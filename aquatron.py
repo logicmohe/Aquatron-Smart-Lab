@@ -21,7 +21,9 @@ Problems:
 import os
 import sys
 import serial
-import RPI.GPIO as GPIO
+#import board
+#import busio
+#import RPI.GPIO as GPIO
 from time import localtime, strftime,sleep
 
 from kivy.app import App
@@ -36,3 +38,74 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.properties import BooleanProperty, ListProperty, StringProperty, ObjectProperty
+
+'''
+Initialization
+'''
+#initialize all the variables
+
+_init=0.0
+
+#sensors, read in from GPIO
+watertemp_sensor=_init
+waterlvl_sensor=_init
+liquid_sensor=_init
+light_sensor=init
+airtemp_sensor=_init
+humanity_sensor=_init
+
+#Setup: After reaching the limit, special event will be triggerred
+watertemp_limit=_init
+waterlvl_limit=_init
+liquid_limit=_init
+light_limit=init
+airtemp_limit=_init
+humanity_limit=_init
+
+
+'''
+Data Processing
+'''
+
+#read in data and process in this section
+
+
+
+
+
+
+'''
+Kivy Interface
+'''
+#Kivy Setting Screen
+class SettingScreen(Screen):
+    #waiting for other items
+
+
+
+#Kivy Main Screen
+class MainScreen(Screen):
+    #waiting for other items
+
+
+
+
+
+#AquaGUI screen manager
+class ScreenManager(ScreenManager):
+    pass
+
+class AquaguiApp(App):
+    title = "Aquatron Smart Lab"
+    def build(self):
+        return ScreenManager
+
+
+
+'''
+Main Program
+'''
+if __name__=='__main__':
+    #Build DWM connection
+    #DWM=serial.Serial(port="/dev/ttyACM0",baudrate=115200,timeout=0.5) #The input port expire after  0.5 seconds
+    AquaguiApp().run()
