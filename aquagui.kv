@@ -8,6 +8,126 @@
 
 #Main Screen Layout
 <MainScreen>:
+    name: 'Main'
+    BoxLayout:
+        orientation:"vertical"
 
+        #Header
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: .1
+            label:
+                text: "Aquatron Smart Lab"
+            Label:
+                id: time_label
+                text: "0000-00-00 00:00:00"
+        
+        #Top buttons
+        BoxLayout:
+            orientation: "horizontal"
+            height: 10
+            size_hint_y: .3
+            spacing: 20
+            Image:
+                source: 'aquatron.png'
+                size_hint: 0.5,1
+            Button:
+                text:"Seting"
+                size_hint: .5,1
+                on_release: root.manager.current='Setting'
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint: .9,1
+                ToggleButton:
+                    id: ON
+                    on_press:root.on_button()
+                    state:'down'
+                    text: "ON"
+                    group: "Status"
+                ToggleButton:
+                    id:OFF
+                    on_press: root.off_button()
+                    text: "OFF"
+                    group: "Status"
+
+        #First Row Three sensors 
+        BoxLayout:
+            orientation: "horizontal"
+            height: 10
+            size_hint_y: .3
+            spacing: 20
+            Button:
+                text:"Seting"
+                size_hint: .5,1
+                on_release: root.manager.current='Setting'            
+            Button:
+                text:"Seting"
+                size_hint: .5,1
+                on_release: root.manager.current='Setting'
+            Button:
+                text:"Seting"
+                size_hint: .5,1
+                on_release: root.manager.current='Setting'
+
+        #Second Row Three sensors 
+        BoxLayout:
+            orientation: "horizontal"
+            height: 10
+            size_hint_y: .3
+            spacing: 20
+            Image:
+                source: 'aquatron.png'
+                size_hint: 0.5,1
+            Button:
+                text:"Seting"
+                size_hint: .5,1
+                on_release: root.manager.current='Setting'
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint: .9,1
+                ToggleButton:
+                    id: ON
+                    on_press:root.on_button()
+                    state:'down'
+                    text: "ON"
+                    group: "Status"
+                ToggleButton:
+                    id:OFF
+                    on_press: root.off_button()
+                    text: "OFF"
+                    group: "Status"
 #Setting Screen Layout
 <SettingScreen>:
+    name: 'Setting'
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            orientation: "horizontal"
+            Label:
+                text: "Water Temperature Sensor"
+            TextInput:
+                id: watertemp
+            Label:
+                text: "Liquid Sensor"
+            TextInput:
+                id: liquid            
+            Label:
+                text: "Air Temperature Sensor"
+            TextInput:
+                id: airtemp                
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            orientation: "horizontal"
+            Label:
+                text: "Water Level Sensor"
+            TextInput:
+                id: waterlvl
+            Label:
+                text: "Light Sensor"
+            TextInput:
+                id: light            
+            Label:
+                text: "Humanity Sensor"
+            TextInput:
+                id: humanity                
