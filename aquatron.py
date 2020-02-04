@@ -100,14 +100,14 @@ class ScreenManager(ScreenManager):
 class AquaguiApp(App):
     title = "Aquatron Smart Lab"
     def build(self):
-        return ScreenManager
+        return ScreenManager()
 
 
 
 '''
 Main Program
 '''
-#if __name__=='__main__':
+if __name__=='__main__':
     #Build DWM connection
     #DWM=serial.Serial(port="/dev/ttyACM0",baudrate=115200,timeout=0.5) #The input port expire after  0.5 seconds
-AquaguiApp().run()
+    AquaguiApp().run()
