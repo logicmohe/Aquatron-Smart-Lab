@@ -50,7 +50,7 @@ _init=0.0
 watertemp_sensor=_init
 waterlvl_sensor=_init
 liquid_sensor=_init
-light_sensor=init
+light_sensor=_init
 airtemp_sensor=_init
 humanity_sensor=_init
 
@@ -58,7 +58,7 @@ humanity_sensor=_init
 watertemp_limit=_init
 waterlvl_limit=_init
 liquid_limit=_init
-light_limit=init
+light_limit=_init
 airtemp_limit=_init
 humanity_limit=_init
 
