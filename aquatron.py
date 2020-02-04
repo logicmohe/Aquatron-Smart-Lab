@@ -80,12 +80,14 @@ Kivy Interface
 #Kivy Setting Screen
 class SettingScreen(Screen):
     #waiting for other items
+    pass
 
 
 
 #Kivy Main Screen
 class MainScreen(Screen):
     #waiting for other items
+    pass
 
 
 
