@@ -40,7 +40,7 @@
                 size_hint: .9,1
                 ToggleButton:
                     id: ON
-                    on_press:root.on_button()
+                    on_press: root.on_button()
                     state:'down'
                     text: "ON"
                     group: "Status"
@@ -49,6 +49,7 @@
                     on_press: root.off_button()
                     text: "OFF"
                     group: "Status"
+                #Switch:
 
         #First Row Three sensors 
         BoxLayout:
@@ -56,18 +57,15 @@
             height: 10
             size_hint_y: .3
             spacing: 20
-            Button:
-                text:"Seting"
+            Label:
+                text:"Water Temperature Sensor"
                 size_hint: .5,1
-                on_release: root.manager.current='Setting'            
-            Button:
-                text:"Seting"
+            Label:
+                text:"Liquid Sensor"
                 size_hint: .5,1
-                on_release: root.manager.current='Setting'
-            Button:
-                text:"Seting"
+            Label:
+                text:"Air Temperature Sensor"
                 size_hint: .5,1
-                on_release: root.manager.current='Setting'
 
         #Second Row Three sensors 
         BoxLayout:
@@ -75,59 +73,98 @@
             height: 10
             size_hint_y: .3
             spacing: 20
-            Image:
-                source: 'aquatron.png'
-                size_hint: 0.5,1
-            Button:
-                text:"Seting"
+            Label:
+                text:"Water Level Sensor"
                 size_hint: .5,1
-                on_release: root.manager.current='Setting'
-            BoxLayout:
-                orientation: "horizontal"
-                size_hint: .9,1
-                ToggleButton:
-                    id: ON
-                    on_press:root.on_button()
-                    state:'down'
-                    text: "ON"
-                    group: "Status"
-                ToggleButton:
-                    id:OFF
-                    on_press: root.off_button()
-                    text: "OFF"
-                    group: "Status"
+            Label:
+                text:"Light Sensor"
+                size_hint: .5,1
+            Label:
+                text:"Humanity Sensor"
+                size_hint: .5,1
+                
 #Setting Screen Layout
 <SettingScreen>:
     name: 'Setting'
     BoxLayout:
         orientation: "vertical"
+        spacing: 20
+        #First Row contains three sensors
         BoxLayout:
             orientation: "horizontal"
-            Label:
-                text: "Water Temperature Sensor"
-            TextInput:
-                id: watertemp
-            Label:
-                text: "Liquid Sensor"
-            TextInput:
-                id: liquid            
-            Label:
-                text: "Air Temperature Sensor"
-            TextInput:
-                id: airtemp                
-    BoxLayout:
-        orientation: "vertical"
+
+            BoxLayout:
+                orientation: "horizontal"
+                Label:
+                    text: "Water Temperature Sensor"
+                Slider:
+                    id: watertemp_slider
+                    min: 0
+                    max: 100
+                    step: 1
+                    orientation: "horizontal"
+                TextInput:
+                    id: watertemp
+            BoxLayout:
+                orientation: "horizontal"
+                Label:
+                    text: "Liquid Sensor"
+                Slider:
+                    id: liquid_slider
+                    min: 0
+                    max: 100
+                    step: 1
+                    orientation: "horizontal"
+                TextInput:
+                    id: liquid  
+            BoxLayout:
+                orientation: "horizontal"          
+                Label:
+                    text: "Air Temperature Sensor"
+                Slider:
+                    id: airtemp_slider
+                    min: 0
+                    max: 100
+                    step: 1
+                    orientation: "horizontal"
+                TextInput:
+                    id: airtemp                
+        #Second Row contains three sensors
         BoxLayout:
             orientation: "horizontal"
-            Label:
-                text: "Water Level Sensor"
-            TextInput:
-                id: waterlvl
-            Label:
-                text: "Light Sensor"
-            TextInput:
-                id: light            
-            Label:
-                text: "Humanity Sensor"
-            TextInput:
-                id: humanity                
+            BoxLayout:
+                orientation: "horizontal"
+                Label:
+                    text: "Water Level Sensor"
+                Slider:
+                    id: waterlvl_slider
+                    min: 0
+                    max: 100
+                    step: 1
+                    orientation: "horizontal"
+                TextInput:
+                    id: waterlvl
+            BoxLayout:
+                orientation: "horizontal"
+                Label:
+                    text: "Light Sensor"
+                Slider:
+                    id: light_slider
+                    min: 0
+                    max: 100
+                    step: 1
+                    orientation: "horizontal"
+                TextInput:
+                    id: light      
+            BoxLayout:
+                orientation: "horizontal"      
+                Label:
+                    text: "Humanity Sensor"
+                Slider:
+                    id: huamnity_slider
+                    min: 0
+                    max: 100
+                    step: 1
+                    orientation: "horizontal"
+                TextInput:
+                    id: humanity                
