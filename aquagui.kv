@@ -32,7 +32,7 @@
                 source: 'aquatron.png'
                 size_hint: 0.5,1
             Button:
-                text:"Seting"
+                text:"Setting Page"
                 size_hint: .5,1
                 on_release: root.manager.current='Setting'
             BoxLayout:
@@ -66,6 +66,21 @@
             Label:
                 text:"Air Temperature Sensor"
                 size_hint: .5,1
+        #First Row Three sensors 
+        BoxLayout:
+            orientation: "horizontal"
+            height: 10
+            size_hint_y: .3
+            spacing: 20
+            Button:
+                text:"Water Temperature Sensor"
+                size_hint: .5,1
+            Button:
+                text:"Liquid Sensor"
+                size_hint: .5,1
+            Button:
+                text:"Air Temperature Sensor"
+                size_hint: .5,1
 
         #Second Row Three sensors 
         BoxLayout:
@@ -82,89 +97,111 @@
             Label:
                 text:"Humanity Sensor"
                 size_hint: .5,1
-                
+
+        #Second Row Three sensors 
+        BoxLayout:
+            orientation: "horizontal"
+            height: 10
+            size_hint_y: .3
+            spacing: 20
+            Button:
+                text:"Water Level Sensor"
+                size_hint: .5,1
+            Button:
+                text:"Light Sensor"
+                size_hint: .5,1
+            Button:
+                text:"Humanity Sensor"
+                size_hint: .5,1
+            
 #Setting Screen Layout
 <SettingScreen>:
     name: 'Setting'
     BoxLayout:
         orientation: "vertical"
         spacing: 20
+        #Header
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: .1
+            Label:
+                text: "Aquatron Smart Lab"
+            Label:
+                id: time_label
+                text: "0000-00-00 00:00:00"
+
         #First Row contains three sensors
         BoxLayout:
             orientation: "horizontal"
+            Label:
+                text: "Water Temperature Sensor"
+            Label:
+                text: "Liquid Sensor"       
+            Label:
+                text: "Air Temperature Sensor"
 
-            BoxLayout:
+        #First Row contains three sensors
+        BoxLayout:
+            orientation: "horizontal"
+            Slider:
+                id: watertemp_slider
+                min: 0
+                max: 100
+                step: 1
                 orientation: "horizontal"
-                Label:
-                    text: "Water Temperature Sensor"
-                Slider:
-                    id: watertemp_slider
-                    min: 0
-                    max: 100
-                    step: 1
-                    orientation: "horizontal"
-                TextInput:
-                    id: watertemp
-            BoxLayout:
+            Slider:
+                id: liquid_slider
+                min: 0
+                max: 100
+                step: 1
                 orientation: "horizontal"
-                Label:
-                    text: "Liquid Sensor"
-                Slider:
-                    id: liquid_slider
-                    min: 0
-                    max: 100
-                    step: 1
-                    orientation: "horizontal"
-                TextInput:
-                    id: liquid  
-            BoxLayout:
-                orientation: "horizontal"          
-                Label:
-                    text: "Air Temperature Sensor"
-                Slider:
-                    id: airtemp_slider
-                    min: 0
-                    max: 100
-                    step: 1
-                    orientation: "horizontal"
-                TextInput:
-                    id: airtemp                
+            Slider:
+                id: airtemp_slider
+                min: 0
+                max: 100
+                step: 1
+                orientation: "horizontal"
+
+
         #Second Row contains three sensors
         BoxLayout:
             orientation: "horizontal"
-            BoxLayout:
+            Label:
+                text: "Water Level Sensor"
+            Label:
+                text: "Light Sensor"
+            Label:
+                text: "Humanity Sensor"
+
+        #Second Row contains three sensors
+        BoxLayout:
+            orientation: "horizontal"
+            Slider:
+                id: waterlvl_slider
+                min: 0
+                max: 100
+                step: 1
                 orientation: "horizontal"
-                Label:
-                    text: "Water Level Sensor"
-                Slider:
-                    id: waterlvl_slider
-                    min: 0
-                    max: 100
-                    step: 1
-                    orientation: "horizontal"
-                TextInput:
-                    id: waterlvl
-            BoxLayout:
+            Slider:
+                id: light_slider
+                min: 0
+                max: 100
+                step: 1
                 orientation: "horizontal"
-                Label:
-                    text: "Light Sensor"
-                Slider:
-                    id: light_slider
-                    min: 0
-                    max: 100
-                    step: 1
-                    orientation: "horizontal"
-                TextInput:
-                    id: light      
-            BoxLayout:
-                orientation: "horizontal"      
-                Label:
-                    text: "Humanity Sensor"
-                Slider:
-                    id: huamnity_slider
-                    min: 0
-                    max: 100
-                    step: 1
-                    orientation: "horizontal"
-                TextInput:
-                    id: humanity                
+            Slider:
+                id: huamnity_slider
+                min: 0
+                max: 100
+                step: 1
+                orientation: "horizontal"
+        
+        #Button on bottom
+        BoxLayout:
+            orientation: "horizontal"
+            Button:
+                text:"Save Changes"
+                #on_release:
+                    #root.update.....
+            Button:
+                text: "Back"
+                on_release: root.manager.current='Main'            
