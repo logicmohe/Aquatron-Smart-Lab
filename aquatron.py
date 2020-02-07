@@ -87,9 +87,8 @@ class SettingScreen(Screen):
     #waiting for other items
     #could be wrong
     data_items=ListProperty([])
-    def __init__(self, **kwargs):
-        super(MainScreen, self).__init__(**kwargs)
-        Clock.schedule_interval(self.get_users,0.1) #proper callback time, for now is 0.1 s
+
+    Clock.schedule_interval(self.get_users,0.1) #proper callback time, for now is 0.1 s
     def get_users(self,dt):
         global current_time
         current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
