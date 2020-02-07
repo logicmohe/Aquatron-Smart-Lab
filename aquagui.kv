@@ -12,10 +12,11 @@
     BoxLayout:
         orientation:"vertical"
 
+        spacing: 30
         #Header
         BoxLayout:
             orientation: "horizontal"
-            size_hint_y: .3
+            size_hint_y: .15
             Label:
                 text: "Aquatron Smart Lab"
             Label:
@@ -30,7 +31,7 @@
             spacing: 20
             Image:
                 source: 'aquatron.png'
-                size_hint: 1,1
+                size_hint: .3,1
             Button:
                 text:"Setting Page"
                 size_hint: .5,1
@@ -55,22 +56,21 @@
         BoxLayout:
             orientation: "horizontal"
             height: 10
-            size_hint_y: .3
+            size_hint_y: .2
             spacing: 20
             Label:
                 text:"Water Temperature Sensor"
-                size_hint: .5,1
+                #size_hint: .5,1
             Label:
                 text:"Liquid Sensor"
-                size_hint: .5,1
+                #size_hint: .5,1
             Label:
                 text:"Air Temperature Sensor"
-                size_hint: .5,1
+                #size_hint: .5,1
         #First Row Three sensors 
         BoxLayout:
             orientation: "horizontal"
             height: 10
-            size_hint_y: .3
             spacing: 20
             Button:
                 text:"Water Temperature Sensor"
@@ -86,23 +86,22 @@
         BoxLayout:
             orientation: "horizontal"
             height: 10
-            size_hint_y: .3
+            size_hint_y: .2
             spacing: 20
             Label:
                 text:"Water Level Sensor"
-                size_hint: .5,1
+                #size_hint: .5,1
             Label:
                 text:"Light Sensor"
-                size_hint: .5,1
+                #size_hint: .5,1
             Label:
                 text:"Humanity Sensor"
-                size_hint: .5,1
+                #size_hint: .5,1
 
         #Second Row Three sensors 
         BoxLayout:
             orientation: "horizontal"
             height: 10
-            size_hint_y: .3
             spacing: 20
             Button:
                 text:"Water Level Sensor"
@@ -133,12 +132,22 @@
         #First Row contains three sensors
         BoxLayout:
             orientation: "horizontal"
+            size_hint_y: .8
             Label:
                 text: "Water Temperature Sensor"
             Label:
                 text: "Liquid Sensor"       
             Label:
                 text: "Air Temperature Sensor"
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: .2
+            Label:
+                text: "0.0"
+            Label:
+                text: "0.0"     
+            Label:
+                text: "0.0"
 
         #First Row contains three sensors
         BoxLayout:
@@ -166,12 +175,22 @@
         #Second Row contains three sensors
         BoxLayout:
             orientation: "horizontal"
+            size_hint_y: .8
             Label:
                 text: "Water Level Sensor"
             Label:
                 text: "Light Sensor"
             Label:
                 text: "Humanity Sensor"
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: .2
+            Label:
+                text: "0.0"
+            Label:
+                text: "0.0"     
+            Label:
+                text: "0.0"
 
         #Second Row contains three sensors
         BoxLayout:
