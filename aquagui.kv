@@ -124,10 +124,8 @@
             orientation: "horizontal"
             size_hint_y: .2
             Label:
-                text: "Aquatron Smart Lab"
-            Label:
-                id: time_label
-                text: "0000-00-00 00:00:00"
+                text: "Aquatron Smart Lab Setting Page: Please drag the slider to desire values and press Save Change button"
+
 
         #First Row contains three sensors
         BoxLayout:
@@ -143,11 +141,11 @@
             orientation: "horizontal"
             size_hint_y: .2
             Label:
-                text: "0.0"
+                text: str(watertemp_slider.value)
             Label:
-                text: "0.0"     
+                text: str(liquid_slider.value)   
             Label:
-                text: "0.0"
+                text: str(airtemp_slider.value)
 
         #First Row contains three sensors
         BoxLayout:
@@ -186,11 +184,11 @@
             orientation: "horizontal"
             size_hint_y: .2
             Label:
-                text: "0.0"
+                text: str(waterlvl_slider.value)
             Label:
-                text: "0.0"     
+                text: str(light_slider.value)   
             Label:
-                text: "0.0"
+                text: str(huamnity_slider.value)
 
         #Second Row contains three sensors
         BoxLayout:
