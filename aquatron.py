@@ -49,6 +49,8 @@ Initialization
 
 _init=0.0
 
+current_time='0000-00-00 00:00:00'      #initialize the time
+
 #sensors, read in from GPIO
 watertemp_sensor=_init
 waterlvl_sensor=_init
@@ -83,14 +85,29 @@ Kivy Interface
 #Kivy Setting Screen
 class SettingScreen(Screen):
     #waiting for other items
-    pass
+    #could be wrong
+    data_items=ListProperty([])
+    def __init__(self, **kwargs):
+        super(MainScreen, self).__init__(**kwargs)
+        Clock.schedule_intervel(self.get_users,0.1) #proper callback time, for now is 0.1 s
+    def get_users(self,dt):
+        global current_time
+        current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
+        self.ids.time_label.text=current_time
 
 
 
 #Kivy Main Screen
 class MainScreen(Screen):
     #waiting for other items
-    pass
+    data_items=ListProperty([])
+    def __init__(self, **kwargs):
+        super(MainScreen, self).__init__(**kwargs)
+        Clock.schedule_intervel(self.get_users,0.1) #proper callback time, for now is 0.1 s
+    def get_users(self,dt):
+        global current_time
+        current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
+        self.ids.time_label.text=current_time
 
 
 
