@@ -1,6 +1,8 @@
 '''
 Project name: Aquatron Smart Lab
-Python file: python3 aquatron.py
+
+Run file: python3 aquatron.py
+Environment: Kivy, Python3, Rapsberry Pi 3
 
 Description: This project is to build a sensor system for Aquatron Lab. Include the temperature sensor, humanity sensor light sensor, water detection on groud and water level sensor. This app is aiming to build a prototype that communicate will all the sensors in the lab and used a kivy based graphical user interface to show all the information from outside. The combination of warning light and email alerting system to form the alerting system.
 
@@ -19,6 +21,13 @@ Problems:
 
 @Setting page: Use scroll to set the limit figure without keyboard, another option is virtual keyboard (Numberic)
 
+@Updated on Feb 6th, still need to do:
+--Try to build the basic frame
+--Simple
+--Need to add color change
+--Add pics as background
+--Frame different color block
+--Change icon size
 '''
 import os
 import sys
