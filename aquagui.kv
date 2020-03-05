@@ -179,7 +179,7 @@
             Label:
                 text: "Light Sensor"
             Label:
-                text: "Humanity Sensor"
+                text: "Humidity Sensor"
         BoxLayout:
             orientation: "horizontal"
             size_hint_y: .2
@@ -188,7 +188,7 @@
             Label:
                 text: str(light_slider.value)   
             Label:
-                text: str(huamnity_slider.value)
+                text: str(humidity_slider.value)
 
         #Second Row contains three sensors
         BoxLayout:
@@ -206,7 +206,7 @@
                 step: 1
                 orientation: "horizontal"
             Slider:
-                id: huamnity_slider
+                id: humidity_slider
                 min: 0
                 max: 100
                 step: 1

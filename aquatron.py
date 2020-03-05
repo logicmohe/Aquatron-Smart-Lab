@@ -1,5 +1,7 @@
 '''
 Project name: Aquatron Smart Lab
+Version 1.2
+--New Version Feature: Statistic Analyzer for 24 hours with 10 mins read in rate
 
 Run file: python3 aquatron.py
 Environment: Kivy, Python3, Rapsberry Pi 3
@@ -28,6 +30,9 @@ Problems:
 --Add pics as background
 --Frame different color block
 --Change icon size
+
+@Updated on March 5th
+--Read in data from SQL post
 '''
 import os
 import sys
