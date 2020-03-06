@@ -130,6 +130,8 @@ class StatisticScreen(Screen):
         try:
             self.ids.topline.clear_widgets(children=None)
             self.ids.botline.clear_widgets(children=None)
+        except:
+            pass
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
