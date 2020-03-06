@@ -129,7 +129,7 @@ class SettingScreen(Screen):
 class MainScreen(Screen):
     #build a simple graph
     plt.plot([1,23,2,4])
-    plt.ylable('Statistic Graph in 24 hours')
+    plt.ylabel('Statistic Graph in 24 hours')
 
     #waiting for other items
     data_items=ListProperty([])
