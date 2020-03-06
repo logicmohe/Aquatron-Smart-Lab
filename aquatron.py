@@ -27,6 +27,8 @@ Problems:
 
 @Alarm system: Email
 
+@In statistic screen, should we refresh the screen?
+
 @Setting page: Use scroll to set the limit figure without keyboard, another option is virtual keyboard (Numberic)
 
 @Updated on Feb 6th, still need to do:
@@ -120,10 +122,17 @@ class StatisticScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(StatisticScreen, self).__init__(**kwargs)
-        Clock.schedule_interval(self.graph_test,10) #proper callback time, for now is 0.1 s
+        self.graph_test
+        #Considering whether we should just do it updating each 10 mins
+        #Clock.schedule_once(self.graph_test)
+        #Clock.schedule_interval(self.graph_test,10) #proper callback time, for now is 0.1 s
     def graph_test(self,dt):
-        self.ids.destination.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        self.ids.line1.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        self.ids.line1.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        self.ids.line2.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        self.ids.line2.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         #return box
+        #If this is keep refreshing, then use remove_widget(destination)
 
 
 #Kivy Setting Screen

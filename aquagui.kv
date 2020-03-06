@@ -240,11 +240,17 @@
         #Header
 
         BoxLayout:
-            id: destination
+            orientation: "horizontal"
+            id: line1
+
+        BoxLayout:
+            orientation: "horizontal"
+            id: line2
         
         #Button on bottom
         BoxLayout:
             orientation: "horizontal"
+            size_hint_y: .15
             Button:
                 text:"Save Changes"
                 #on_release:
