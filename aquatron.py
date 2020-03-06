@@ -33,6 +33,14 @@ Problems:
 
 @Updated on March 5th
 --Read in data from SQL post
+--Test Plan
+   -- Read the Kivy with matplotlib
+   https://stackoverflow.com/questions/44905416/how-to-get-started-use-matplotlib-in-kivy/44922317
+
+   -- Build postgreSQL on RPI
+   https://www.postgresql.org/
+   https://opensource.com/article/17/10/set-postgres-database-your-raspberry-pi
+
 '''
 import os
 import sys
@@ -55,6 +63,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 #from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 #from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.properties import BooleanProperty, ListProperty, StringProperty, ObjectProperty
+
+#update since version 1.2
+#use matplotlib to plot the statistic graph
+from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
+import matplotlib.pyplot as plt
 
 '''
 Initialization
@@ -96,6 +109,12 @@ Data Processing
 '''
 Kivy Interface
 '''
+#Kivy StatisticScreen for anylyzing the collected data in 24 hours
+class StatisticScreen(Screen):
+    self.ids.destination.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+
+
+
 #Kivy Setting Screen
 class SettingScreen(Screen):
     #waiting for other items
@@ -107,6 +126,10 @@ class SettingScreen(Screen):
 
 #Kivy Main Screen
 class MainScreen(Screen):
+    #build a simple graph
+    plt.plot([1,23,2,4])
+    ply.ylable('Statistic Graph in 24 hours')
+
     #waiting for other items
     data_items=ListProperty([])
     def __init__(self, **kwargs):

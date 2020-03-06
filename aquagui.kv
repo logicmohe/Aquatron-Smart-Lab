@@ -5,6 +5,7 @@
 <ScreenManager>:
     MainScreen
     SettingScreen
+    StatisticScreen
 
 #Main Screen Layout
 <MainScreen>:
@@ -222,3 +223,27 @@
             Button:
                 text: "Back"
                 on_release: root.manager.current='Main'            
+
+
+
+#StatisticScreen Screen Layout
+<StatisticScreen>:
+    name: 'Statitic'
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        #Header
+
+        BoxLayout:
+            id: destination
+        
+        #Button on bottom
+        BoxLayout:
+            orientation: "horizontal"
+            Button:
+                text:"Save Changes"
+                #on_release:
+                    #root.update.....
+            Button:
+                text: "Back"
+                on_release: root.manager.current='Main'
