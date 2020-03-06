@@ -119,7 +119,7 @@ Kivy Interface
 '''
 #Kivy StatisticScreen for anylyzing the collected data in 24 hours
 class StatisticScreen(Screen):
-    self.graph_test()
+    graph_test()
         #Considering whether we should just do it updating each 10 mins
         #Clock.schedule_once(self.graph_test)
         #Clock.schedule_interval(self.graph_test,10) #proper callback time, for now is 0.1 s
