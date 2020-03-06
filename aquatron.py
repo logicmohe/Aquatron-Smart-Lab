@@ -111,7 +111,8 @@ Kivy Interface
 '''
 #Kivy StatisticScreen for anylyzing the collected data in 24 hours
 class StatisticScreen(Screen):
-    self.ids.destination.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+    def __init__(self,**kwargs):
+        self.ids.destination.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
 
 
@@ -128,7 +129,7 @@ class SettingScreen(Screen):
 class MainScreen(Screen):
     #build a simple graph
     plt.plot([1,23,2,4])
-    ply.ylable('Statistic Graph in 24 hours')
+    plt.ylable('Statistic Graph in 24 hours')
 
     #waiting for other items
     data_items=ListProperty([])
