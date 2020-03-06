@@ -126,7 +126,7 @@ class StatisticScreen(Screen):
         Clock.schedule_once(self.graph_test)
         #Clock.schedule_interval(self.graph_test,10) #proper callback time, for now is 0.1 s
 
-    def graph_test(self):
+    def graph_test(self, dt):
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
