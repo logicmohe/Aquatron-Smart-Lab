@@ -127,15 +127,13 @@ class StatisticScreen(Screen):
         Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
 
     def graph_test(self, dt):
-        try:
-            self.ids.topline.clear_widgets(children=None)
-            self.ids.botline.clear_widgets(children=None)
-        except:
-            pass
+        self.ids.topline.clear_widgets(children=None)
+        self.ids.botline.clear_widgets(children=None)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        sleep(100)
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
 
