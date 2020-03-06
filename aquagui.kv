@@ -37,6 +37,11 @@
                 text:"Setting Page"
                 size_hint: .5,1
                 on_release: root.manager.current='Setting'
+            Button:
+                text:"Statistic Page"
+                size_hint: .5,1
+                on_release: root.manager.current='Statistic'
+
             BoxLayout:
                 orientation: "horizontal"
                 size_hint: .9,1
@@ -228,7 +233,7 @@
 
 #StatisticScreen Screen Layout
 <StatisticScreen>:
-    name: 'Statitic'
+    name: 'Statistic'
     BoxLayout:
         orientation: "vertical"
         spacing: 20
