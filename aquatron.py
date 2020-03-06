@@ -112,6 +112,7 @@ Kivy Interface
 #Kivy StatisticScreen for anylyzing the collected data in 24 hours
 class StatisticScreen(Screen):
     def __init__(self,**kwargs):
+        super(TextInputPopup, self).__init__(**kwargs)
         self.ids.destination.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
 
