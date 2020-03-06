@@ -11,6 +11,12 @@ Description: This project is to build a sensor system for Aquatron Lab. Include 
 Overview: Currently, we have six type of sensors, there will be two sensors of each type.
 
 
+Setup:
+sudo apt-get install python3, pip3
+pip3 install kivy (Some configurations see online web)
+garden install matplotlib
+pip3 install matplotlib
+
 
 Problems:
 @Build connection to all sensors
@@ -112,7 +118,7 @@ Kivy Interface
 #Kivy StatisticScreen for anylyzing the collected data in 24 hours
 class StatisticScreen(Screen):
     def __init__(self,**kwargs):
-        super(TextInputPopup, self).__init__(**kwargs)
+        super(StatisticScreen, self).__init__(**kwargs)
         self.ids.destination.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
 
