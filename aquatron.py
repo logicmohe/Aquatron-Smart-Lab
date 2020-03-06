@@ -117,9 +117,13 @@ Kivy Interface
 '''
 #Kivy StatisticScreen for anylyzing the collected data in 24 hours
 class StatisticScreen(Screen):
+    data_items=ListProperty([])
+    def __init__(self, **kwargs):
+        super(StatisticScreen, self).__init__(**kwargs)
+        Clock.schedule_interval(self.graph_test,10) #proper callback time, for now is 0.1 s
     def graph_test(self):
         self.ids.destination.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-        return box
+        #return box
 
 
 #Kivy Setting Screen
