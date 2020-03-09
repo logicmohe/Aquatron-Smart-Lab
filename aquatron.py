@@ -6,12 +6,12 @@ Version 1.2
 Run file: python3 aquatron.py
 Environment: Kivy, Python3, Rapsberry Pi 3
 
-Description: This project is to build a sensor system for Aquatron Lab. Include the temperature sensor, humanity sensor light sensor, water detection on groud and water level sensor. This app is aiming to build a prototype that communicate will all the sensors in the lab and used a kivy based graphical user interface to show all the information from outside. The combination of warning light and email alerting system to form the alerting system.
+Description: This project is to build a sensor system for Aquatron Lab. Include the temperature sensor, humidity sensor light sensor, water detection on groud and water level sensor. This app is aiming to build a prototype that communicate will all the sensors in the lab and used a kivy based graphical user interface to show all the information from outside. The combination of warning light and email alerting system to form the alerting system.
 
 Overview: Currently, we have six type of sensors, there will be two sensors of each type.
 
 
-Setup:
+Setup: (Library Required)
 sudo apt-get install python3, pip3
 pip3 install kivy (Some configurations see online web)
 garden install matplotlib
@@ -42,8 +42,6 @@ Problems:
 @Updated on March 5th
 --Read in data from SQL post
 --Test Plan
-   -- Read the Kivy with matplotlib
-   https://stackoverflow.com/questions/44905416/how-to-get-started-use-matplotlib-in-kivy/44922317
 
    -- Build postgreSQL on RPI
    https://www.postgresql.org/
@@ -92,7 +90,7 @@ waterlvl_sensor=_init
 liquid_sensor=_init
 light_sensor=_init
 airtemp_sensor=_init
-humanity_sensor=_init
+humidity_sensor=_init
 
 #Setup: After reaching the limit, special event will be triggerred
 watertemp_limit=_init
@@ -100,7 +98,7 @@ waterlvl_limit=_init
 liquid_limit=_init
 light_limit=_init
 airtemp_limit=_init
-humanity_limit=_init
+humidity_limit=_init
 
 
 '''
@@ -120,6 +118,9 @@ Kivy Interface
 #Kivy StatisticScreen for anylyzing the collected data in 24 hours
 class StatisticScreen(Screen):
     data_items=ListProperty([])
+    #build a simple graph
+    plt.plot([1,23,2,4])
+    plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
         super(StatisticScreen, self).__init__(**kwargs)
         #Considering whether we should just do it updating each 10 mins
@@ -127,13 +128,23 @@ class StatisticScreen(Screen):
         #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
 
     def graph_test(self, dt):
+        self.graph_generate()
+        plt.ylabel('Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        
+        plt.ylabel('Humidity in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        plt.plot([11,12,13,15])
+        plt.ylabel('Optic in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        plt.plot([15,23,2,4])
+        plt.ylabel('Water Level in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-        #sleep(100)
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
+    def graph_generate(self):
+        #overhere, read from postgreSQL data to generate Matplotlib graph
+        pass
 
 #Kivy Setting Screen
 class SettingScreen(Screen):
@@ -146,9 +157,7 @@ class SettingScreen(Screen):
 
 #Kivy Main Screen
 class MainScreen(Screen):
-    #build a simple graph
-    plt.plot([1,23,2,4])
-    plt.ylabel('Statistic Graph in 24 hours')
+
 
     #waiting for other items
     data_items=ListProperty([])
@@ -159,6 +168,8 @@ class MainScreen(Screen):
         global current_time
         current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
         self.ids.time_label.text=current_time
+    #def toggle_button(self):
+    #design for the toggle button to contrl on and off
 
 
 
