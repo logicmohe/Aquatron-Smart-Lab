@@ -147,15 +147,6 @@
             orientation: "horizontal"
             size_hint_y: .2
             Label:
-                text: "Max"
-            Label:
-                text: str(airtemp_slider_max.value)
-            Label:
-                text: "Min"  
-            Label:
-                text: str(airtemp_slider_min.value)
-
-            Label:
                 text: "Max"                
             Label:
                 text: str(watertemp_slider_max.value)
@@ -172,8 +163,15 @@
             Label:
                 text: "Min"
             Label:
-                text: str(liquid_slider_max.value)
-
+                text: str(liquid_slider_min.value)
+            Label:
+                text: "Max"
+            Label:
+                text: str(airtemp_slider_max.value)
+            Label:
+                text: "Min"  
+            Label:
+                text: str(airtemp_slider_min.value)
 
         #First Row Sliders
         BoxLayout:#Max
@@ -257,7 +255,7 @@
             Label:
                 text: "Min"
             Label:
-                text: str(humidity_slider_max.value)
+                text: str(humidity_slider_min.value)
 
 
         #Second Row Sliders
