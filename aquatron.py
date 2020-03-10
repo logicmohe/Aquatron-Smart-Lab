@@ -129,20 +129,20 @@ class StatisticScreen(Screen):
 
     def graph_test(self, dt):
         self.graph_generate()
-        figure(0)
+        plt.figure(0)
         plt.ylabel('Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        figure(1)
+        plt.figure(1)
         plt.ylabel('Humidity in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        figure(2)
+        plt.figure(2)
         plt.plot([11,12,13,15])
         plt.ylabel('Optic in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        figure(3)
+        plt.figure(3)
         plt.plot([15,23,2,4])
         plt.ylabel('Water Level in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
