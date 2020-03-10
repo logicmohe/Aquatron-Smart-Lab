@@ -131,7 +131,7 @@ class StatisticScreen(Screen):
         self.graph_generate()
         plt.figure(0)
         plt.plot([1,23,2,4])
-        plt.ylabel('Temperature in 24 hours')
+        plt.title('Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(1)
