@@ -136,17 +136,17 @@ class StatisticScreen(Screen):
         
         plt.figure(1)
         plt.plot([2,4,8, 16])
-        plt.ylabel('Humidity in 24 hours')
+        plt.title('Humidity in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(2)
         plt.plot([11,12,13,15])
-        plt.ylabel('Optic in 24 hours')
+        plt.title('Optic in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(3)
         plt.plot([15,23,2,4])
-        plt.ylabel('Water Level in 24 hours')
+        plt.title('Water Level in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
