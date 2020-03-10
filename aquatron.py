@@ -11,7 +11,7 @@ Description: This project is to build a sensor system for Aquatron Lab. Include 
 Overview: Currently, we have six type of sensors, there will be two sensors of each type.
 
 
-Setup: (Library Required)
+Setup: (Library)
 sudo apt-get install python3, pip3
 pip3 install kivy (Some configurations see online web)
 garden install matplotlib
@@ -119,6 +119,8 @@ Kivy Interface
 class StatisticScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
+    plt.plot([1,23,2,4])
+    plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
         super(StatisticScreen, self).__init__(**kwargs)
         #Considering whether we should just do it updating each 10 mins
@@ -127,23 +129,27 @@ class StatisticScreen(Screen):
 
     def graph_test(self, dt):
         self.graph_generate()
+        figure(0)
+        plt.ylabel('Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        
+        figure(1)
+        plt.ylabel('Humidity in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        
+        figure(2)
+        plt.plot([11,12,13,15])
+        plt.ylabel('Optic in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        
+        figure(3)
+        plt.plot([15,23,2,4])
+        plt.ylabel('Water Level in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
     def graph_generate(self):
         #overhere, read from postgreSQL data to generate Matplotlib graph
-        temp_plot, humi_plot, optic_plot, water_plot = plt.subplots()
-        temp_plot.plot([1,23,2,4])
-        temp_plot.set_title('Statistic Graph in 24 hours')
-        humi_plot.plot([1,2,4,8])
-        humi_plot.set_title('Humidity in 24 hours')
-        optic_plot.plot([11,12,13,15])
-        optic_plot.set_title('Optic in 24 hours')
-        pwater_plotlt.plot([15,23,2,4])
-        water_plot.set_title('Water Level in 24 hours')                
         pass
 
 #Kivy Setting Screen
