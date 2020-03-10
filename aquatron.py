@@ -119,7 +119,7 @@ Kivy Interface
 class StatisticScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
-    plt.plot([1,23,2,4])
+    
     plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
         super(StatisticScreen, self).__init__(**kwargs)
@@ -130,10 +130,12 @@ class StatisticScreen(Screen):
     def graph_test(self, dt):
         self.graph_generate()
         plt.figure(0)
+        plt.plot([1,23,2,4])
         plt.ylabel('Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(1)
+        plt.plot([2,4,8, 16])
         plt.ylabel('Humidity in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
