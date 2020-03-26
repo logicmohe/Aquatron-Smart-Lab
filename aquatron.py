@@ -1,53 +1,3 @@
-'''
-Project name: Aquatron Smart Lab
-Version 1.2
---New Version Feature: Statistic Analyzer for 24 hours with 10 mins read in rate
-
-Run file: python3 aquatron.py
-Environment: Kivy, Python3, Rapsberry Pi 3
-
-Description: This project is to build a sensor system for Aquatron Lab. Include the temperature sensor, humidity sensor light sensor, water detection on groud and water level sensor. This app is aiming to build a prototype that communicate will all the sensors in the lab and used a kivy based graphical user interface to show all the information from outside. The combination of warning light and email alerting system to form the alerting system.
-
-Overview: Currently, we have six type of sensors, there will be two sensors of each type.
-
-
-Setup: (Library)
-sudo apt-get install python3, pip3
-pip3 install kivy (Some configurations see online web)
-garden install matplotlib
-pip3 install matplotlib
-
-
-Problems:
-@Build connection to all sensors
-    GPIO
-    Bluetooth
-@Kivy Interface
-    Should we replace it with QT or TKinker
-
-@Alarm system: Email
-
-@In statistic screen, should we refresh the screen?
-
-@Setting page: Use scroll to set the limit figure without keyboard, another option is virtual keyboard (Numberic)
-
-@Updated on Feb 6th, still need to do:
---Try to build the basic frame
---Simple
---Need to add color change
---Add pics as background
---Frame different color block
---Change icon size
-
-@Updated on March 5th
---Read in data from SQL post
---Test Plan
-
-   -- Build postgreSQL on RPI
-   https://www.postgresql.org/
-   https://opensource.com/article/17/10/set-postgres-database-your-raspberry-pi
-
-'''
 import os
 import sys
 import serial
@@ -93,14 +43,32 @@ airtemp_sensor=_init
 humidity_sensor=_init
 
 #Setup: After reaching the limit, special event will be triggerred
-watertemp_limit=_init
-waterlvl_limit=_init
-liquid_limit=_init
-light_limit=_init
-airtemp_limit=_init
-humidity_limit=_init
+watertemp_min=_init
+waterlvl_min=_init
+liquid_min=_init
+light_min=_init
+airtemp_min=_init
+humidity_min=_init
 
+watertemp_max=_init
+waterlvl_max=_init
+liquid_max=_init
+light_max=_init
+airtemp_max=_init
+humidity_max=_init
 
+#Note for future : use for loop to check if any sensor value is 
+#out of range, use correpsonding button to make it read
+'''
+OOP in case for future expandsion
+WATERTEMP=0
+WATERLVL=1
+LIQUID=2
+LIGHT=3
+AIRTEMP=4
+HUMIDITY=5
+ListOfSensor=['watertemp','waterlvl','liquid','light','airtemp','humidity']
+'''
 '''
 Data Processing
 '''
@@ -127,7 +95,8 @@ class StatisticScreen(Screen):
         Clock.schedule_once(self.graph_test)
         #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
 
-    def graph_test(self, dt):
+    def graph_test(self, dt): 
+        #Plot the graph using matplotlib
         self.graph_generate()
         plt.figure(0)
         plt.plot([1,23,2,4])
@@ -171,14 +140,21 @@ class MainScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        Clock.schedule_interval(self.get_users,10) #proper callback time, for now is 0.1 s
-    def get_users(self,dt):
+        Clock.schedule_interval(self.get_data,10) #proper callback time, for now is 0.1 s
+    def get_data(self,dt):
         global current_time
         current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
         self.ids.time_label.text=current_time
+        self.alarm_check()
+    def alarm_check(self):
+        #if any sensor is beyond or below the threshold
+        #Turn the button to be red and flashing
+        #self.ids.alarm.background_color=(1,1,1,1)
+        pass
     #def toggle_button(self):
     #design for the toggle button to contrl on and off
-
+#testing plan:
+#Whether I could use self.ids.ListOfSensors[Num] to identify the button
 
 
 
@@ -191,7 +167,6 @@ class AquaguiApp(App):
     title = "Aquatron Smart Lab"
     def build(self):
         return ScreenManager()
-
 
 
 '''
