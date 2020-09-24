@@ -2,12 +2,18 @@
 
 SENSOR_CONFIG = '/etc/aquatron/sensors.conf'
 
+import time
 import configparser
 import sys
 import os
 from pathlib import Path
 
-DEFAULT_CONFIG_STR = '''
+DEFAULT_CONFIG_STR = (
+'''# Global config
+[Global]
+# sensor polling period in seconds
+Period = 10
+
 # Write list of sensors here.
 # Example:
 # [Water Tank 1 Temperature]
@@ -15,6 +21,7 @@ DEFAULT_CONFIG_STR = '''
 # Address = 0x123
 # Model = abc123
 '''
+)
 
 ########################################################################
 # read_config
@@ -64,13 +71,23 @@ def read_config(path_str):
 ########################################################################
 def get_global_conf(config):
 	glob = {}
-	if "Global" in config.sections():
-		glob = config["Global"]
+	if "Global" in config:
+		if "Period" in config["Global"]:
+			try:
+				glob["Period"] = float(config["Global"]["Period"])
+			except ValueError as err:
+				print("Invalid period in [Global]: {0}".format(err))
+				print("Defaulting to Period = 10")
+				glob["Period"] = 10.0
+		else:
+			# default to 10 second poll period
+			print("Warning: no Period in [Global] in config. Default: 10")
+			glob["Period"] = 10.0
 		del config["Global"]
 	else:
 		# default to 10 second poll period
 		print("Warning: no [Global] section in config. Default period: 10")
-		glob["Period"] = 10
+		glob["Period"] = 10.0
 	return glob
 
 ########################################################################
@@ -93,7 +110,7 @@ def build_sensor_lists(config):
 			errors = True
 			continue
 		
-		sensor = {}
+		sensor = {"Value" : None}
 		sensor["name"] = friendly_name
 		
 		if "Address" in s:
@@ -125,21 +142,46 @@ def build_sensor_lists(config):
 		sys.exit(1)
 	return oneWire, i2c, digitalIO
 
-def loop(oneWire, i2c, digitalIO):
+def read_oneWire(sensor):
+	print(f'Reading from {sensor["name"]}')
+
+def read_i2c(sensor):
+	print(f'Reading from {sensor["name"]}')
+
+def read_digitalIO(sensor):
+	print(f'Reading from {sensor["name"]}')
+
+########################################################################
+# loop
+# receives: oneWire, i2c, digitalIO sensor lists and poll period
+# does: reads each sensor, stores data into db once every pollPeriod
+# returns: nothing
+########################################################################
+def loop(oneWire, i2c, digitalIO, pollPeriod):
 	running = True
-	#while running:
+	starttime = time.time()
+	while running:
 		# read data
-		
+		for sensor in oneWire:
+			read_oneWire(sensor)
+		for sensor in i2c:
+			read_i2c(sensor)
+		for sensor in digitalIO:
+			read_digitalIO(sensor)
 		# store data
 		
 		# sleep for period
+		time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
 
 def main():
 	config = read_config(SENSOR_CONFIG)
 	global_conf = get_global_conf(config)
 	oneWire, i2c, digitalIO = build_sensor_lists(config)
-	print(oneWire, i2c, digitalIO)
-	# loop(oneWire, i2c, digitalIO)
+	print("1wire devices: ", oneWire)
+	print("i2c devices: ", i2c)
+	print("digitalIO devices: ", digitalIO)
+	print("poll period: ", global_conf["Period"])
+	loop(oneWire, i2c, digitalIO, global_conf["Period"])
 
 if __name__ == "__main__":
 	main()
