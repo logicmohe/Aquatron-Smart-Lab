@@ -1,2 +1,112 @@
 #!/usr/bin/env python3
 
+SENSOR_CONFIG = '/etc/aquatron/sensors.conf'
+
+import configparser
+import sys.exit
+import os
+from pathlib import Path
+
+DEFAULT_CONFIG_STR =
+'''
+# Write list of sensors here.
+# Example:
+# [Water Tank 1 Temperature]
+# Bus = 1wire
+# Address = 0x123
+# Model = abc123
+'''
+
+########################################################################
+# read_config
+# receives: path to sensor config file as string
+# does: creates path and file if either DNE, parses config
+# returns: ConfigParser object filled with sensor info
+########################################################################
+def read_config(path_str):
+	config_path = Path(path_str)
+	# check if directory exists
+	if not os.path.exists(config_path.parent):
+		# create path
+		try:
+			os.mkdir(config_path.parent)
+		except OSError as err:
+			print("OS error: {0}".format(err))
+			print("Are you root?")
+			sys.exit(1)
+	# check if file exists
+	if not os.path.exists(config_path):
+		# create path
+		try:
+			f = open(config_path, "w")
+			f.write(DEFAULT_CONFIG_STR)
+			f.close()
+			print(f'Please populate {SENSOR_CONFIG}')
+			sys.exit(0)
+		except OSError as err:
+			print("OS error: {0}".format(err))
+			print("Are you root?")
+			sys.exit(1)
+	# file exists
+	config = ConfigParser()
+	try:
+		config.read(config_path)
+	except OSError as err:
+		print("OS error: {0}".format(err))
+		print("Are you root?")
+		sys.exit(1)
+	return config
+	
+		
+########################################################################
+# build_sensor_lists
+# receives: ConfigParser object obtained from read_config()
+# does: sorts sensors from config into 1wire sensor list, i2c sensor
+#       list, and digital IO sensor list, verifying that needed fields
+#       are there
+# returns: tuple of lists (oneWire, i2c, digitalIO)
+########################################################################
+def build_sensor_lists(config):
+	oneWire = []
+	i2c = []
+	digitalIO = []
+	errors = False
+	for friendly_name in config.sections():
+		s = config[friendly_name]
+		if "Bus" not in s:
+			print(f'Bus type not specified for {friendly_name}.')
+			errors = True
+			continue
+			
+		sensor = {}
+		sensor["name"] = friendly_name
+		
+		if "Address" in s:
+			sensor["addr"] = int(s["Address"]) # TODO: parse hex
+		else:
+			print(f'Address type not specified for {friendly_name}.')
+			errors = True
+		
+		if "Model" in s:
+			sensor["model"] = s["Model"]
+		else
+			print(f'Model number not specified for {friendly_name}.')
+			errors = True
+		
+		bus = s["Bus"].upper()
+		if bus in ["1WIRE", "ONEWIRE"]:
+			oneWire.append(sensor.copy())
+		else if bus in ["2WIRE", "TWOWIRE", "TWI", "I2C"]:
+			i2c.append(sensor.copy())
+		else if bus in [
+			"GPIO", "DIGITAL", "IO", "DIGITALIO", "BOOL", "BOOLEAN"
+		]:
+			digitalIO.append(sensor.copy())
+		else: # unknown bus type
+			print(f'Unknown bus type for {friendly_name}: {s["Bus"]}')
+			errors = True
+	if errors:
+		print(f'Please fix these errors in {SENSOR_CONFIG}')
+		sys.exit(1)
+	return oneWire, i2c, digitalIO
+			
