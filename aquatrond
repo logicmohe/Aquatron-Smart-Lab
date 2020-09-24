@@ -20,7 +20,7 @@ DEFAULT_CONFIG_STR = '''
 # read_config
 # receives: path to sensor config file as string
 # does: creates path and file if either DNE, parses config
-# returns: ConfigParser object filled with sensor info
+# returns: ConfigParser object filled with parsed info
 ########################################################################
 def read_config(path_str):
 	config_path = Path(path_str)
@@ -47,7 +47,7 @@ def read_config(path_str):
 			print("Are you root?")
 			sys.exit(1)
 	# file exists
-	config = ConfigParser()
+	config = configparser.ConfigParser()
 	try:
 		config.read(config_path)
 	except OSError as err:
@@ -55,8 +55,24 @@ def read_config(path_str):
 		print("Are you root?")
 		sys.exit(1)
 	return config
-	
-		
+
+########################################################################
+# get_global_conf
+# receives: ConfigParser object filled with parsed info
+# does: grabs global section and deletes it from passed dictionary
+# returns: ConfigParser object filled with only sensor info
+########################################################################
+def get_global_conf(config):
+	glob = {}
+	if "Global" in config.sections():
+		glob = config["Global"]
+		del config["Global"]
+	else:
+		# default to 10 second poll period
+		print("Warning: no [Global] section in config. Default period: 10")
+		glob["Period"] = 10
+	return glob
+
 ########################################################################
 # build_sensor_lists
 # receives: ConfigParser object obtained from read_config()
@@ -76,7 +92,7 @@ def build_sensor_lists(config):
 			print(f'Bus type not specified for {friendly_name}.')
 			errors = True
 			continue
-			
+		
 		sensor = {}
 		sensor["name"] = friendly_name
 		
@@ -108,4 +124,22 @@ def build_sensor_lists(config):
 		print(f'Please fix these errors in {SENSOR_CONFIG}')
 		sys.exit(1)
 	return oneWire, i2c, digitalIO
-			
+
+def loop(oneWire, i2c, digitalIO):
+	running = True
+	#while running:
+		# read data
+		
+		# store data
+		
+		# sleep for period
+
+def main():
+	config = read_config(SENSOR_CONFIG)
+	global_conf = get_global_conf(config)
+	oneWire, i2c, digitalIO = build_sensor_lists(config)
+	print(oneWire, i2c, digitalIO)
+	# loop(oneWire, i2c, digitalIO)
+
+if __name__ == "__main__":
+	main()
