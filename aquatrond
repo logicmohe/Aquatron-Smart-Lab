@@ -3,12 +3,11 @@
 SENSOR_CONFIG = '/etc/aquatron/sensors.conf'
 
 import configparser
-import sys.exit
+import sys
 import os
 from pathlib import Path
 
-DEFAULT_CONFIG_STR =
-'''
+DEFAULT_CONFIG_STR = '''
 # Write list of sensors here.
 # Example:
 # [Water Tank 1 Temperature]
@@ -89,16 +88,16 @@ def build_sensor_lists(config):
 		
 		if "Model" in s:
 			sensor["model"] = s["Model"]
-		else
+		else:
 			print(f'Model number not specified for {friendly_name}.')
 			errors = True
 		
 		bus = s["Bus"].upper()
 		if bus in ["1WIRE", "ONEWIRE"]:
 			oneWire.append(sensor.copy())
-		else if bus in ["2WIRE", "TWOWIRE", "TWI", "I2C"]:
+		elif bus in ["2WIRE", "TWOWIRE", "TWI", "I2C"]:
 			i2c.append(sensor.copy())
-		else if bus in [
+		elif bus in [
 			"GPIO", "DIGITAL", "IO", "DIGITALIO", "BOOL", "BOOLEAN"
 		]:
 			digitalIO.append(sensor.copy())
