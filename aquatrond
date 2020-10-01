@@ -183,7 +183,7 @@ def loop(oneWire, i2c, digitalIO, global_conf):
 			read_digitalIO(sensor)
 		# store data
 		for sensor in oneWire:
-			print(f'{sensor["name"]}: {sensor["value"]}')
+			print(f'{time.time()}: {sensor["name"]}: {sensor["value"]}')
 		# sleep for period
 		time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
 
