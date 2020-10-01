@@ -152,11 +152,9 @@ def build_sensor_lists(config):
 
 def read_owfs(sensor, owfs):
 	print(f'Reading from {sensor["name"]}')
-	print(sensor)
-	vfile = owfs / Path(sensor["addr"]) / Path("temperature")
-	"""{
+	vfile = owfs / Path(sensor["addr"]) / Path({
 		"DS18B20" : "temperature"
-	}[sensor["model"]]"""
+	}[sensor["model"]])
 	if os.path.exists(vfile.parent):
 		sensor["value"] = open(vfile).read()
 	else:
@@ -184,7 +182,8 @@ def loop(oneWire, i2c, digitalIO, global_conf):
 		for sensor in digitalIO:
 			read_digitalIO(sensor)
 		# store data
-		
+		for sensor in oneWire:
+			print(f'{sensor["name"]}: {sensor["value"]}')
 		# sleep for period
 		time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
 
