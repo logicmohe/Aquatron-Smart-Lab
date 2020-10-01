@@ -150,6 +150,13 @@ def build_sensor_lists(config):
 		sys.exit(1)
 	return oneWire, i2c, digitalIO
 
+########################################################################
+# read_owfs
+# receives: list of 1wire sensor dictionaries, owfs mountpoint Path
+# does: reads virtual device file in owfs vfs, stores value into
+#       sensor["value"]. Also stores timestamp.
+# returns: nothing
+########################################################################
 def read_owfs(sensor, owfs):
 	# TODO: check for key error in list, add more devices
 	vfile = owfs / Path(sensor["addr"]) / Path({
