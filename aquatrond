@@ -7,13 +7,13 @@ import configparser
 import sys
 import os
 from pathlib import Path
-import smbus
 
 DEFAULT_CONFIG_STR = (
 '''# Global config
 [Global]
 # sensor polling period in seconds
 Period = 10
+OWFS Mountpoint = /mnt/owfs
 
 # Write list of sensors here.
 # Example:
@@ -84,11 +84,18 @@ def get_global_conf(config):
 			# default to 10 second poll period
 			print("Warning: no Period in [Global] in config. Default: 10")
 			glob["Period"] = 10.0
+		if "OWFS Mountpoint" in config["Global"]:
+			glob["owfs"] = config["Global"]["OWFS Mountpoint"]
+		else:
+			print("Warning: no OWFS Mountpoint set in config. Default: /mnt/owfs")
+			glob["owfs"] = "/mnt/owfs"
 		del config["Global"]
 	else:
 		# default to 10 second poll period
 		print("Warning: no [Global] section in config. Default period: 10")
 		glob["Period"] = 10.0
+		print("Warning: no OWFS Mountpoint set in config. Default: /mnt/owfs")
+		glob["owfs"] = "/mnt/owfs"
 	return glob
 
 ########################################################################
@@ -115,7 +122,7 @@ def build_sensor_lists(config):
 		sensor["name"] = friendly_name
 		
 		if "Address" in s:
-			sensor["addr"] = int(s["Address"]) # TODO: parse hex
+			sensor["addr"] = s["Address"]
 		else:
 			print(f'Address type not specified for {friendly_name}.')
 			errors = True
@@ -143,11 +150,18 @@ def build_sensor_lists(config):
 		sys.exit(1)
 	return oneWire, i2c, digitalIO
 
-def read_oneWire(sensor):
+def read_owfs(sensor, owfs):
 	print(f'Reading from {sensor["name"]}')
-
-def read_i2c(sensor):
-	print(f'Reading from {sensor["name"]}')
+	print(sensor)
+	vfile = owfs / Path(sensor["addr"]) / Path("temperature")
+	"""{
+		"DS18B20" : "temperature"
+	}[sensor["model"]]"""
+	if os.path.exists(vfile.parent):
+		sensor["value"] = open(vfile).read()
+	else:
+		print("Error reading from sensor.")
+		print(vfile)
 
 def read_digitalIO(sensor):
 	print(f'Reading from {sensor["name"]}')
@@ -158,15 +172,15 @@ def read_digitalIO(sensor):
 # does: reads each sensor, stores data into db once every pollPeriod
 # returns: nothing
 ########################################################################
-def loop(oneWire, i2c, digitalIO, pollPeriod):
+def loop(oneWire, i2c, digitalIO, global_conf):
+	pollPeriod = global_conf["Period"]
 	running = True
+	owfs_path = Path(global_conf["owfs"])
 	starttime = time.time()
 	while running:
 		# read data
 		for sensor in oneWire:
-			read_oneWire(sensor)
-		for sensor in i2c:
-			read_i2c(sensor)
+			read_owfs(sensor, owfs_path)
 		for sensor in digitalIO:
 			read_digitalIO(sensor)
 		# store data
@@ -182,7 +196,7 @@ def main():
 	print("i2c devices: ", i2c)
 	print("digitalIO devices: ", digitalIO)
 	print("poll period: ", global_conf["Period"])
-	loop(oneWire, i2c, digitalIO, global_conf["Period"])
+	loop(oneWire, i2c, digitalIO, global_conf)
 
 if __name__ == "__main__":
 	main()
