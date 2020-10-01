@@ -156,6 +156,7 @@ def read_owfs(sensor, owfs):
 		"DS18B20" : "temperature"
 	}[sensor["model"]])
 	if os.path.exists(vfile):
+		sensor["timestamp"] = time.time()
 		sensor["value"] = open(vfile).read()
 	else:
 		print("Error reading from sensor.")
@@ -183,7 +184,7 @@ def loop(oneWire, i2c, digitalIO, global_conf):
 			read_digitalIO(sensor)
 		# store data
 		for sensor in oneWire:
-			print(f'{time.time()}: {sensor["name"]}: {sensor["value"]}')
+			print(f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
 		# sleep for period
 		time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
 
