@@ -151,11 +151,11 @@ def build_sensor_lists(config):
 	return oneWire, i2c, digitalIO
 
 def read_owfs(sensor, owfs):
-	print(f'Reading from {sensor["name"]}')
+	# TODO: check for key error in list, add more devices
 	vfile = owfs / Path(sensor["addr"]) / Path({
 		"DS18B20" : "temperature"
 	}[sensor["model"]])
-	if os.path.exists(vfile.parent):
+	if os.path.exists(vfile):
 		sensor["value"] = open(vfile).read()
 	else:
 		print("Error reading from sensor.")
