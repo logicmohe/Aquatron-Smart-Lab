@@ -84,13 +84,13 @@
             height: 10
             spacing: 20
             Button:
-                text:"Water Temperature Sensor"
+                text:"44F 46F"
                 #size_hint: .5,1
             Button:
-                text:"Liquid Sensor"
+                text:"No Lead Detected"
                 #size_hint: .5,1
             Button:
-                text:"Air Temperature Sensor"
+                text:"53F"
                 #size_hint: .5,1
 
         
@@ -115,13 +115,13 @@
             height: 10
             spacing: 20
             Button:
-                text:"Water Level Sensor"
+                text:"25% 25%"
                 #size_hint: 1,1
             Button:
-                text:"Light Sensor"
+                text:"36"
                 #size_hint: .5,1
             Button:
-                text:"Humidity Sensor"
+                text:"55%"
                 #size_hint: .5,1
 
 #Setting Screen Layout
@@ -338,10 +338,6 @@
             orientation: "horizontal"
             size_hint_y: .15
             Button:
-                text:"Save Changes"
-                #on_release:
-                    #root.update.....
-            Button:
                 text: "Back"
                 on_release: root.manager.current='Main'
 
@@ -364,10 +360,6 @@
         BoxLayout:
             orientation: "horizontal"
             size_hint_y: .15
-            Button:
-                text:"Save Changes"
-                #on_release:
-                    #root.update.....
             Button:
                 text: "Back"
                 on_release: root.manager.current='Main'
