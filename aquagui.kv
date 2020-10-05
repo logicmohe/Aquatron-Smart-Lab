@@ -363,3 +363,27 @@
             Button:
                 text: "Back"
                 on_release: root.manager.current='Main'
+
+<AlertingScreen>:
+    name: 'OtherSensor'
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "Please enter the email address for emergency contacts:"
+        TextInput:
+            id: "Email1"
+        TextInput:
+            id: "Email2"
+        TextInput:
+            id: "Email3"
+
+        #Button on bottom
+        BoxLayout:
+            orientation: "horizontal"
+            Button:
+                text:"Save Changes"
+                #on_release:
+                    #root.update.....
+            Button:
+                text: "Back"
+                on_release: root.manager.current='Main'            
