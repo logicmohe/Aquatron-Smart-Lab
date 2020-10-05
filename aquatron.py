@@ -86,33 +86,33 @@ class WaterSensorScreen(Screen):
         self.graph_generate()
         plt.figure(0)
         plt.plot([1,23,2,4])
-        plt.title('Upside Water Temperature')
+        plt.title('Average Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(1)
         plt.plot([2,4,8, 16])
-        plt.title('Downside Water Temperature')
+        plt.title('Upside Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
         plt.figure(2)
         plt.plot([2,4,8, 16])
-        plt.title('Average Water Temperature')
+        plt.title('Downside Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(3)
         plt.plot([11,12,13,15])
-        plt.title('Leftside Water Level')
+        plt.title('Average Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(4)
         plt.plot([15,23,2,4])
-        plt.title('Rightside Water Level')
+        plt.title('Leftside Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
         ))
 
         plt.figure(5)
         plt.plot([15,23,2,4])
-        plt.title('Average Water Level')
+        plt.title('Rightside Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
         ))
         #return box
@@ -124,7 +124,7 @@ class WaterSensorScreen(Screen):
 class OtherSensorScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
-    
+    x = ['00:00','00:30','01:00','01:30','02:00','02:30','03:00','03:30','04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30','22:00','22:30','23:00','23:30']
     plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
         super(OtherSensorScreen, self).__init__(**kwargs)
@@ -136,7 +136,7 @@ class OtherSensorScreen(Screen):
         #Plot the graph using matplotlib
         self.graph_generate()
         plt.figure(6)
-        plt.plot([1,23,2,4])
+        plt.plot(x,[1,23,2,4,5,6,7,8,9,0,12,53,2,4])
         plt.title('Room Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
