@@ -174,7 +174,12 @@ class SettingScreen(Screen):
     data_items=ListProperty([])
     pass
 
-
+#Kivy Setting Screen
+class AlertingScreen(Screen):
+    #waiting for other items
+    #could be wrong
+    data_items=ListProperty([])
+    pass
 
 #Kivy Main Screen
 class MainScreen(Screen):
