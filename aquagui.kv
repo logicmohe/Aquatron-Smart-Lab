@@ -7,6 +7,7 @@
     SettingScreen
     WaterSensorScreen
     OtherSensorScreen
+    AlertingScreen
 
 #Main Screen Layout
 <MainScreen>:
@@ -30,7 +31,7 @@
             orientation: "horizontal"
             height: 10
             size_hint_y: .3
-            spacing: 20
+            spacing: 10
             Image:
                 source: 'aquatron.png'
                 size_hint: .3,1
@@ -46,6 +47,11 @@
                 text:"Other Sensor Page"
                 size_hint: .5,1
                 on_release: root.manager.current='OtherSensor'
+            Button:
+                text:"Alerting Page"
+                size_hint: .5,1
+                on_release: root.manager.current='Alerting'
+
 
             BoxLayout:
                 orientation: "horizontal"
@@ -365,7 +371,7 @@
                 on_release: root.manager.current='Main'
 
 <AlertingScreen>:
-    name: 'OtherSensor'
+    name: 'Alerting'
     BoxLayout:
         orientation: "vertical"
         Label:
