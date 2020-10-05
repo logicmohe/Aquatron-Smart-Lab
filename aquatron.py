@@ -135,22 +135,22 @@ class OtherSensorScreen(Screen):
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
         self.graph_generate()
-        plt.figure(0)
+        plt.figure(6)
         plt.plot([1,23,2,4])
         plt.title('Room Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(1)
+        plt.figure(7)
         plt.plot([2,4,8, 16])
         plt.title('Room Humidity in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(2)
+        plt.figure(8)
         plt.plot([11,12,13,15])
         plt.title('Optic in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(3)
+        plt.figure(9)
         plt.plot([15,23,2,4])
         plt.title('Water Leak in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
