@@ -89,9 +89,9 @@ class WaterSensorScreen(Screen):
         self.graph_generate()
         fig=plt.figure(0)
         ax=fig.add_subplot(1,1,1)
-        
+
         plt.plot(x,[17,19,23,20])
-        ax.xaxis.set_major_locator(MultipleLocator(2))
+        ax.xaxis.set_major_locator(2)
         plt.title('Average Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
