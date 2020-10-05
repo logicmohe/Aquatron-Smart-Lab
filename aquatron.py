@@ -60,7 +60,7 @@ humidity_max=_init
 #Note for future : use for loop to check if any sensor value is 
 #out of range, use correpsonding button to make it read
 '''
-OOP in case for future expandsion
+in case for future expandsion
 WATERTEMP=0
 WATERLVL=1
 LIQUID=2
@@ -74,8 +74,6 @@ Data Processing
 '''
 
 #read in data and process in this section
-
-
 
 
 
@@ -140,7 +138,7 @@ class MainScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        Clock.schedule_interval(self.get_data,10) #proper callback time, for now is 0.1 s
+        Clock.schedule_interval(self.get_data,1)
     def get_data(self,dt):
         global current_time
         current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
