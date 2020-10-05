@@ -79,41 +79,43 @@ class WaterSensorScreen(Screen):
         super(WaterSensorScreen, self).__init__(**kwargs)
         #Considering whether we should just do it updating each 10 mins
         Clock.schedule_once(self.graph_test)
-        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+        #Clock.schedule_interval(self.graph_test,600)
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
-        x = ['00:00','04:00','08:00','12:00','16:00','20:00',]
+        x = ['00:00','06:00','12:00','18:00']
 
         self.graph_generate()
-        plt.figure(0)
-        plt.plot(x,[17,19,23,20,21,20])
+        ax=plt.figure(0)
+        
+        plt.plot(x,[17,19,23,20])
+        ax.xaxis.set_major_locator(MultipleLocator(2))
         plt.title('Average Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(1)
-        plt.plot(x,[18,19,22,20,20,20])
+        plt.plot(x,[18,19,22,20])
         plt.title('Upside Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
         plt.figure(2)
-        plt.plot(x,[16,18,24,20,22,20])
+        plt.plot(x,[16,18,24,20])
         plt.title('Downside Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(3)
-        plt.plot(x,[11,11,10,11,13,11])
+        plt.plot(x,[11,11,13,11])
         plt.title('Average Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(4)
-        plt.plot(x,[11,12,10,11,13,11])
+        plt.plot(x,[11,12,13,11])
         plt.title('Leftside Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
         ))
 
         plt.figure(5)
-        plt.plot(x,[11,10,10,11,13,11])
+        plt.plot(x,[11,10,13,11])
         plt.title('Rightside Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
         ))
