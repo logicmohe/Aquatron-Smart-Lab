@@ -87,8 +87,9 @@ class WaterSensorScreen(Screen):
         x = ['00:00','06:00','12:00','18:00']
 
         self.graph_generate()
-        plt.figure(0)
+        fig=plt.figure(0)
         ax=fig.add_subplot(1,1,1)
+        
         plt.plot(x,[17,19,23,20])
         ax.xaxis.set_major_locator(MultipleLocator(2))
         plt.title('Average Water Temperature')
