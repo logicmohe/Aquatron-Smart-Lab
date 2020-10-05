@@ -30,51 +30,39 @@ Initialization
 '''
 #initialize all the variables
 
-_init=0.0
+_init=0.00
+_init_min=0
+_init_max=100
 
 current_time='0000-00-00 00:00:00'      #initialize the time
 
 #sensors, read in from GPIO
-watertemp_sensor=_init
-waterlvl_sensor=_init
-liquid_sensor=_init
-light_sensor=_init
-airtemp_sensor=_init
-humidity_sensor=_init
+watertemp_sensor=waterlvl_sensor =liquid_sensor   = \
+    light_sensor=airtemp_sensor=humidity_sensor=_init
 
 #Setup: After reaching the limit, special event will be triggerred
-watertemp_min=_init
-waterlvl_min=_init
-liquid_min=_init
-light_min=_init
-airtemp_min=_init
-humidity_min=_init
+watertemp_min=waterlvl_min=liquid_min=light_min \
+    =airtemp_min=humidity_min=_init_min
 
-watertemp_max=_init
-waterlvl_max=_init
-liquid_max=_init
-light_max=_init
-airtemp_max=_init
-humidity_max=_init
+watertemp_max=waterlvl_max=liquid_max= \
+    light_max=airtemp_max=humidity_max=_init_max
 
 #Note for future : use for loop to check if any sensor value is 
 #out of range, use correpsonding button to make it read
-'''
-in case for future expandsion
-WATERTEMP=0
-WATERLVL=1
-LIQUID=2
-LIGHT=3
-AIRTEMP=4
-HUMIDITY=5
-ListOfSensor=['watertemp','waterlvl','liquid','light','airtemp','humidity']
-'''
+
+# in case for future expandsion
+# WATERTEMP=0
+# WATERLVL=1
+# LIQUID=2
+# LIGHT=3
+# AIRTEMP=4
+# HUMIDITY=5
+# ListOfSensor=['watertemp','waterlvl','liquid','light','airtemp','humidity']
+
 '''
 Data Processing
 '''
-
 #read in data and process in this section
-
 
 
 
@@ -82,13 +70,52 @@ Data Processing
 Kivy Interface
 '''
 #Kivy StatisticScreen for anylyzing the collected data in 24 hours
-class StatisticScreen(Screen):
+class WaterSensorScreen(Screen):
+    data_items=ListProperty([])
+    #build a simple graph
+    
+    plt.ylabel('Statistic Graph in 24 hours for water level and water temperature')
+    def __init__(self, **kwargs):
+        super(WaterSensorScreen, self).__init__(**kwargs)
+        #Considering whether we should just do it updating each 10 mins
+        Clock.schedule_once(self.graph_test)
+        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+
+    def graph_test(self, dt): 
+        #Plot the graph using matplotlib
+        self.graph_generate()
+        plt.figure(0)
+        plt.plot([1,23,2,4])
+        plt.title('Temperature in 24 hours')
+        self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        
+        plt.figure(1)
+        plt.plot([2,4,8, 16])
+        plt.title('Humidity in 24 hours')
+        self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        
+        plt.figure(2)
+        plt.plot([11,12,13,15])
+        plt.title('Optic in 24 hours')
+        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        
+        plt.figure(3)
+        plt.plot([15,23,2,4])
+        plt.title('Water Level in 24 hours')
+        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        #return box
+        #If this is keep refreshing, then use remove_widget(destination)
+    def graph_generate(self):
+        #overhere, read from postgreSQL data to generate Matplotlib graph
+        pass
+
+class OtherSensorScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
     
     plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
-        super(StatisticScreen, self).__init__(**kwargs)
+        super(OtherSensorScreen, self).__init__(**kwargs)
         #Considering whether we should just do it updating each 10 mins
         Clock.schedule_once(self.graph_test)
         #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s

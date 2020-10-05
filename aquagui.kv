@@ -5,7 +5,8 @@
 <ScreenManager>:
     MainScreen
     SettingScreen
-    StatisticScreen
+    WaterSensorScreen
+    OtherSensorScreen
 
 #Main Screen Layout
 <MainScreen>:
@@ -38,9 +39,13 @@
                 size_hint: .5,1
                 on_release: root.manager.current='Setting'
             Button:
-                text:"Statistic Page"
+                text:"Water Sensor Page"
                 size_hint: .5,1
-                on_release: root.manager.current='Statistic'
+                on_release: root.manager.current='WaterSensor'            
+            Button:
+                text:"Other Sensor Page"
+                size_hint: .5,1
+                on_release: root.manager.current='OtherSensor'
 
             BoxLayout:
                 orientation: "horizontal"
@@ -314,8 +319,35 @@
 
 
 #StatisticScreen Screen Layout
-<StatisticScreen>:
-    name: 'Statistic'
+<WaterSensorScreen>:
+    name: 'WaterSensor'
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        #Header
+
+        BoxLayout:
+            orientation: "horizontal"
+            id: topline
+
+        BoxLayout:
+            orientation: "horizontal"
+            id: botline
+        
+        #Button on bottom
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: .15
+            Button:
+                text:"Save Changes"
+                #on_release:
+                    #root.update.....
+            Button:
+                text: "Back"
+                on_release: root.manager.current='Main'
+
+<OtherSensorScreen>:
+    name: 'OtherSensor'
     BoxLayout:
         orientation: "vertical"
         spacing: 20
