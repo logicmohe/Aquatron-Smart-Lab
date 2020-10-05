@@ -108,12 +108,12 @@ class WaterSensorScreen(Screen):
         plt.plot([15,23,2,4])
         plt.title('Right Water Level in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
-        
+        ))
+
         plt.figure(5)
         plt.plot([15,23,2,4])
         plt.title('Average Water Level in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
-                
         ))
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
