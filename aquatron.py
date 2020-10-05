@@ -124,7 +124,7 @@ class WaterSensorScreen(Screen):
 class OtherSensorScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
-    x = ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00']
+    
 
     plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
@@ -137,6 +137,7 @@ class OtherSensorScreen(Screen):
         #Plot the graph using matplotlib
         self.graph_generate()
         plt.figure(6)
+        x = ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00']
         plt.plot(x,[17,16,17,16,17,16,17,18,18,19,20,18])
         plt.title('Room Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
