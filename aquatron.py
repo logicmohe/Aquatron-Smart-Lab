@@ -86,23 +86,35 @@ class WaterSensorScreen(Screen):
         self.graph_generate()
         plt.figure(0)
         plt.plot([1,23,2,4])
-        plt.title('Temperature in 24 hours')
+        plt.title('Up Water Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(1)
         plt.plot([2,4,8, 16])
-        plt.title('Humidity in 24 hours')
+        plt.title('Down Water Temperature in 24 hours')
+        self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+
+        plt.figure(2)
+        plt.plot([2,4,8, 16])
+        plt.title('Average Water Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(2)
+        plt.figure(3)
         plt.plot([11,12,13,15])
-        plt.title('Optic in 24 hours')
+        plt.title('Left Water Level in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(3)
+        plt.figure(4)
         plt.plot([15,23,2,4])
-        plt.title('Water Level in 24 hours')
-        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        plt.title('Right Water Level in 24 hours')
+        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
+        
+        plt.figure(5)
+        plt.plot([15,23,2,4])
+        plt.title('Average Water Level in 24 hours')
+        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
+                
+        ))
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
     def graph_generate(self):
@@ -125,12 +137,12 @@ class OtherSensorScreen(Screen):
         self.graph_generate()
         plt.figure(0)
         plt.plot([1,23,2,4])
-        plt.title('Temperature in 24 hours')
+        plt.title('Room Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(1)
         plt.plot([2,4,8, 16])
-        plt.title('Humidity in 24 hours')
+        plt.title('Room Humidity in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(2)
@@ -140,7 +152,7 @@ class OtherSensorScreen(Screen):
         
         plt.figure(3)
         plt.plot([15,23,2,4])
-        plt.title('Water Level in 24 hours')
+        plt.title('Water Leak in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
