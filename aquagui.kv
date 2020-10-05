@@ -147,6 +147,10 @@
             orientation: "horizontal"
             size_hint_y: .2
             Label:
+                text: "Min"
+            Label:
+                text: str(watertemp_slider_min.value)
+            Label:
                 text: "Max"                
             Label:
                 text: str(watertemp_slider_max.value)
@@ -154,46 +158,23 @@
             Label:
                 text: "Min"
             Label:
-                text: str(watertemp_slider_min.value)
-
-            Label:
-                text: "Max"
-            Label:
-                text: str(liquid_slider_max.value)  
-            Label:
-                text: "Min"
-            Label:
                 text: str(liquid_slider_min.value)
             Label:
                 text: "Max"
             Label:
-                text: str(airtemp_slider_max.value)
+                text: str(liquid_slider_max.value)  
+
             Label:
                 text: "Min"  
             Label:
-                text: str(airtemp_slider_min.value)
+                text: str(airtemp_slider_min.value)                
+            Label:
+                text: "Max"
+            Label:
+                text: str(airtemp_slider_max.value)
+            
 
         #First Row Sliders
-        BoxLayout:#Max
-            orientation: "horizontal"
-            Slider:
-                id: watertemp_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: liquid_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: airtemp_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
         BoxLayout:#Min
             orientation: "horizontal"
             Slider:
@@ -214,6 +195,26 @@
                 max: 100
                 step: 1
                 orientation: "horizontal"
+        BoxLayout:#Max
+            orientation: "horizontal"
+            Slider:
+                id: watertemp_slider_max
+                min: 0
+                max: 100
+                step: 1
+                orientation: "horizontal"
+            Slider:
+                id: liquid_slider_max
+                min: 0
+                max: 100
+                step: 1
+                orientation: "horizontal"
+            Slider:
+                id: airtemp_slider_max
+                min: 0
+                max: 100
+                step: 1
+                orientation: "horizontal"
 
 
         #Second Row contains three sensors
@@ -230,14 +231,18 @@
             orientation: "horizontal"
             size_hint_y: .2
             Label:
-                text: "Max"
-            Label:
-                text: str(waterlvl_slider_max.value)
-            Label:
                 text: "Min"  
             Label:
                 text: str(waterlvl_slider_min.value)
+            Label:
+                text: "Max"
+            Label:
+                text: str(waterlvl_slider_max.value)
 
+            Label:
+                text: "Min"
+            Label:
+                text: str(light_slider_min.value)
             Label:
                 text: "Max"                
             Label:
@@ -246,18 +251,33 @@
             Label:
                 text: "Min"
             Label:
-                text: str(light_slider_min.value)
-
+                text: str(humidity_slider_min.value)
             Label:
                 text: "Max"
             Label:
                 text: str(humidity_slider_max.value)  
-            Label:
-                text: "Min"
-            Label:
-                text: str(humidity_slider_min.value)
 
 
+        BoxLayout:#Min
+            orientation: "horizontal"
+            Slider:
+                id: waterlvl_slider_min
+                min: 0
+                max: 100
+                step: 1
+                orientation: "horizontal"
+            Slider:
+                id: light_slider_min
+                min: 0
+                max: 100
+                step: 1
+                orientation: "horizontal"
+            Slider:
+                id: humidity_slider_min
+                min: 0
+                max: 100
+                step: 1
+                orientation: "horizontal"
         #Second Row Sliders
         BoxLayout:#Max
             orientation: "horizontal"
@@ -275,26 +295,6 @@
                 orientation: "horizontal"
             Slider:
                 id: humidity_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-        BoxLayout:#Min
-            orientation: "horizontal"
-            Slider:
-                id: waterlvl_slider_min
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: light_slider_min
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: humidity_slider_min
                 min: 0
                 max: 100
                 step: 1
