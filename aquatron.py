@@ -83,35 +83,37 @@ class WaterSensorScreen(Screen):
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
+        x = ['00:00','04:00','08:00','12:00','16:00','20:00',]
+
         self.graph_generate()
         plt.figure(0)
-        plt.plot([1,23,2,4])
+        plt.plot(x,[17,19,23,20,21,20])
         plt.title('Average Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(1)
-        plt.plot([2,4,8, 16])
+        plt.plot(x,[18,19,22,20,20,20])
         plt.title('Upside Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
         plt.figure(2)
-        plt.plot([2,4,8, 16])
+        plt.plot(x,[16,18,24,20,22,20])
         plt.title('Downside Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(3)
-        plt.plot([11,12,13,15])
+        plt.plot(x,[11,11,10,11,13,11])
         plt.title('Average Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(4)
-        plt.plot([15,23,2,4])
+        plt.plot(x,[11,12,10,11,13,11])
         plt.title('Leftside Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
         ))
 
         plt.figure(5)
-        plt.plot([15,23,2,4])
+        plt.plot(x,[11,10,10,11,13,11])
         plt.title('Rightside Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
         ))
@@ -137,23 +139,23 @@ class OtherSensorScreen(Screen):
         #Plot the graph using matplotlib
         self.graph_generate()
         plt.figure(6)
-        x = ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00']
-        plt.plot(x,[17,16,17,16,17,16,17,18,18,19,20,18])
+        x = ['00:00','04:00','08:00','12:00','16:00','20:00',]
+        plt.plot(x,[17,18,18,19,20,18])
         plt.title('Room Temperature in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(7)
-        plt.plot([2,4,8, 16])
+        plt.plot(x,[4,3,2,4,8, 16])
         plt.title('Room Humidity in 24 hours')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(8)
-        plt.plot([11,12,13,15])
+        plt.plot(x,[0,0,11,12,13,15])
         plt.title('Optic in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         plt.figure(9)
-        plt.plot([15,23,2,4])
+        plt.plot(x,[10,11,15,23,2,4])
         plt.title('Water Leak in 24 hours')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         #return box
