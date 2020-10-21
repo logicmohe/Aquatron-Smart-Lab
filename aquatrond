@@ -12,8 +12,10 @@ import RPi.GPIO as GPIO
 import board
 import busio
 import adafruit_si7021
+import Adafruit_ADS1x15
 
 i2c = busio.I2C(board.SCL, board.SDA)
+adc = Adafruit_ADS1x15.ADS1015()
 
 DEFAULT_CONFIG_STR = (
 '''# Global config
@@ -109,17 +111,19 @@ def get_global_conf(config):
 # build_sensor_lists
 # receives: ConfigParser object obtained from read_config()
 # does: sorts sensors from config into 1wire sensor list, i2c sensor
-#       list, and digital IO sensor list, verifying that needed fields
-#       are there
-# returns: tuple of lists (oneWire, i2c, digitalIO)
+#       list, analog sensor lise, and digital IO sensor list,
+#       verifying that needed fields are there
+# returns: tuple of lists (oneWire, i2c, digitalIO, analog)
 ########################################################################
 def build_sensor_lists(config):
 	oneWire = []
 	i2c = []
 	digitalIO = []
+	analog = []
 	oneWireNames = ["1WIRE", "ONEWIRE"]
 	i2cNames = ["2WIRE", "TWOWIRE", "TWI", "I2C"]
 	digitalIONames = ["GPIO", "DIGITAL", "IO", "DIGITALIO", "BOOL", "BOOLEAN"]
+	analogNames = ["ANALOG"]
 	errors = False
 	for friendly_name in config.sections():
 		s = config[friendly_name]
@@ -141,7 +145,7 @@ def build_sensor_lists(config):
 		
 		if "Model" in s:
 			sensor["model"] = s["Model"].upper()
-		elif bus not in digitalIONames:
+		elif bus not in digitalIONames + analogNames:
 			print(f'Model number not specified for {friendly_name}.')
 			errors = True
 		
@@ -165,13 +169,15 @@ def build_sensor_lists(config):
 				errors = True
 			GPIO.setup(sensor["addr"], GPIO.IN)
 			digitalIO.append(sensor.copy())
+		elif bus in analogNames:
+			analog.append(sensor.copy())
 		else: # unknown bus type
 			print(f'Unknown bus type for {friendly_name}: {s["Bus"]}')
 			errors = True
 	if errors:
 		print(f'Please fix these errors in {SENSOR_CONFIG}')
 		sys.exit(1)
-	return oneWire, i2c, digitalIO
+	return oneWire, i2c, digitalIO, analog
 
 ########################################################################
 # read_owfs
@@ -225,12 +231,23 @@ def read_digitalIO(sensor):
 	sensor["value"] = GPIO.input(sensor["addr"])
 
 ########################################################################
+# read_analog
+# receives: list of analog sensor dictionaries
+# does: reads analog adc pin, stores value into
+#       sensor["value"]. Also stores timestamp.
+# returns: nothing
+########################################################################
+def read_analog(sensor):
+	sensor["timestamp"] = time.time()
+	sensor["value"] = adc.read_adc(sensor["addr"], gain=1)
+
+########################################################################
 # loop
-# receives: oneWire, i2c, digitalIO sensor lists and poll period
+# receives: oneWire, i2c, digitalIO, analog sensor lists and poll period
 # does: reads each sensor, stores data into db once every pollPeriod
 # returns: nothing
 ########################################################################
-def loop(oneWire, i2c, digitalIO, global_conf):
+def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	pollPeriod = global_conf["Period"]
 	running = True
 	owfs_path = Path(global_conf["owfs"])
@@ -243,8 +260,10 @@ def loop(oneWire, i2c, digitalIO, global_conf):
 			read_i2c(sensor)
 		for sensor in digitalIO:
 			read_digitalIO(sensor)
+		for sensor in analog:
+			read_analog(sensor)
 		# store data
-		for sensor in oneWire + i2c + digitalIO:
+		for sensor in oneWire + i2c + digitalIO + analog:
 			print(f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
 		print()
 		# sleep for period
@@ -254,12 +273,13 @@ def main():
 	GPIO.setmode(GPIO.BCM)
 	config = read_config(SENSOR_CONFIG)
 	global_conf = get_global_conf(config)
-	oneWire, i2c, digitalIO = build_sensor_lists(config)
+	oneWire, i2c, digitalIO, analog = build_sensor_lists(config)
 	print("1wire devices: ", json.dumps(oneWire, indent = 2))
 	print("i2c devices: ", json.dumps(i2c, indent = 2))
 	print("digitalIO devices: ", json.dumps(digitalIO, indent = 2))
+	print("analog devices: ", json.dumps(analog, indent = 2))
 	print("poll period: ", global_conf["Period"])
-	loop(oneWire, i2c, digitalIO, global_conf)
+	loop(oneWire, i2c, digitalIO, analog, global_conf)
 
 if __name__ == "__main__":
 	main()
