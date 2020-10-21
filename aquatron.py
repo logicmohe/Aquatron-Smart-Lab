@@ -131,7 +131,7 @@ class RoomSensorScreen(Screen):
 
     plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
-        super(OtherSensorScreen, self).__init__(**kwargs)
+        super(RoomSensorScreen, self).__init__(**kwargs)
         #Considering whether we should just do it updating each 10 mins
         Clock.schedule_once(self.graph_test)
         #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
@@ -225,7 +225,6 @@ class AlertingScreen(Screen):
 
 #Kivy Main Screen
 class MainScreen(Screen):
-
 
     #waiting for other items
     data_items=ListProperty([])
