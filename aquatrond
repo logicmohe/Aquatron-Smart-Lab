@@ -169,6 +169,23 @@ def read_owfs(sensor, owfs):
 		print("Error reading from sensor.")
 		print(vfile)
 
+########################################################################
+# read_i2c
+# receives: list of i2s sensor dictionaries
+# does: reads sensor value, stores value into
+#       sensor["value"]. Also stores timestamp.
+# returns: nothing
+########################################################################
+def read_i2c(sensor):
+	print(f'Reading from {sensor["name"]}')
+
+########################################################################
+# read_digitalIO
+# receives: list of IO sensor dictionaries
+# does: reads gpio pin, stores value into
+#       sensor["value"]. Also stores timestamp.
+# returns: nothing
+########################################################################
 def read_digitalIO(sensor):
 	print(f'Reading from {sensor["name"]}')
 
@@ -187,6 +204,8 @@ def loop(oneWire, i2c, digitalIO, global_conf):
 		# read data
 		for sensor in oneWire:
 			read_owfs(sensor, owfs_path)
+		for sensor in i2c:
+			read_i2c(sensor)
 		for sensor in digitalIO:
 			read_digitalIO(sensor)
 		# store data
