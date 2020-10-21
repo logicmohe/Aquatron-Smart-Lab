@@ -5,6 +5,7 @@ import serial
 #import busio
 #import RPI.GPIO as GPIO
 from time import localtime, strftime,sleep
+import pandas as pd
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -85,41 +86,27 @@ class WaterSensorScreen(Screen):
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
-        x = ['00:00','06:00','12:00','18:00']
+        data = [random.randrange(80,100) for i in range (144)]
+
+        times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         self.graph_generate()
         plt.figure(0)
 
-        plt.plot(x,[17,19,23,20])
-        plt.title('Average Water Temperature')
+        plt.plot(times, data, label="Upside")
+        plt.plot(times, data, label="Downside")
+        plt.plot(times, data, label="Average")
+        plt.title('Water Temperature')
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(1)
-        plt.plot(x,[18,19,22,20])
-        plt.title('Upside Water Temperature')
-        self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
-        plt.figure(2)
-        plt.plot(x,[16,18,24,20])
-        plt.title('Downside Water Temperature')
-        self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-        
-        plt.figure(3)
-        plt.plot(x,[11,11,13,11])
-        plt.title('Average Water Level')
+        plt.figure(1)
+        plt.plot(times, data, label="Leftside")
+        plt.plot(times, data, label="Rightside")
+        plt.plot(times, data, label="Average")
+        plt.title('Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(4)
-        plt.plot(x,[11,12,13,11])
-        plt.title('Leftside Water Level')
-        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
-        ))
-
-        plt.figure(5)
-        plt.plot(x,[11,10,13,11])
-        plt.title('Rightside Water Level')
-        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()
-        ))
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
     def graph_generate(self):
