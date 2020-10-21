@@ -97,14 +97,17 @@
             Button:
                 id: watertemp
                 text:"44F   |   46F"
+                on_release: root.manager.current='WaterSensor'
                 #size_hint: .5,1
             Button:
                 id: waterleak
                 text:"No Leak Detected"
+                on_release: root.manager.current='RoomSensor'
                 #size_hint: .5,1
             Button:
                 id: roomtemp
                 text:"53F"
+                on_release: root.manager.current='OtherSensor'
                 #size_hint: .5,1
 
         
@@ -131,14 +134,17 @@
             Button:
                 id: waterlvl
                 text:"25%   |   25%"
+                on_release: root.manager.current='WaterSensor'
                 #size_hint: 1,1
             Button:
                 id: light
                 text:"36"
+                on_release: root.manager.current='RoomSensor'
                 #size_hint: .5,1
             Button:
                 id: humidity
                 text:"55%"
+                on_release: root.manager.current='OtherSensor'
                 #size_hint: .5,1
 
 #Setting Screen Layout
