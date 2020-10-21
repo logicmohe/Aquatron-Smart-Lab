@@ -202,7 +202,7 @@ def read_owfs(sensor, owfs):
 		print("Don't know how to read this sensor model: ", sensor["model"])
 	if os.path.exists(vfile):
 		sensor["timestamp"] = time.time()
-		sensor["value"] = open(vfile).read()
+		sensor["value"] = str(open(vfile).read())
 	else:
 		print("Error reading from sensor.")
 		print(vfile)
@@ -219,9 +219,9 @@ def read_i2c(sensor):
 	if sensor["model"] == "SI7021":
 		temp = adafruit_si7021.SI7021(i2c)
 		if sensor["type"] == "temperature":
-			sensor["value"] = temp.temperature
+			sensor["value"] = str(temp.temperature)
 		elif sensor["type"] == "humidity":
-			sensor["value"] = temp.relative_humidity
+			sensor["value"] = str(temp.relative_humidity)
 	else:
 		print("Don't know how to read this sensor model: ", sensor["model"])
 
@@ -234,7 +234,7 @@ def read_i2c(sensor):
 ########################################################################
 def read_digitalIO(sensor):
 	sensor["timestamp"] = time.time()
-	sensor["value"] = GPIO.input(sensor["addr"])
+	sensor["value"] = str(GPIO.input(sensor["addr"]))
 
 ########################################################################
 # read_analog
@@ -245,7 +245,7 @@ def read_digitalIO(sensor):
 ########################################################################
 def read_analog(sensor):
 	sensor["timestamp"] = time.time()
-	sensor["value"] = adc.read_adc(sensor["addr"], gain=1)
+	sensor["value"] = str(adc.read_adc(sensor["addr"], gain=1))
 
 ########################################################################
 # loop
