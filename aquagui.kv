@@ -15,24 +15,23 @@
     name: 'Main'
     BoxLayout:
         orientation:"vertical"
-
-        spacing: 10
+        spacing: 5
         #Header: Icon Info & Button
         BoxLayout:
             orientation: "horizontal"
             size_hint_y: .15
-
             #Icon
             BoxLayout:
+                size_hint_x: .2
                 orientation: "horizontal"
                 Image:
                     source: 'aquatron.png'
-                    size_hint: .3,1
             BoxLayout:
                 orientation:"vertical"
                 #Info
                 BoxLayout:
                     orientation:"horizontal"
+                    size_hint_y: .3
                     Label:
                         text: "Aquatron Smart Lab"
                     Label:
@@ -81,10 +80,9 @@
                             group: "Status"
                         #Switch:
 
+        #Sensors & Labels
         BoxLayout:
             orientation: "horizontal"
-            height: 5
-            size_hint_y: .2
             spacing: 20
             #Water Sensor
             BoxLayout:
