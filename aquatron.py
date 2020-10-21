@@ -1,5 +1,6 @@
 import os
 import sys
+import random
 import serial
 #import board
 #import busio
@@ -106,7 +107,7 @@ class WaterSensorScreen(Screen):
         plt.plot(times, data, label="Average")
         plt.title('Water Level')
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-        
+
         #return box
         #If this is keep refreshing, then use remove_widget(destination)
     def graph_generate(self):
