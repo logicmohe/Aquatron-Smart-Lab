@@ -99,7 +99,7 @@ class WaterSensorScreen(Screen):
         plt.plot(times, data1, label="Upside")
         plt.plot(times, data2, label="Downside")
         plt.plot(times, data3, label="Average")
-        plt.title('Water Temperature')
+        plt.title('Water Temperature in 24 hours')
         plt.legend()
         plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
@@ -112,7 +112,7 @@ class WaterSensorScreen(Screen):
         plt.plot(times, data1, label="Leftside")
         plt.plot(times, data2, label="Rightside")
         plt.plot(times, data3, label="Average")
-        plt.title('Water Level')
+        plt.title('Water Level in 24 hours')
         plt.legend()
         plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
@@ -125,10 +125,9 @@ class WaterSensorScreen(Screen):
         #overhere, read from postgreSQL data to generate Matplotlib graph
         pass
 
-class OtherSensorScreen(Screen):
+class RoomSensorScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
-    
 
     plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
@@ -139,26 +138,70 @@ class OtherSensorScreen(Screen):
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
+        data1 = [random.randrange(0,100) for i in range (144)]
+
+        times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
+
         self.graph_generate()
-        plt.figure(6)
-        x = ['00:00','04:00','08:00','12:00','16:00','20:00',]
-        plt.plot(x,[17,18,18,19,20,18])
+        figt=plt.figure(0)
+        top=figt.add_subplot(111)
+        plt.plot(times, data1, label="Upside")
         plt.title('Room Temperature in 24 hours')
+        plt.ylim(top=100);plt.ylim(bottom=0)
+        xfmt=mdates.DateFormatter('%H:%M')
+        top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(7)
-        plt.plot(x,[4,3,2,4,8, 16])
+        data2 = [random.randrange(0,100) for i in range (144)]
+        figb=plt.figure(1)
+        bot=figb.add_subplot(111)
+        plt.plot(times, data2)
         plt.title('Room Humidity in 24 hours')
+        plt.ylim(top=100);plt.ylim(bottom=0)
+        xfmt=mdates.DateFormatter('%H:%M')
+        bot.xaxis.set_major_formatter(xfmt)
+        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        #return box
+        #If this is keep refreshing, then use remove_widget(destination)
+    def graph_generate(self):
+        #overhere, read from postgreSQL data to generate Matplotlib graph
+        pass
+
+class OtherSensorScreen(Screen):
+    data_items=ListProperty([])
+    #build a simple graph
+
+    plt.ylabel('Statistic Graph in 24 hours')
+    def __init__(self, **kwargs):
+        super(OtherSensorScreen, self).__init__(**kwargs)
+        #Considering whether we should just do it updating each 10 mins
+        Clock.schedule_once(self.graph_test)
+        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+
+    def graph_test(self, dt): 
+        #Plot the graph using matplotlib
+        data1 = [random.randrange(0,100) for i in range (144)]
+
+        times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
+
+        self.graph_generate()
+        figt=plt.figure(0)
+        top=figt.add_subplot(111)
+        plt.plot(times, data1, label="Upside")
+        plt.title('Water Leak in 24 hours')
+        plt.ylim(top=100);plt.ylim(bottom=0)
+        xfmt=mdates.DateFormatter('%H:%M')
+        top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        plt.figure(8)
-        plt.plot(x,[0,0,11,12,13,15])
-        plt.title('Optic in 24 hours')
-        self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-        
-        plt.figure(9)
-        plt.plot(x,[10,11,15,23,2,4])
-        plt.title('Water Leak in 24 hours')
+        data2 = [random.randrange(0,100) for i in range (144)]
+        figb=plt.figure(1)
+        bot=figb.add_subplot(111)
+        plt.plot(times, data2)
+        plt.title('Optic Level in 24 hours')
+        plt.ylim(top=100);plt.ylim(bottom=0)
+        xfmt=mdates.DateFormatter('%H:%M')
+        bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         #return box
         #If this is keep refreshing, then use remove_widget(destination)

@@ -6,6 +6,7 @@
     MainScreen
     SettingScreen
     WaterSensorScreen
+    RoomSensorScreen
     OtherSensorScreen
     AlertingScreen
 
@@ -36,19 +37,23 @@
                 source: 'aquatron.png'
                 size_hint: .3,1
             Button:
-                text:"Setting Page"
+                text:"Setting"
                 size_hint: .5,1
                 on_release: root.manager.current='Setting'
             Button:
-                text:"Water Sensor Page"
+                text:"Water Sensor"
                 size_hint: .5,1
-                on_release: root.manager.current='WaterSensor'            
+                on_release: root.manager.current='WaterSensor'  
             Button:
-                text:"Other Sensor Page"
+                text:"Room Sensor"
+                size_hint: .5,1
+                on_release: root.manager.current='RoomSensor'          
+            Button:
+                text:"Other Sensor"
                 size_hint: .5,1
                 on_release: root.manager.current='OtherSensor'
             Button:
-                text:"Alerting Page"
+                text:"Alerting"
                 size_hint: .5,1
                 on_release: root.manager.current='Alerting'
 
@@ -72,7 +77,7 @@
         #First Row Three sensors 
         BoxLayout:#Name
             orientation: "horizontal"
-            height: 10
+            height: 5
             size_hint_y: .2
             spacing: 20
             Label:
@@ -103,7 +108,7 @@
         #Second Row Three sensors 
         BoxLayout:#Name
             orientation: "horizontal"
-            height: 10
+            height: 5
             size_hint_y: .2
             spacing: 20
             Label:
@@ -331,6 +336,29 @@
         orientation: "vertical"
         spacing: 20
         #Header
+        BoxLayout:
+            orientation: "horizontal"
+            id: topline
+
+        BoxLayout:
+            orientation: "horizontal"
+            id: botline
+        
+        #Button on bottom
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: .15
+            Button:
+                text: "Back"
+                on_release: root.manager.current='Main'
+
+<RoomSensorScreen>:
+    name: 'RoomSensor'
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        #Header
+
         BoxLayout:
             orientation: "horizontal"
             id: topline
