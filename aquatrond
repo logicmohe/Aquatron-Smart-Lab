@@ -260,7 +260,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	aq_dir = os.getenv("HOME") + '/.aquatron'
 	if not os.path.exists(aq_dir):
 		os.mkdir(aq_dir)
-	db = dataset.connect(aq_dir + '/.aquatron/db.sqlite')
+	db = dataset.connect('sqlite://' + aq_dir + '/db.sqlite')
 	starttime = time.time()
 	while running:
 		# read data
