@@ -9,6 +9,11 @@ import os
 import json
 from pathlib import Path
 import RPi.GPIO as GPIO
+import board
+import budio
+import adafruit_si7021
+
+i2c = busio.I2C(board.SCL, board.SDA)
 
 DEFAULT_CONFIG_STR = (
 '''# Global config
@@ -128,14 +133,14 @@ def build_sensor_lists(config):
 		
 		if "Address" in s:
 			sensor["addr"] = s["Address"]
-		else:
+		elif s["Model"].upper() != "SI7021":
 			print(f'Address type not specified for {friendly_name}.')
 			errors = True
 		
 		bus = s["Bus"].upper()
 		
 		if "Model" in s:
-			sensor["model"] = s["Model"]
+			sensor["model"] = s["Model"].upper()
 		elif bus not in digitalIONames:
 			print(f'Model number not specified for {friendly_name}.')
 			errors = True
@@ -143,6 +148,13 @@ def build_sensor_lists(config):
 		if bus in oneWireNames:
 			oneWire.append(sensor.copy())
 		elif bus in i2cNames:
+			if sensor["model"] == "SI7021":
+				sensor["type"] = "temperature"
+				i2c.append(sensor.copy())
+				i2c[-1]["name"] += "(temp)"
+				sensor["type"] = "humidity"
+				i2c.append(sensor.copy())
+				i2c[-1]["name"] += "(temp)"
 			i2c.append(sensor.copy())
 		elif bus in digitalIONames:
 			try:
@@ -188,6 +200,12 @@ def read_owfs(sensor, owfs):
 ########################################################################
 def read_i2c(sensor):
 	print(f'Reading from {sensor["name"]}')
+	if sensor["model"] == "SI7021":
+		temp = adafruit_si7021.SI7021(i2c)
+		if sensor["type"] == "temperature":
+			sensor["value"] = temp.temperature
+		elif sensor["type"] == "humidity":
+			sensor["value"] = temp.humidity
 
 ########################################################################
 # read_digitalIO
