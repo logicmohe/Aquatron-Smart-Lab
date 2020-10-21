@@ -16,136 +16,134 @@
     BoxLayout:
         orientation:"vertical"
 
-        spacing: 30
-        #Header
+        spacing: 10
+        #Header: Icon Info & Button
         BoxLayout:
             orientation: "horizontal"
             size_hint_y: .15
-            Label:
-                text: "Aquatron Smart Lab"
-            Label:
-                id: time_label
-                text: "0000-00-00 00:00:00"
-        
-        #Top buttons
-        BoxLayout:
-            orientation: "horizontal"
-            height: 10
-            size_hint_y: .3
-            spacing: 5
-            Image:
-                source: 'aquatron.png'
-                size_hint: .3,1
-            Button:
-                text:"Setting"
-                size_hint: .5,1
-                on_release: root.manager.current='Setting'
-            Button:
-                text:"Water Sensor"
-                size_hint: .5,1
-                on_release: root.manager.current='WaterSensor'  
-            Button:
-                text:"Room Sensor"
-                size_hint: .5,1
-                on_release: root.manager.current='RoomSensor'          
-            Button:
-                text:"Other Sensor"
-                size_hint: .5,1
-                on_release: root.manager.current='OtherSensor'
-            Button:
-                text:"Alerting"
-                size_hint: .5,1
-                on_release: root.manager.current='Alerting'
 
-
+            #Icon
             BoxLayout:
                 orientation: "horizontal"
-                size_hint: .9,1
-                ToggleButton:
-                    id: ON
-                    on_press: root.on_button()
-                    state:'down'
-                    text: "ON"
-                    group: "Status"
-                ToggleButton:
-                    id:OFF
-                    on_press: root.off_button()
-                    text: "OFF"
-                    group: "Status"
-                #Switch:
+                Image:
+                    source: 'aquatron.png'
+                    size_hint: .3,1
+            BoxLayout:
+                orientation:"vertical"
+                #Info
+                BoxLayout:
+                    orientation:"horizontal"
+                    Label:
+                        text: "Aquatron Smart Lab"
+                    Label:
+                        id: time_label
+                        text: "0000-00-00 00:00:00"
+                #Top buttons
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: .3
+                    spacing: 5
+                    
+                    Button:
+                        text:"Setting"
+                        size_hint: .5,1
+                        on_release: root.manager.current='Setting'
+                    Button:
+                        text:"Water Sensor"
+                        size_hint: .5,1
+                        on_release: root.manager.current='WaterSensor'  
+                    Button:
+                        text:"Room Sensor"
+                        size_hint: .5,1
+                        on_release: root.manager.current='RoomSensor'          
+                    Button:
+                        text:"Other Sensor"
+                        size_hint: .5,1
+                        on_release: root.manager.current='OtherSensor'
+                    Button:
+                        text:"Alerting"
+                        size_hint: .5,1
+                        on_release: root.manager.current='Alerting'
 
-        #First Row Three sensors 
-        BoxLayout:#Name
+                    BoxLayout:
+                        orientation: "horizontal"
+                        size_hint: .9,1
+                        ToggleButton:
+                            id: ON
+                            on_press: root.on_button()
+                            state:'down'
+                            text: "ON"
+                            group: "Status"
+                        ToggleButton:
+                            id:OFF
+                            on_press: root.off_button()
+                            text: "OFF"
+                            group: "Status"
+                        #Switch:
+
+        BoxLayout:
             orientation: "horizontal"
             height: 5
             size_hint_y: .2
             spacing: 20
-            Label:
-                text:"Water Temperature Sensor"
-                #size_hint: .5,1
-            Label:
-                text:"Liquid Sensor"
-                #size_hint: .5,1
-            Label:
-                text:"Air Temperature Sensor"
-                #size_hint: .5,1
+            #Water Sensor
+            BoxLayout:
+                orientation:"vertical"
+                Label:
+                    text:"Water Temperature Sensor"
+                    size_hint: 1,.5
+                Button:
+                    id: watertemp
+                    text:"44F   |   46F"
+                    on_release: root.manager.current='WaterSensor'
+                    #size_hint: .5,1
+                Label:
+                    text:"Water Level Sensor"
+                    size_hint: 1,.5
+                Button:
+                    id: waterlvl
+                    text:"25%   |   25%"
+                    on_release: root.manager.current='WaterSensor'
+                    #size_hint: 1,1
 
-        BoxLayout:#Value
-            orientation: "horizontal"
-            height: 10
-            spacing: 20
-            Button:
-                id: watertemp
-                text:"44F   |   46F"
-                on_release: root.manager.current='WaterSensor'
-                #size_hint: .5,1
-            Button:
-                id: waterleak
-                text:"No Leak Detected"
-                on_release: root.manager.current='RoomSensor'
-                #size_hint: .5,1
-            Button:
-                id: roomtemp
-                text:"53F"
-                on_release: root.manager.current='OtherSensor'
-                #size_hint: .5,1
-
-        
-        #Second Row Three sensors 
-        BoxLayout:#Name
-            orientation: "horizontal"
-            height: 5
-            size_hint_y: .2
-            spacing: 20
-            Label:
-                text:"Water Level Sensor"
-                #size_hint: .5,1
-            Label:
-                text:"Light Sensor"
-                #size_hint: .5,1
-            Label:
-                text:"Humidity Sensor"
-                #size_hint: .5,1
-
-        BoxLayout:#Value
-            orientation: "horizontal"
-            height: 10
-            spacing: 20
-            Button:
-                id: waterlvl
-                text:"25%   |   25%"
-                on_release: root.manager.current='WaterSensor'
-                #size_hint: 1,1
-            Button:
-                id: light
-                text:"36"
-                on_release: root.manager.current='RoomSensor'
-                #size_hint: .5,1
-            Button:
-                id: humidity
-                text:"55%"
-                on_release: root.manager.current='OtherSensor'
-                #size_hint: .5,1
+            #Room Sensor
+            BoxLayout:
+                orientation:"vertical"
+                Label:
+                    text:"Air Temperature Sensor"
+                    size_hint: 1,.5   
+                Button:
+                    id: roomtemp
+                    text:"53F"
+                    on_release: root.manager.current='RoomSensor'
+                    #size_hint: .5,1
+                Label:
+                    text:"Humidity Sensor"
+                    size_hint: 1,.5
+                Button:
+                    id: humidity
+                    text:"55%"
+                    on_release: root.manager.current='RoomSensor'
+                    #size_hint: .5,1
+            #Other Sensor
+            BoxLayout:
+                orientation:"vertical"
+                Label:
+                    text:"Water Leak Sensor"
+                    size_hint: 1,.5
+                Button:
+                    id: waterleak
+                    text:"No Leak Detected"
+                    on_release: root.manager.current='OtherSensor'
+                    #size_hint: .5,1
+                Label:
+                    text:"Optic Sensor"
+                    size_hint: 1,.5            
+                Button:
+                    id: light
+                    text:"36"
+                    on_release: root.manager.current='OtherSensor'
+                    #size_hint: .5,1
 
 #Setting Screen Layout
 <SettingScreen>:
