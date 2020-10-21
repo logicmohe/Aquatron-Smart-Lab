@@ -87,25 +87,34 @@ class WaterSensorScreen(Screen):
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
-        data = [random.randrange(80,100) for i in range (144)]
+        data1 = [random.randrange(0,100) for i in range (144)]
+        data2 = [random.randrange(0,50) for i in range (144)]
+        data3 = [random.randrange(50,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         self.graph_generate()
         plt.figure(0)
-
-        plt.plot(times, data, label="Upside")
-        plt.plot(times, data, label="Downside")
-        plt.plot(times, data, label="Average")
+        top=fig.add_subplot(111)
+        plt.plot(times, data1, label="Upside")
+        plt.plot(times, data2, label="Downside")
+        plt.plot(times, data3, label="Average")
         plt.title('Water Temperature')
+        plt.ylim(top=100);plt.ylim(bottom=0)
+        xfmt=mdates.DateFormater('%H:%M')
+        ax.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
 
         plt.figure(1)
-        plt.plot(times, data, label="Leftside")
-        plt.plot(times, data, label="Rightside")
-        plt.plot(times, data, label="Average")
+        bot=fig.add_subplot(111)
+        plt.plot(times, data1, label="Leftside")
+        plt.plot(times, data2, label="Rightside")
+        plt.plot(times, data3, label="Average")
         plt.title('Water Level')
+        plt.ylim(top=100);plt.ylim(bottom=0)
+        xfmt=mdates.DateFormater('%H:%M')
+        ax.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
         #return box
