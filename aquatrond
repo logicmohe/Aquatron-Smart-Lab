@@ -257,7 +257,10 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	pollPeriod = global_conf["Period"]
 	running = True
 	owfs_path = Path(global_conf["owfs"])
-	db = dataset.connect('sqlite://' + os.getenv("HOME") + '/.aquatron/db.sqlite')
+	aq_dir = os.getenv("HOME") + '/.aquatron'
+	if not os.path.exists(aq_dir):
+		os.mkdir(aq_dir)
+	db = dataset.connect(aq_dir + '/.aquatron/db.sqlite')
 	starttime = time.time()
 	while running:
 		# read data
