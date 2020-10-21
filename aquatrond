@@ -143,6 +143,11 @@ def build_sensor_lists(config):
 		elif bus in [
 			"GPIO", "DIGITAL", "IO", "DIGITALIO", "BOOL", "BOOLEAN"
 		]:
+			try:
+				sensor["addr"] = int(sensor["addr"])
+			except ValueError:
+				print(f'{sensor["name"]} has invalid address')
+				errors = True
 			GPIO.setup(sensor["addr"], GPIO.IN)
 			digitalIO.append(sensor.copy())
 		else: # unknown bus type
