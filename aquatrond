@@ -258,7 +258,6 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	running = True
 	owfs_path = Path(global_conf["owfs"])
 	db = dataset.connect('sqlite:///run/aquatron.db')
-	table = db["sensor_data"]
 	starttime = time.time()
 	while running:
 		# read data
@@ -273,10 +272,15 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		# store data
 		for sensor in oneWire + i2c + digitalIO + analog:
 			print(f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
-			table.insert(dict(
-				name = sensor["name"], timestamp=sensor["timestamp"],
-				value = sensor["value"]
-			))
+			db.begin()
+			try:
+				db["sensor_data"].insert(dict(
+					name = sensor["name"], timestamp=sensor["timestamp"],
+					value = sensor["value"]
+				))
+				db.commit()
+			except:
+				db.rollback()
 		print()
 		# sleep for period
 		time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
