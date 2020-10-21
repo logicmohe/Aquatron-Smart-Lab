@@ -112,6 +112,9 @@ def build_sensor_lists(config):
 	oneWire = []
 	i2c = []
 	digitalIO = []
+	oneWireNames = ["1WIRE", "ONEWIRE"]
+	i2cNames = ["2WIRE", "TWOWIRE", "TWI", "I2C"]
+	digitalIONames = ["GPIO", "DIGITAL", "IO", "DIGITALIO", "BOOL", "BOOLEAN"]
 	errors = False
 	for friendly_name in config.sections():
 		s = config[friendly_name]
@@ -130,13 +133,18 @@ def build_sensor_lists(config):
 			errors = True
 		
 		bus = s["Bus"].upper()
-		if bus in ["1WIRE", "ONEWIRE"]:
+		
+		if "Model" in s:
+			sensor["model"] = s["Model"]
+		elif bus not in digitalIONames:
+			print(f'Model number not specified for {friendly_name}.')
+			errors = True
+		
+		if bus in oneWireNames:
 			oneWire.append(sensor.copy())
-		elif bus in ["2WIRE", "TWOWIRE", "TWI", "I2C"]:
+		elif bus in i2cNames:
 			i2c.append(sensor.copy())
-		elif bus in [
-			"GPIO", "DIGITAL", "IO", "DIGITALIO", "BOOL", "BOOLEAN"
-		]:
+		elif bus in digitalIONames:
 			try:
 				sensor["addr"] = int(sensor["addr"])
 			except ValueError:
@@ -146,12 +154,6 @@ def build_sensor_lists(config):
 			digitalIO.append(sensor.copy())
 		else: # unknown bus type
 			print(f'Unknown bus type for {friendly_name}: {s["Bus"]}')
-			errors = True
-		
-		if "Model" in s:
-			sensor["model"] = s["Model"]
-		elif sensor in oneWire or sensor in i2c: # no model for digitalIO
-			print(f'Model number not specified for {friendly_name}.')
 			errors = True
 	if errors:
 		print(f'Please fix these errors in {SENSOR_CONFIG}')
