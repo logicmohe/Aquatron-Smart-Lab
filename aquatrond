@@ -224,6 +224,7 @@ def loop(oneWire, i2c, digitalIO, global_conf):
 		time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
 
 def main():
+	GPIO.setmode(GPIO.BCM)
 	config = read_config(SENSOR_CONFIG)
 	global_conf = get_global_conf(config)
 	oneWire, i2c, digitalIO = build_sensor_lists(config)
@@ -231,7 +232,6 @@ def main():
 	print("i2c devices: ", json.dumps(i2c, indent = 2))
 	print("digitalIO devices: ", json.dumps(digitalIO, indent = 2))
 	print("poll period: ", global_conf["Period"])
-	GPIO.setmode(GPIO.BCM)
 	loop(oneWire, i2c, digitalIO, global_conf)
 
 if __name__ == "__main__":
