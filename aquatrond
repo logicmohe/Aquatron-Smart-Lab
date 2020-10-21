@@ -197,7 +197,6 @@ def read_i2c(sensor):
 # returns: nothing
 ########################################################################
 def read_digitalIO(sensor):
-	print(f'Reading from {sensor["name"]}')
 	sensor["timestamp"] = time.time()
 	sensor["value"] = GPIO.input(sensor["addr"])
 
