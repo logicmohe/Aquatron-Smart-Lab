@@ -278,7 +278,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 			db.begin()
 			try:
 				db["sensor_data"].insert(dict(
-					name = sensor["name"], timestamp=sensor["timestamp"],
+					timestamp=sensor["timestamp"], name = sensor["name"],
 					value = sensor["value"]
 				))
 				db.commit()
