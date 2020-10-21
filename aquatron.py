@@ -94,27 +94,27 @@ class WaterSensorScreen(Screen):
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         self.graph_generate()
-        plt.figure(0)
-        top=fig.add_subplot(111)
+        figt=plt.figure(0)
+        top=figt.add_subplot(111)
         plt.plot(times, data1, label="Upside")
         plt.plot(times, data2, label="Downside")
         plt.plot(times, data3, label="Average")
         plt.title('Water Temperature')
         plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormater('%H:%M')
-        ax.xaxis.set_major_formatter(xfmt)
+        top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
 
-        plt.figure(1)
-        bot=fig.add_subplot(111)
+        figb=plt.figure(1)
+        bot=figb.add_subplot(111)
         plt.plot(times, data1, label="Leftside")
         plt.plot(times, data2, label="Rightside")
         plt.plot(times, data3, label="Average")
         plt.title('Water Level')
         plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormater('%H:%M')
-        ax.xaxis.set_major_formatter(xfmt)
+        bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
         #return box
