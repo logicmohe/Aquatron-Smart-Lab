@@ -182,9 +182,12 @@ def build_sensor_lists(config):
 ########################################################################
 def read_owfs(sensor, owfs):
 	# TODO: check for key error in list, add more devices
-	vfile = owfs / Path(sensor["addr"]) / Path({
-		"DS18B20" : "temperature"
-	}[sensor["model"]])
+	try:
+		vfile = owfs / Path(sensor["addr"]) / Path({
+			"DS18B20" : "temperature"
+		}[sensor["model"]])
+	except KeyError:
+		print("Don't know how to read this sensor model: ", sensor["model"])
 	if os.path.exists(vfile):
 		sensor["timestamp"] = time.time()
 		sensor["value"] = open(vfile).read()
@@ -208,7 +211,7 @@ def read_i2c(sensor):
 		elif sensor["type"] == "humidity":
 			sensor["value"] = temp.relative_humidity
 	else:
-		print("Don't know how to read this sensor")
+		print("Don't know how to read this sensor model: ", sensor["model"])
 
 ########################################################################
 # read_digitalIO
