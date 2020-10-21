@@ -129,12 +129,6 @@ def build_sensor_lists(config):
 			print(f'Address type not specified for {friendly_name}.')
 			errors = True
 		
-		if "Model" in s:
-			sensor["model"] = s["Model"]
-		else:
-			print(f'Model number not specified for {friendly_name}.')
-			errors = True
-		
 		bus = s["Bus"].upper()
 		if bus in ["1WIRE", "ONEWIRE"]:
 			oneWire.append(sensor.copy())
@@ -152,6 +146,12 @@ def build_sensor_lists(config):
 			digitalIO.append(sensor.copy())
 		else: # unknown bus type
 			print(f'Unknown bus type for {friendly_name}: {s["Bus"]}')
+			errors = True
+		
+		if "Model" in s:
+			sensor["model"] = s["Model"]
+		elif sensor in oneWire or sensor in i2c: # no model for digitalIO
+			print(f'Model number not specified for {friendly_name}.')
 			errors = True
 	if errors:
 		print(f'Please fix these errors in {SENSOR_CONFIG}')
