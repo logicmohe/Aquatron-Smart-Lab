@@ -261,6 +261,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	if not os.path.exists(aq_dir):
 		os.mkdir(aq_dir)
 	db = dataset.connect('sqlite://' + aq_dir + '/db.sqlite')
+	db.execute(f'PRAGMA temp_store_directory = "{aq_dir + "/tmp"}"')
 	starttime = time.time()
 	while running:
 		# read data
@@ -275,10 +276,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		# store data
 		for sensor in oneWire + i2c + digitalIO + analog:
 			print(f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
-			try:
-				db.begin()
-			except:
-				print(f'Error opening db: ', 'sqlite://' + aq_dir + '/db.sqlite')
+			db.begin()
 			try:
 				db["sensor_data"].insert(dict(
 					name = sensor["name"], timestamp=sensor["timestamp"],
