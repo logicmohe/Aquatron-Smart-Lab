@@ -13,6 +13,7 @@ import board
 import busio
 import adafruit_si7021
 import Adafruit_ADS1x15
+import dataset
 
 i2c = busio.I2C(board.SCL, board.SDA)
 adc = Adafruit_ADS1x15.ADS1015()
@@ -256,6 +257,8 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	pollPeriod = global_conf["Period"]
 	running = True
 	owfs_path = Path(global_conf["owfs"])
+	db = dataset.connect('sqlite:///run/aquatron.db')
+	table = db["sensor_data"]
 	starttime = time.time()
 	while running:
 		# read data
@@ -270,6 +273,10 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		# store data
 		for sensor in oneWire + i2c + digitalIO + analog:
 			print(f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
+			table.insert(dict(
+				name = sensor["name"], timestamp=sensor["timestamp"],
+				value = sensor["value"]
+			))
 		print()
 		# sleep for period
 		time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
