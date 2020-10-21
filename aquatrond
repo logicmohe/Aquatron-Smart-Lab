@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 import RPi.GPIO as GPIO
 import board
-import budio
+import busio
 import adafruit_si7021
 
 i2c = busio.I2C(board.SCL, board.SDA)
