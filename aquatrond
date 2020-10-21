@@ -8,6 +8,7 @@ import sys
 import os
 import json
 from pathlib import Path
+import RPi.GPIO as GPIO
 
 DEFAULT_CONFIG_STR = (
 '''# Global config
@@ -142,6 +143,7 @@ def build_sensor_lists(config):
 		elif bus in [
 			"GPIO", "DIGITAL", "IO", "DIGITALIO", "BOOL", "BOOLEAN"
 		]:
+			GPIO.setup(sensor["addr"], GPIO.IN)
 			digitalIO.append(sensor.copy())
 		else: # unknown bus type
 			print(f'Unknown bus type for {friendly_name}: {s["Bus"]}')
@@ -189,6 +191,7 @@ def read_i2c(sensor):
 ########################################################################
 def read_digitalIO(sensor):
 	print(f'Reading from {sensor["name"]}')
+	sensor["value"] = GPIO.input(sensor["addr"])
 
 ########################################################################
 # loop
@@ -223,6 +226,7 @@ def main():
 	print("i2c devices: ", json.dumps(i2c, indent = 2))
 	print("digitalIO devices: ", json.dumps(digitalIO, indent = 2))
 	print("poll period: ", global_conf["Period"])
+	GPIO.setmode(GPIO.BCM)
 	loop(oneWire, i2c, digitalIO, global_conf)
 
 if __name__ == "__main__":
