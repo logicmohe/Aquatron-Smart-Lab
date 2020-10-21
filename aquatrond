@@ -6,6 +6,7 @@ import time
 import configparser
 import sys
 import os
+import json
 from pathlib import Path
 
 DEFAULT_CONFIG_STR = (
@@ -218,9 +219,9 @@ def main():
 	config = read_config(SENSOR_CONFIG)
 	global_conf = get_global_conf(config)
 	oneWire, i2c, digitalIO = build_sensor_lists(config)
-	print("1wire devices: ", oneWire)
-	print("i2c devices: ", i2c)
-	print("digitalIO devices: ", digitalIO)
+	print("1wire devices: ", json.dumps(oneWire, indent = 2))
+	print("i2c devices: ", json.dumps(i2c, indent = 2))
+	print("digitalIO devices: ", json.dumps(digitalIO, indent = 2))
 	print("poll period: ", global_conf["Period"])
 	loop(oneWire, i2c, digitalIO, global_conf)
 
