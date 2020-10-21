@@ -151,11 +151,12 @@ def build_sensor_lists(config):
 			if sensor["model"] == "SI7021":
 				sensor["type"] = "temperature"
 				i2c.append(sensor.copy())
-				i2c[-1]["name"] += "(temp)"
+				i2c[-1]["name"] += "(temperature)"
 				sensor["type"] = "humidity"
 				i2c.append(sensor.copy())
-				i2c[-1]["name"] += "(temp)"
-			i2c.append(sensor.copy())
+				i2c[-1]["name"] += "(humidity)"
+			else:
+				i2c.append(sensor.copy())
 		elif bus in digitalIONames:
 			try:
 				sensor["addr"] = int(sensor["addr"])
