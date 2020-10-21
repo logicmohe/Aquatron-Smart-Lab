@@ -278,7 +278,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 			try:
 				db.begin()
 			except:
-				print(f'Error opening db: {e}', 'sqlite://' + aq_dir + '/db.sqlite')
+				print(f'Error opening db: ', 'sqlite://' + aq_dir + '/db.sqlite')
 			try:
 				db["sensor_data"].insert(dict(
 					name = sensor["name"], timestamp=sensor["timestamp"],
