@@ -200,7 +200,7 @@ def read_owfs(sensor, owfs):
 # returns: nothing
 ########################################################################
 def read_i2c(sensor):
-	print(f'Reading from {sensor["name"]}')
+	sensor["timestamp"] = time.time()
 	if sensor["model"] == "SI7021":
 		temp = adafruit_si7021.SI7021(i2c)
 		if sensor["type"] == "temperature":
