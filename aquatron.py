@@ -143,7 +143,7 @@ class RoomSensorScreen(Screen):
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         self.graph_generate()
-        figt=plt.figure(0)
+        figt=plt.figure(2)
         top=figt.add_subplot(111)
         plt.plot(times, data1, label="Upside")
         plt.title('Room Temperature in 24 hours')
@@ -153,7 +153,7 @@ class RoomSensorScreen(Screen):
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         data2 = [random.randrange(0,100) for i in range (144)]
-        figb=plt.figure(1)
+        figb=plt.figure(3)
         bot=figb.add_subplot(111)
         plt.plot(times, data2)
         plt.title('Room Humidity in 24 hours')
@@ -185,7 +185,7 @@ class OtherSensorScreen(Screen):
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         self.graph_generate()
-        figt=plt.figure(0)
+        figt=plt.figure(4)
         top=figt.add_subplot(111)
         plt.plot(times, data1, label="Upside")
         plt.title('Water Leak in 24 hours')
@@ -195,7 +195,7 @@ class OtherSensorScreen(Screen):
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         data2 = [random.randrange(0,100) for i in range (144)]
-        figb=plt.figure(1)
+        figb=plt.figure(5)
         bot=figb.add_subplot(111)
         plt.plot(times, data2)
         plt.title('Optic Level in 24 hours')
