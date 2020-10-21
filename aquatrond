@@ -206,7 +206,7 @@ def read_i2c(sensor):
 		if sensor["type"] == "temperature":
 			sensor["value"] = temp.temperature
 		elif sensor["type"] == "humidity":
-			sensor["value"] = temp.humidity
+			sensor["value"] = temp.relative_humidity
 
 ########################################################################
 # read_digitalIO
