@@ -41,15 +41,15 @@ _init_max=100
 current_time='0000-00-00 00:00:00'      #initialize the time
 
 #sensors, read in from GPIO
-watertemp_sensor=waterlvl_sensor =liquid_sensor   = \
-    light_sensor=airtemp_sensor=humidity_sensor=_init
+watertemp_sensor=waterlvl_sensor =waterleak_sensor   = \
+    light_sensor=roomtemp_sensor=humidity_sensor=_init
 
 #Setup: After reaching the limit, special event will be triggerred
-watertemp_min=waterlvl_min=liquid_min=light_min \
-    =airtemp_min=humidity_min=_init_min
+watertemp_min=waterlvl_min=waterleak_min=light_min \
+    =roomtemp_min=humidity_min=_init_min
 
-watertemp_max=waterlvl_max=liquid_max= \
-    light_max=airtemp_max=humidity_max=_init_max
+watertemp_max=waterlvl_max=waterleak_max= \
+    light_max=roomtemp_max=humidity_max=_init_max
 
 #Note for future : use for loop to check if any sensor value is 
 #out of range, use correpsonding button to make it read
@@ -59,9 +59,9 @@ watertemp_max=waterlvl_max=liquid_max= \
 # WATERLVL=1
 # LIQUID=2
 # LIGHT=3
-# AIRTEMP=4
+# roomTEMP=4
 # HUMIDITY=5
-# ListOfSensor=['watertemp','waterlvl','liquid','light','airtemp','humidity']
+# ListOfSensor=['watertemp','waterlvl','waterleak','light','roomtemp','humidity']
 
 '''
 Data Processing
@@ -77,8 +77,7 @@ Kivy Interface
 class WaterSensorScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
-    
-    plt.ylabel('Statistic Graph in 24 hours for water level and water temperature')
+
     def __init__(self, **kwargs):
         super(WaterSensorScreen, self).__init__(**kwargs)
         #Considering whether we should just do it updating each 10 mins
@@ -129,7 +128,6 @@ class RoomSensorScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
 
-    plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
         super(RoomSensorScreen, self).__init__(**kwargs)
         #Considering whether we should just do it updating each 10 mins
@@ -171,7 +169,6 @@ class OtherSensorScreen(Screen):
     data_items=ListProperty([])
     #build a simple graph
 
-    plt.ylabel('Statistic Graph in 24 hours')
     def __init__(self, **kwargs):
         super(OtherSensorScreen, self).__init__(**kwargs)
         #Considering whether we should just do it updating each 10 mins
@@ -237,6 +234,7 @@ class MainScreen(Screen):
         self.ids.time_label.text=current_time
         self.alarm_check()
     def alarm_check(self):
+        self.ids.roomtemp.background_color=(50,0,0,1)
         #if any sensor is beyond or below the threshold
         #Turn the button to be red and flashing
         #self.ids.alarm.background_color=(1,1,1,1)

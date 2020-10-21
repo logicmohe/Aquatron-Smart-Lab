@@ -32,7 +32,7 @@
             orientation: "horizontal"
             height: 10
             size_hint_y: .3
-            spacing: 10
+            spacing: 5
             Image:
                 source: 'aquatron.png'
                 size_hint: .3,1
@@ -95,12 +95,15 @@
             height: 10
             spacing: 20
             Button:
+                id: watertemp
                 text:"44F   |   46F"
                 #size_hint: .5,1
             Button:
+                id: waterleak
                 text:"No Leak Detected"
                 #size_hint: .5,1
             Button:
+                id: roomtemp
                 text:"53F"
                 #size_hint: .5,1
 
@@ -126,12 +129,15 @@
             height: 10
             spacing: 20
             Button:
+                id: waterlvl
                 text:"25%   |   25%"
                 #size_hint: 1,1
             Button:
+                id: light
                 text:"36"
                 #size_hint: .5,1
             Button:
+                id: humidity
                 text:"55%"
                 #size_hint: .5,1
 
