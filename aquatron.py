@@ -101,7 +101,7 @@ class WaterSensorScreen(Screen):
         plt.plot(times, data3, label="Average")
         plt.title('Water Temperature')
         plt.ylim(top=100);plt.ylim(bottom=0)
-        xfmt=mdates.DateFormater('%H:%M')
+        xfmt=mdates.DateFormatter('%H:%M')
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
@@ -113,7 +113,7 @@ class WaterSensorScreen(Screen):
         plt.plot(times, data3, label="Average")
         plt.title('Water Level')
         plt.ylim(top=100);plt.ylim(bottom=0)
-        xfmt=mdates.DateFormater('%H:%M')
+        xfmt=mdates.DateFormatter('%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
