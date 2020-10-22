@@ -26,6 +26,8 @@ pip3 install matplotlib
 sudo apt install postgresql libpq-dev postgresql-client postgresql-client-common -y
 sudo pip3 install psycopg2
 sudo apt-get install python3-pandas
+pip3 install yagmail
+sudo apt install matchbox-keyboard
 
 
 Version History: (See Project Management tab on Github for details)

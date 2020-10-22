@@ -29,6 +29,7 @@ from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+from enum import Enum
 '''
 Initialization
 '''
@@ -38,18 +39,32 @@ _init=0.00
 _init_min=0
 _init_max=100
 
+AlertEmail=["dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com"]
+
 current_time='0000-00-00 00:00:00'      #initialize the time
 
-#sensors, read in from GPIO
-watertemp_sensor=waterlvl_sensor =waterleak_sensor   = \
-    light_sensor=roomtemp_sensor=humidity_sensor=_init
+class SS(Enum):
+    WATERTEMP=0
+    WATERLVL=1
+    ROOMTEMP=2
+    ROOMHUMI=3
+    WATERLEAK=4
+    OPTIC=5
 
-#Setup: After reaching the limit, special event will be triggerred
-watertemp_min=waterlvl_min=waterleak_min=light_min \
-    =roomtemp_min=humidity_min=_init_min
+SensorInfo={}
+for i in range(6):
+    SensorInfo[i]=[_init, _init_min, _init_max]
 
-watertemp_max=waterlvl_max=waterleak_max= \
-    light_max=roomtemp_max=humidity_max=_init_max
+# #sensors, read in from GPIO
+# watertemp_sensor=waterlvl_sensor =waterleak_sensor   = \
+#     light_sensor=roomtemp_sensor=humidity_sensor=_init
+
+# #Setup: After reaching the limit, special event will be triggerred
+# watertemp_min=waterlvl_min=waterleak_min=light_min \
+#     =roomtemp_min=humidity_min=_init_min
+
+# watertemp_max=waterlvl_max=waterleak_max= \
+#     light_max=roomtemp_max=humidity_max=_init_max
 
 #Note for future : use for loop to check if any sensor value is 
 #out of range, use correpsonding button to make it read
@@ -80,9 +95,8 @@ class WaterSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(WaterSensorScreen, self).__init__(**kwargs)
-        #Considering whether we should just do it updating each 10 mins
-        Clock.schedule_once(self.graph_test)
-        #Clock.schedule_interval(self.graph_test,600)
+        #Clock.schedule_once(self.graph_test)
+        Clock.schedule_interval(self.graph_test,600)
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
@@ -105,7 +119,6 @@ class WaterSensorScreen(Screen):
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-
         figb=plt.figure(1)
         bot=figb.add_subplot(111)
         plt.plot(times, data1, label="Leftside")
@@ -130,9 +143,8 @@ class RoomSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(RoomSensorScreen, self).__init__(**kwargs)
-        #Considering whether we should just do it updating each 10 mins
-        Clock.schedule_once(self.graph_test)
-        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+        #Clock.schedule_once(self.graph_test)
+        Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
@@ -171,9 +183,8 @@ class OtherSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(OtherSensorScreen, self).__init__(**kwargs)
-        #Considering whether we should just do it updating each 10 mins
-        Clock.schedule_once(self.graph_test)
-        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+        #Clock.schedule_once(self.graph_test)
+        Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
@@ -209,20 +220,42 @@ class OtherSensorScreen(Screen):
 #Kivy Setting Screen
 class SettingScreen(Screen):
     #waiting for other items
-    #could be wrong
     data_items=ListProperty([])
+    def __init__(self, **kwargs):
+        super(SettingScreen, self).__init__(**kwargs)
+        self.ids.watertemp_slider_min.value=SensorInfo[SS.WATERTEMP][1]
+        self.ids.watertemp_slider_max.value=SensorInfo[SS.WATERTEMP][2]
+        self.ids.waterlvl_slider_min.value=SensorInfo[SS.WATERLVL][1]
+        self.ids.waterlvl_slider_max.value=SensorInfo[SS.WATERLVL][2]
+        self.ids.roomtemp_slider_min.value=SensorInfo[SS.ROOMTEMP][1]
+        self.ids.roomtemp_slider_max.value=SensorInfo[SS.ROOMTEMP][2]
+        self.ids.roomhumi_slider_min.value=SensorInfo[SS.ROOMHUMI][1]
+        self.ids.roomhumi_slider_max.value=SensorInfo[SS.ROOMHUMI][2]
+        self.ids.waterleak_slider_min.value=SensorInfo[SS.WATERLEAK][1]
+        self.ids.waterleak_slider_max.value=SensorInfo[SS.WATERLEAK][2]
+        self.ids.optic_slider_min.value=SensorInfo[SS.OPTIC][1]
+        self.ids.optic_slider_max.value=SensorInfo[SS.OPTIC][2]
     pass
 
 #Kivy Setting Screen
 class AlertingScreen(Screen):
+    global AlertEmail
     #waiting for other items
-    #could be wrong
     data_items=ListProperty([])
+    def __init__(self, **kwargs):
+        super(AlertingScreen, self).__init__(**kwargs)
+        self.ids.Email1.text=AlertEmail[0]
+        self.ids.Email2.text=AlertEmail[1]
+        self.ids.Email3.text=AlertEmail[2]
+
+    def alert_change(self, email1, email2, email3):
+        AlertEmail[0]=email1
+        AlertEmail[1]=email2
+        AlertEmail[2]=email3
     pass
 
 #Kivy Main Screen
 class MainScreen(Screen):
-
     #waiting for other items
     data_items=ListProperty([])
     def __init__(self, **kwargs):
