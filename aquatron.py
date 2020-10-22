@@ -86,8 +86,8 @@ class WaterSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(WaterSensorScreen, self).__init__(**kwargs)
-        #Clock.schedule_once(self.graph_test)
-        Clock.schedule_interval(self.graph_test,600)
+        Clock.schedule_once(self.graph_test)
+        #Clock.schedule_interval(self.graph_test,600)
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
@@ -134,8 +134,8 @@ class RoomSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(RoomSensorScreen, self).__init__(**kwargs)
-        #Clock.schedule_once(self.graph_test)
-        Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+        Clock.schedule_once(self.graph_test)
+        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
@@ -174,15 +174,14 @@ class OtherSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(OtherSensorScreen, self).__init__(**kwargs)
-        #Clock.schedule_once(self.graph_test)
-        Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+        Clock.schedule_once(self.graph_test)
+        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
         data1 = [random.randrange(0,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
-
         self.graph_generate()
         figt=plt.figure(4)
         top=figt.add_subplot(111)
