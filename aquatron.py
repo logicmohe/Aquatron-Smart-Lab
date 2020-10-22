@@ -69,15 +69,6 @@ for i in range(6):
 #Note for future : use for loop to check if any sensor value is 
 #out of range, use correpsonding button to make it read
 
-# in case for future expandsion
-# WATERTEMP=0
-# WATERLVL=1
-# LIQUID=2
-# LIGHT=3
-# roomTEMP=4
-# HUMIDITY=5
-# ListOfSensor=['watertemp','waterlvl','waterleak','light','roomtemp','humidity']
-
 '''
 Data Processing
 '''
@@ -223,18 +214,18 @@ class SettingScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(SettingScreen, self).__init__(**kwargs)
-        self.ids.watertemp_slider_min.value=SensorInfo[SS.WATERTEMP][1]
-        self.ids.watertemp_slider_max.value=SensorInfo[SS.WATERTEMP][2]
-        self.ids.waterlvl_slider_min.value=SensorInfo[SS.WATERLVL][1]
-        self.ids.waterlvl_slider_max.value=SensorInfo[SS.WATERLVL][2]
-        self.ids.roomtemp_slider_min.value=SensorInfo[SS.ROOMTEMP][1]
-        self.ids.roomtemp_slider_max.value=SensorInfo[SS.ROOMTEMP][2]
-        self.ids.roomhumi_slider_min.value=SensorInfo[SS.ROOMHUMI][1]
-        self.ids.roomhumi_slider_max.value=SensorInfo[SS.ROOMHUMI][2]
-        self.ids.waterleak_slider_min.value=SensorInfo[SS.WATERLEAK][1]
-        self.ids.waterleak_slider_max.value=SensorInfo[SS.WATERLEAK][2]
-        self.ids.optic_slider_min.value=SensorInfo[SS.OPTIC][1]
-        self.ids.optic_slider_max.value=SensorInfo[SS.OPTIC][2]
+        self.ids.watertemp_slider_min.value=SensorInfo[SS.WATERTEMP.value][1]
+        self.ids.watertemp_slider_max.value=SensorInfo[SS.WATERTEMP.value][2]
+        self.ids.waterlvl_slider_min.value=SensorInfo[SS.WATERLVL.value][1]
+        self.ids.waterlvl_slider_max.value=SensorInfo[SS.WATERLVL.value][2]
+        self.ids.roomtemp_slider_min.value=SensorInfo[SS.ROOMTEMP.value][1]
+        self.ids.roomtemp_slider_max.value=SensorInfo[SS.ROOMTEMP.value][2]
+        self.ids.roomhumi_slider_min.value=SensorInfo[SS.ROOMHUMI.value][1]
+        self.ids.roomhumi_slider_max.value=SensorInfo[SS.ROOMHUMI.value][2]
+        self.ids.waterleak_slider_min.value=SensorInfo[SS.WATERLEAK.value][1]
+        self.ids.waterleak_slider_max.value=SensorInfo[SS.WATERLEAK.value][2]
+        self.ids.optic_slider_min.value=SensorInfo[SS.OPTIC.value][1]
+        self.ids.optic_slider_max.value=SensorInfo[SS.OPTIC.value][2]
     pass
 
 #Kivy Setting Screen
