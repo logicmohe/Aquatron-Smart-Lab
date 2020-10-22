@@ -238,6 +238,9 @@ class AlertingScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(AlertingScreen, self).__init__(**kwargs)
+        Clock.schedule_once(self.alert_email)
+
+    def alert_email(self):
         self.ids.Email1.text=AlertEmail[0]
         self.ids.Email2.text=AlertEmail[1]
         self.ids.Email3.text=AlertEmail[2]
