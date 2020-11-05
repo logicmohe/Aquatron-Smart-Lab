@@ -292,7 +292,8 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 				db.rollback()
 		print()
 		# sleep for period
-		time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
+		if running:
+			time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
 
 def main():
 	GPIO.setmode(GPIO.BCM)
