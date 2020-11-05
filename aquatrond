@@ -13,6 +13,7 @@ import board
 import busio
 import adafruit_si7021
 import Adafruit_ADS1x15
+import adafruit_veml7700
 import dataset
 import signal
 
@@ -223,6 +224,8 @@ def read_i2c(sensor):
 			sensor["value"] = str(temp.temperature)
 		elif sensor["type"] == "humidity":
 			sensor["value"] = str(temp.relative_humidity)
+	elif sensor["model"] == "VEML7700":
+		sensor["value"] = str(adafruit_veml7700.VEML7700(i2c).lux)
 	else:
 		print("Don't know how to read this sensor model: ", sensor["model"])
 
