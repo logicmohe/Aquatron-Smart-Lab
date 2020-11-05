@@ -267,7 +267,7 @@ class MainScreen(Screen):
         watertemp1=cur.fetchall()
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
         watertemp2=cur.fetchall()
-        self.ids.watertemp.text=round(float(watertemp1[0][0]),3)+" | "+round(float(watertemp2[0][0]),3)
+        self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),3))
 
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
         roomtemp=cur.fetchall()
