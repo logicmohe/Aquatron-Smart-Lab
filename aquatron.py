@@ -214,7 +214,9 @@ class SettingScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(SettingScreen, self).__init__(**kwargs)
+        self.ids.roomhumi_slider_max.value=88
         Clock.schedule_interval(self.set_threshold,1)
+
 
     def set_threshold(self,dt):
         self.ids.watertemp_slider_min.value=SensorInfo[SS.WATERTEMP.value][1]
@@ -226,7 +228,7 @@ class SettingScreen(Screen):
         self.ids.roomtemp_slider_min.value=SensorInfo[SS.ROOMTEMP.value][1]
         self.ids.roomtemp_slider_max.value=SensorInfo[SS.ROOMTEMP.value][2]
         self.ids.roomhumi_slider_min.value=SensorInfo[SS.ROOMHUMI.value][1]
-        self.ids.roomhumi_slider_max.value=SensorInfo[SS.ROOMHUMI.value][2]
+        #self.ids.roomhumi_slider_max.value=SensorInfo[SS.ROOMHUMI.value][2]
         self.ids.waterleak_slider_min.value=SensorInfo[SS.WATERLEAK.value][1]
         self.ids.waterleak_slider_max.value=SensorInfo[SS.WATERLEAK.value][2]
         self.ids.optic_slider_min.value=SensorInfo[SS.OPTIC.value][1]
