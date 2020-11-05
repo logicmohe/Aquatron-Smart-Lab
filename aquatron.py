@@ -94,27 +94,23 @@ class WaterSensorScreen(Screen):
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
-        global cur
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 1 Temperature',))
-        watertemp1=cur.fetchall()
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
-        watertemp2=cur.fetchall()
+        # global cur
+        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 1 Temperature',))
+        # watertemp1=cur.fetchall()
+        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
+        # watertemp2=cur.fetchall()
 
-        data1=[]
-        data2=[]
-        data3=[]
-        for i in range(144):
-            data1[i]=watertemp1[i]
-            data2[i]=watertemp2[i]
-            data3[i]=(watertemp1[i]+watertemp2[i])/2
+        # data1=[]
+        # data2=[]
+        # data3=[]
+        # for i in range(144):
+        #     data1[i]=watertemp1[i]
+        #     data2[i]=watertemp2[i]
+        #     data3[i]=(watertemp1[i]+watertemp2[i])/2
 
-        
-
-
-
-        # data1 = [random.randrange(0,100) for i in range (144)]
-        # data2 = [random.randrange(0,50) for i in range (144)]
-        # data3 = [random.randrange(50,100) for i in range (144)]
+        data1 = [random.randrange(0,100) for i in range (144)]
+        data2 = [random.randrange(0,50) for i in range (144)]
+        data3 = [random.randrange(50,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
