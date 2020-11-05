@@ -30,7 +30,6 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 from enum import Enum
-import yagmail
 import sqlite3
 '''
 Initialization
