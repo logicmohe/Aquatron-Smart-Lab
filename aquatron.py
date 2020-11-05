@@ -214,7 +214,7 @@ class SettingScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(SettingScreen, self).__init__(**kwargs)
-        Clock.schedule_interval(self.set_threshold,600)
+        Clock.schedule_interval(self.set_threshold,1)
 
     def set_threshold(self,dt):
         self.ids.watertemp_slider_min.value=SensorInfo[SS.WATERTEMP.value][1]
