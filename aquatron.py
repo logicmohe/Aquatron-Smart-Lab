@@ -267,19 +267,19 @@ class MainScreen(Screen):
         watertemp1=cur.fetchall()
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
         watertemp2=cur.fetchall()
-        self.ids.watertemp.text=round(watertemp1[0][0],3)+" | "+round(watertemp2[0][0],3)
+        self.ids.watertemp.text=round(float(watertemp1[0][0]),3)+" | "+round(float(watertemp2[0][0]),3)
 
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
         roomtemp=cur.fetchall()
-        self.ids.roomtemp.text=round(roomtemp[0][0],3)
+        self.ids.roomtemp.text=round(float(roomtemp[0][0]),3)
 
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(humidity)',))
         roomhumi=cur.fetchall()
-        self.ids.roomhumi.text=round(roomhumi[0][0],3)
+        self.ids.roomhumi.text=round(float(roomhumi[0][0]),3)
 
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
         waterlvl=cur.fetchall()
-        self.ids.waterlvl.text=round(waterlvl[0][0],3)
+        self.ids.waterlvl.text=round(float(waterlvl[0][0]),3)
         self.alarm_check()
     def alarm_check(self):
         self.ids.roomtemp.background_color=(50,0,0,1)
