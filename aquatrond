@@ -260,7 +260,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	def sig_handler(*args):
 		print("Graceful exit")
 		running = False
-	signal.signal(signal.SIGINT, signal_handler)
+	signal.signal(signal.SIGINT, sig_handler)
 	owfs_path = Path(global_conf["owfs"])
 	aq_dir = '/run/aquatron'
 	if not os.path.exists(aq_dir):
