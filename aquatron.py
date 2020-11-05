@@ -234,8 +234,7 @@ class SettingScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(SettingScreen, self).__init__(**kwargs)
-        Clock.schedule_once(self.set_threshold)
-        
+        #Clock.schedule_once(self.set_threshold)
 
     def set_threshold(self,dt):
         global SensorInfo
