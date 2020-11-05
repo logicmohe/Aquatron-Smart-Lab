@@ -30,6 +30,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 from enum import Enum
+import yagmail
+import sqlite3
 '''
 Initialization
 '''
@@ -259,6 +261,26 @@ class MainScreen(Screen):
         global current_time
         current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
         self.ids.time_label.text=current_time
+        #Get value from SQLite 3
+        conn=sqlite3.connect('/run/aquatron/db.sqlite')
+        cur=conn.cursor()
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 1 Temperature',))
+        watertemp1=cur.fetchall()
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
+        watertemp2=cur.fetchall()
+        self.ids.watertemp.text=watertemp1[0][0]+"|"+watertemp2[0][0]
+
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
+        roomtemp=cur.fetchall()
+        self.ids.roomtemp.text=roomtemp[0][0]
+
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(humidity)',))
+        roomhumi=cur.fetchall()
+        self.ids.roomhumi.text=roomhumi[0][0]
+
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
+        waterlvl=cur.fetchall()
+        self.ids.waterlvl.text=waterlvl[0][0]
         self.alarm_check()
     def alarm_check(self):
         self.ids.roomtemp.background_color=(50,0,0,1)
@@ -266,6 +288,8 @@ class MainScreen(Screen):
         #Turn the button to be red and flashing
         #self.ids.alarm.background_color=(1,1,1,1)
         pass
+    #def email_alert(self):
+    #    yag=yagmail.SMTP('dalhousieaquatron@gmail.com','aquatron123')
     #def toggle_button(self):
     #design for the toggle button to contrl on and off
 #testing plan:
