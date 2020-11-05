@@ -56,6 +56,8 @@ SensorInfo={}
 for i in range(6):
     SensorInfo[i]=[_init, _init_min, _init_max]
 
+conn=sqlite3.connect('/run/aquatron/db.sqlite')
+cur=conn.cursor()
 # #sensors, read in from GPIO
 # watertemp_sensor=waterlvl_sensor =waterleak_sensor   = \
 #     light_sensor=roomtemp_sensor=humidity_sensor=_init
@@ -92,9 +94,27 @@ class WaterSensorScreen(Screen):
 
     def graph_test(self, dt): 
         #Plot the graph using matplotlib
-        data1 = [random.randrange(0,100) for i in range (144)]
-        data2 = [random.randrange(0,50) for i in range (144)]
-        data3 = [random.randrange(50,100) for i in range (144)]
+        global cur
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 1 Temperature',))
+        watertemp1=cur.fetchall()
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
+        watertemp2=cur.fetchall()
+
+        data1=[]
+        data2=[]
+        data3=[]
+        for i in range(144):
+            data1[i]=watertemp1[i]
+            data2[i]=watertemp2[i]
+            data3[i]=(watertemp1[i]+watertemp2[i])/2
+
+        
+
+
+
+        # data1 = [random.randrange(0,100) for i in range (144)]
+        # data2 = [random.randrange(0,50) for i in range (144)]
+        # data3 = [random.randrange(50,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
@@ -214,7 +234,7 @@ class SettingScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(SettingScreen, self).__init__(**kwargs)
-        Clock.schedule_interval(self.set_threshold,30)
+        Clock.schedule_once(self.set_threshold)
         
 
     def set_threshold(self,dt):
@@ -266,8 +286,8 @@ class MainScreen(Screen):
         current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
         self.ids.time_label.text=current_time
         #Get value from SQLite 3
-        conn=sqlite3.connect('/run/aquatron/db.sqlite')
-        cur=conn.cursor()
+        
+        global cur
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 1 Temperature',))
         watertemp1=cur.fetchall()
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
