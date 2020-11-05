@@ -218,9 +218,11 @@ class SettingScreen(Screen):
 
     def set_threshold(self,dt):
         self.ids.watertemp_slider_min.value=SensorInfo[SS.WATERTEMP.value][1]
-        self.ids.watertemp_slider_max.value=SensorInfo[SS.WATERTEMP.value][2]
+        #self.ids.watertemp_slider_max.value=SensorInfo[SS.WATERTEMP.value][2]
+        self.ids.watertemp_slider_max.value=100
         self.ids.waterlvl_slider_min.value=SensorInfo[SS.WATERLVL.value][1]
-        self.ids.waterlvl_slider_max.value=SensorInfo[SS.WATERLVL.value][2]
+        #self.ids.waterlvl_slider_max.value=SensorInfo[SS.WATERLVL.value][2]
+        self.ids.waterlvl_slider_max.value=100
         self.ids.roomtemp_slider_min.value=SensorInfo[SS.ROOMTEMP.value][1]
         self.ids.roomtemp_slider_max.value=SensorInfo[SS.ROOMTEMP.value][2]
         self.ids.roomhumi_slider_min.value=SensorInfo[SS.ROOMHUMI.value][1]
