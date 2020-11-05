@@ -14,6 +14,7 @@ import busio
 import adafruit_si7021
 import Adafruit_ADS1x15
 import dataset
+import signal
 
 i2c = busio.I2C(board.SCL, board.SDA)
 adc = Adafruit_ADS1x15.ADS1015()
@@ -256,6 +257,10 @@ def read_analog(sensor):
 def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	pollPeriod = global_conf["Period"]
 	running = True
+	def sig_handler(*args):
+		print("Graceful exit")
+		running = False
+	signal.signal(signal.SIGINT, signal_handler)
 	owfs_path = Path(global_conf["owfs"])
 	aq_dir = '/run/aquatron'
 	if not os.path.exists(aq_dir):
