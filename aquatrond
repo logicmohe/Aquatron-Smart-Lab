@@ -258,6 +258,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	pollPeriod = global_conf["Period"]
 	running = True
 	def sig_handler(*args):
+		nonlocal running
 		print("Graceful exit")
 		running = False
 	signal.signal(signal.SIGINT, sig_handler)
