@@ -73,8 +73,8 @@ SensorInfo={}
 for i in range(6):
     SensorInfo[i]=[_init, _init_min, _init_max]
 
-conn=sqlite3.connect('/run/aquatron/db.sqlite')
-cur=conn.cursor()
+#conn=sqlite3.connect('/run/aquatron/db.sqlite')
+#cur=conn.cursor()
 # #sensors, read in from GPIO
 # watertemp_sensor=waterlvl_sensor =waterleak_sensor   = \
 #     light_sensor=roomtemp_sensor=humidity_sensor=_init
