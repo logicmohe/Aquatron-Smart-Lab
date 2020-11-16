@@ -263,8 +263,8 @@ class SettingScreen(Screen):
         self.ids.roomhumi_slider_max.value=SensorInfo[SS.ROOMHUMI.value][2]
         self.ids.waterleak_slider_min.value=SensorInfo[SS.WATERLEAK.value][1]
         self.ids.waterleak_slider_max.value=SensorInfo[SS.WATERLEAK.value][2]
-        self.ids.optic_slider_min.value=SensorInfo[5][1]
-        self.ids.optic_slider_max.value=SensorInfo[5][2]
+        self.ids.optic_slider_min.value=0#SensorInfo[5][1]
+        self.ids.optic_slider_max.value=100#SensorInfo[5][2]
     pass
     def setting_change(self, watertemp_min,watertemp_max, waterlvl_min, waterlvl_max,roomtemp_min, roomtemp_max, roomhumi_min, roomhumi_max, waterleak_min, waterleak_max, Optic_min, Optic_max):
         global SensorInfo
