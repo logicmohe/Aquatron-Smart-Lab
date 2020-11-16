@@ -307,7 +307,7 @@ class MainScreen(Screen):
         super(MainScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self.get_data,1)
     def get_data(self,dt):
-        
+        pass
         # global current_time
         # current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
         # self.ids.time_label.text=current_time
