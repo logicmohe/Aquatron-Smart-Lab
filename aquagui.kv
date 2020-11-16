@@ -335,8 +335,8 @@
             orientation: "horizontal"
             Button:
                 text:"Save Changes"
-                #on_release:
-                    #root.update.....
+                on_release:
+                    root.setting_change(watertemp_slider_min.value, watertemp_slider_max.value, waterlvl_slider_min.value, waterlvl_slider_max.value, roomtemp_slider_min.value, roomtemp_slider_max.value,roomhumi_slider_min.value, roomhumi_slider_max.value,waterleak_slider_min.value, waterleak_slider_max.value,  Optic_slider_min.value, Optic_slider_max.value)
             Button:
                 text: "Back"
                 on_release: root.manager.current='Main'            

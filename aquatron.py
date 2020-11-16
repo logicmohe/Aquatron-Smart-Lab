@@ -1,3 +1,22 @@
+#!/usr/bin/env python3
+
+#    aquatrond - Backend daemon for aquatron system
+#
+#    Copyright (C) 2020 Josh Boudreau <josh.boudreau@dal.ca>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import os
 import sys
 import random
@@ -23,8 +42,6 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 #from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.properties import BooleanProperty, ListProperty, StringProperty, ObjectProperty
 
-#update since version 1.2
-#use matplotlib to plot the statistic graph
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -230,7 +247,7 @@ class SettingScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(SettingScreen, self).__init__(**kwargs)
-        #Clock.schedule_once(self.set_threshold)
+        Clock.schedule_once(self.set_threshold)
 
     def set_threshold(self,dt):
         global SensorInfo
@@ -249,7 +266,20 @@ class SettingScreen(Screen):
         self.ids.optic_slider_min.value=SensorInfo[SS.OPTIC.value][1]
         self.ids.optic_slider_max.value=SensorInfo[SS.OPTIC.value][2]
     pass
-
+    def setting_change(self, watertemp_min,watertemp_max, waterlvl_min, waterlvl_max,roomtemp_min, roomtemp_max, roomhumi_min, roomhumi_max, waterleak_min, waterleak_max, Optic_min, Optic_max):
+        global SensorInfo
+        SensorInfo[SS.WATERTEMP.value][1]=watertemp_min
+        SensorInfo[SS.WATERTEMP.value][2]=watertemp_max
+        SensorInfo[SS.WATERLVL.value][1]=waterlvl_min
+        SensorInfo[SS.WATERLVL.value][2]=waterlvl_max
+        SensorInfo[SS.ROOMTEMP.value][1]=roomtemp_min
+        SensorInfo[SS.ROOMTEMP.value][2]=roomtemp_max
+        SensorInfo[SS.ROOMHUMI.value][1]=roomhumi_min
+        SensorInfo[SS.ROOMHUMI.value][2]=roomhumi_max
+        SensorInfo[SS.WATERLEAK.value][1]=waterleak_min
+        SensorInfo[SS.WATERLEAK.value][2]=waterleak_max
+        SensorInfo[SS.OPTIC.value][1]=Optic_min
+        SensorInfo[SS.OPTIC.value][2]=Optic_max
 #Kivy Setting Screen
 class AlertingScreen(Screen):
     global AlertEmail
@@ -277,30 +307,31 @@ class MainScreen(Screen):
         super(MainScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self.get_data,1)
     def get_data(self,dt):
-        global current_time
-        current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
-        self.ids.time_label.text=current_time
-        #Get value from SQLite 3
         
-        global cur
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 1 Temperature',))
-        watertemp1=cur.fetchall()
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
-        watertemp2=cur.fetchall()
-        self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),3))
+        # global current_time
+        # current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
+        # self.ids.time_label.text=current_time
+        # #Get value from SQLite 3
+        
+        # global cur
+        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 1 Temperature',))
+        # watertemp1=cur.fetchall()
+        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
+        # watertemp2=cur.fetchall()
+        # self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
-        roomtemp=cur.fetchall()
-        self.ids.roomtemp.text=str(round(float(roomtemp[0][0]),3))
+        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
+        # roomtemp=cur.fetchall()
+        # self.ids.roomtemp.text=str(round(float(roomtemp[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(humidity)',))
-        roomhumi=cur.fetchall()
-        self.ids.roomhumi.text=str(round(float(roomhumi[0][0]),3))
+        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(humidity)',))
+        # roomhumi=cur.fetchall()
+        # self.ids.roomhumi.text=str(round(float(roomhumi[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
-        waterlvl=cur.fetchall()
-        self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
-        self.alarm_check()
+        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
+        # waterlvl=cur.fetchall()
+        # self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
+        # self.alarm_check()
     def alarm_check(self):
         self.ids.roomtemp.background_color=(50,0,0,1)
         #if any sensor is beyond or below the threshold
