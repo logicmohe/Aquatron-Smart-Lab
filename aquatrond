@@ -35,6 +35,7 @@ import Adafruit_ADS1x15
 import adafruit_veml7700
 import dataset
 import signal
+import paho.mqtt.client as mqtt
 
 i2c = busio.I2C(board.SCL, board.SDA)
 adc = Adafruit_ADS1x15.ADS1015()
@@ -45,6 +46,8 @@ DEFAULT_CONFIG_STR = (
 # sensor polling period in seconds
 Period = 10
 OWFS Mountpoint = /mnt/owfs
+ThingsBoard Host = 
+ThingsBoard Access Token = 
 
 # Write list of sensors here.
 # Example:
@@ -121,6 +124,17 @@ def get_global_conf(config):
 			print("Warning: no OWFS Mountpoint set in config. Default: /mnt/owfs")
 			glob["owfs"] = "/mnt/owfs"
 		del config["Global"]
+		if "ThingsBoard Host" in config["Global"]:
+			glob["tb_host"] = config["Global"]["ThingsBoard Host"]
+			if "ThingsBoard Access Token" in config["Global"]:
+				glob["use_tb"] = True
+				glob["tb_token"] = config["Global"]["ThingsBoard Access Token"]
+			else:
+				print("Warning: No ThingsBoard Access Token set in config. Not using Thingsboard.");
+				glob["use_tb"] = False
+		else:
+			print("Warning: No ThingsBoard Host set in config. Not using Thingsboard.");
+			glob["use_tb"] = False
 	else:
 		# default to 10 second poll period
 		print("Warning: no [Global] section in config. Default period: 10")
@@ -313,6 +327,12 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 			except:
 				db.rollback()
 		print()
+		# upload data
+		if global_conf["use_tb"]:
+			payload = {}
+			for sensor in oneWire + i2c + digitalIO + analog:
+				payload[sensor["name"]] = sensor["value"]
+			# thingsboard_client.publish(json.dumps(sensor_data), 1)
 		# sleep for period
 		if running:
 			time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
