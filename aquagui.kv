@@ -352,7 +352,7 @@
             Button:
                 text:"Save Changes"
                 on_release:
-                    root.setting_change(watertemp_slider_min.value, watertemp_slider_max.value, waterlvl_slider_min.value, waterlvl_slider_max.value, roomtemp_slider_min.value, roomtemp_slider_max.value,roomhumi_slider_min.value, roomhumi_slider_max.value,waterleak_slider_min.value, waterleak_slider_max.value,  Optic_slider_min.value, Optic_slider_max.value)
+                    root.setting_change(watertemp_slider_min.value, watertemp_slider_max.value, waterlvl_slider_min.value, waterlvl_slider_max.value, roomtemp_slider_min.value, roomtemp_slider_max.value,roomhumi_slider_min.value, roomhumi_slider_max.value,waterleak_slider_min.value, waterleak_slider_max.value,  optic_slider_min.value, optic_slider_max.value)
             Button:
                 text: "Back"
                 on_release: root.manager.current='Main'            
@@ -452,3 +452,19 @@
             Button:
                 text: "Back"
                 on_release: root.manager.current='Main'            
+
+<SettingPopup>:
+    title: "Save Change"
+    size_hint: None, None
+    size: 400, 400
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            id: popup
+            text: "Successful!"
+        Button:
+            size_hint: 1, 0.2
+            text: "Okay"
+            on_press: root.dismiss()

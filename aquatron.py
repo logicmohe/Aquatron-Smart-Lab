@@ -264,7 +264,15 @@ class SettingScreen(Screen):
         self.ids.optic_slider_min.value=SensorInfo[SS.OPTIC.value][1]
         self.ids.optic_slider_max.value=SensorInfo[SS.OPTIC.value][2]
     pass
-    def setting_change(self, watertemp_min,watertemp_max, waterlvl_min, waterlvl_max,roomtemp_min, roomtemp_max, roomhumi_min, roomhumi_max, waterleak_min, waterleak_max, Optic_min, Optic_max):
+    def setting_change(self, watertemp_min,watertemp_max, waterlvl_min, waterlvl_max,roomtemp_min, roomtemp_max, roomhumi_min, roomhumi_max, waterleak_min, waterleak_max, optic_min, optic_max):
+        if watertemp_min <= watertemp_max and waterlvl_min <= waterlvl_max and roomtemp_min <= roomtemp_max and roomhumi_min <= roomhumi_max and waterleak_min <= waterleak_max and optic_min <= optic_max:
+            ind = True
+        else:
+            ind = False
+        popup=SettingPopup(self, ind)
+        popup.open()
+        if ind is False:
+            pass
         global SensorInfo
         SensorInfo[SS.WATERTEMP.value][1]=watertemp_min
         SensorInfo[SS.WATERTEMP.value][2]=watertemp_max
@@ -276,8 +284,18 @@ class SettingScreen(Screen):
         SensorInfo[SS.ROOMHUMI.value][2]=roomhumi_max
         SensorInfo[SS.WATERLEAK.value][1]=waterleak_min
         SensorInfo[SS.WATERLEAK.value][2]=waterleak_max
-        SensorInfo[SS.OPTIC.value][1]=Optic_min
-        SensorInfo[SS.OPTIC.value][2]=Optic_max
+        SensorInfo[SS.OPTIC.value][1]=optic_min
+        SensorInfo[SS.OPTIC.value][2]=optic_max
+#Popup
+class SettingPopup(Popup):
+    obj = ObjectProperty(None)
+
+    def __init__(self, obj, ind):
+        super(SettingPopup, self).__init__(self)
+        if ind is False:
+            self.ids.popup.text="Error! Please try again"
+
+
 #Kivy Setting Screen
 class AlertingScreen(Screen):
     global AlertEmail
