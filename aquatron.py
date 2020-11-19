@@ -245,7 +245,7 @@ class SettingScreen(Screen):
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(SettingScreen, self).__init__(**kwargs)
-        Clock.schedule_once(self.set_threshold)
+        Clock.schedule_interval(self.set_threshold,10)
 
     def set_threshold(self,dt):
         global SensorInfo
@@ -271,9 +271,7 @@ class SettingScreen(Screen):
             ind = False
         popup=SettingPopup(self, ind)
         popup.open()
-        if ind is False:
-            return
-        else:
+        if ind is True:
             global SensorInfo
             SensorInfo[SS.WATERTEMP.value][1]=watertemp_min
             SensorInfo[SS.WATERTEMP.value][2]=watertemp_max
@@ -287,6 +285,9 @@ class SettingScreen(Screen):
             SensorInfo[SS.WATERLEAK.value][2]=waterleak_max
             SensorInfo[SS.OPTIC.value][1]=optic_min
             SensorInfo[SS.OPTIC.value][2]=optic_max
+            return
+        else:
+            return
 #Popup
 class SettingPopup(Popup):
     obj = ObjectProperty(None)
@@ -347,12 +348,41 @@ class MainScreen(Screen):
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
         waterlvl=cur.fetchall()
         self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
-        self.alarm_check()
-    def alarm_check(self):
-        self.ids.roomtemp.background_color=(50,0,0,1)
-        #if any sensor is beyond or below the threshold
-        #Turn the button to be red and flashing
-        #self.ids.alarm.background_color=(1,1,1,1)
+        
+        #Alarm check
+        global SensorInfo
+        if SensorInfo[SS.WATERTEMP.value][1] < float(watertemp1[0][0]) < SensorInfo[SS.WATERTEMP.value][2]:
+            self.ids.watertemp.background_color=(1,1,1,1)
+        else:
+            self.ids.watertemp.background_color=(50,0,0,1)
+
+        if SensorInfo[SS.WATERLVL.value][1] < float(waterlvl[0][0]) < SensorInfo[SS.WATERLVL.value][2]:
+            self.ids.waterlvl.background_color=(1,1,1,1)
+        else:
+            self.ids.waterlvl.background_color=(50,0,0,1)
+
+        if SensorInfo[SS.ROOMTEMP.value][1] < float(roomtemp[0][0]) < SensorInfo[SS.ROOMTEMP.value][2]:
+            self.ids.roomtemp.background_color=(1,1,1,1)
+        else:
+            self.ids.roomtemp.background_color=(50,0,0,1)
+
+        if SensorInfo[SS.ROOMHUMI.value][1] < float(roomhumi[0][0]) < SensorInfo[SS.ROOMHUMI.value][2]:
+            self.ids.roomhumi.background_color=(1,1,1,1)
+        else:
+            self.ids.roomhumi.background_color=(50,0,0,1)
+
+        # if SensorInfo[SS.WATERLEAK.value][1] < float(waterleak[0][0]) < SensorInfo[SS.WATERLEAK.value][2]:
+        #     self.ids.waterleak.background_color=(1,1,1,1)
+        # else:
+        #     self.ids.waterleak.background_color=(50,0,0,1)
+
+        # if SensorInfo[SS.OPTIC.value][1] < float(optic[0][0]) < SensorInfo[SS.OPTIC.value][2]:
+        #     self.ids.optic.background_color=(1,1,1,1)
+        # else:
+        #     self.ids.optic.background_color=(50,0,0,1)
+
+
+
         return
     #def email_alert(self):
     #    yag=yagmail.SMTP('dalhousieaquatron@gmail.com','aquatron123')
