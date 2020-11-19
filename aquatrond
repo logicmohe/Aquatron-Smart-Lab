@@ -344,7 +344,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 			payload = {}
 			for sensor in oneWire + i2c + digitalIO + analog:
 				payload[sensor["name"]] = sensor["value"]
-			thingsboard_client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
+			thingsboard_client.publish('v1/devices/me/telemetry', json.dumps(payload), 1)
 		# sleep for period
 		if running:
 			time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
