@@ -158,7 +158,7 @@ class WaterSensorScreen(Screen):
         #If this is keep refreshing, then use remove_widget(destination)
     def graph_generate(self):
         #overhere, read from postgreSQL data to generate Matplotlib graph
-        pass
+        return
 
 class RoomSensorScreen(Screen):
     data_items=ListProperty([])
@@ -198,7 +198,7 @@ class RoomSensorScreen(Screen):
         #If this is keep refreshing, then use remove_widget(destination)
     def graph_generate(self):
         #overhere, read from postgreSQL data to generate Matplotlib graph
-        pass
+        return
 
 class OtherSensorScreen(Screen):
     data_items=ListProperty([])
@@ -237,7 +237,7 @@ class OtherSensorScreen(Screen):
         #If this is keep refreshing, then use remove_widget(destination)
     def graph_generate(self):
         #overhere, read from postgreSQL data to generate Matplotlib graph
-        pass
+        return
 
 #Kivy Setting Screen
 class SettingScreen(Screen):
@@ -263,7 +263,7 @@ class SettingScreen(Screen):
         self.ids.waterleak_slider_max.value=SensorInfo[SS.WATERLEAK.value][2]
         self.ids.optic_slider_min.value=SensorInfo[SS.OPTIC.value][1]
         self.ids.optic_slider_max.value=SensorInfo[SS.OPTIC.value][2]
-    pass
+        return
     def setting_change(self, watertemp_min,watertemp_max, waterlvl_min, waterlvl_max,roomtemp_min, roomtemp_max, roomhumi_min, roomhumi_max, waterleak_min, waterleak_max, optic_min, optic_max):
         if watertemp_min <= watertemp_max and waterlvl_min <= waterlvl_max and roomtemp_min <= roomtemp_max and roomhumi_min <= roomhumi_max and waterleak_min <= waterleak_max and optic_min <= optic_max:
             ind = True
@@ -272,7 +272,7 @@ class SettingScreen(Screen):
         popup=SettingPopup(self, ind)
         popup.open()
         if ind is False:
-            pass
+            return
         else:
             global SensorInfo
             SensorInfo[SS.WATERTEMP.value][1]=watertemp_min
@@ -314,7 +314,7 @@ class AlertingScreen(Screen):
         AlertEmail[0]=email1
         AlertEmail[1]=email2
         AlertEmail[2]=email3
-    pass
+    
 
 #Kivy Main Screen
 class MainScreen(Screen):
@@ -353,7 +353,7 @@ class MainScreen(Screen):
         #if any sensor is beyond or below the threshold
         #Turn the button to be red and flashing
         #self.ids.alarm.background_color=(1,1,1,1)
-        pass
+        return
     #def email_alert(self):
     #    yag=yagmail.SMTP('dalhousieaquatron@gmail.com','aquatron123')
     #def toggle_button(self):
