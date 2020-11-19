@@ -334,7 +334,8 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 					value = sensor["value"]
 				))
 				db.commit()
-			except:
+			except Exception as err:
+				print("Error storing data in database:\n{0}".format(err))
 				db.rollback()
 		print()
 		# upload data
