@@ -312,7 +312,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		thingsboard_client
 		thingsboard_client = mqtt.Client()
 		thingsboard_client.username_pw_set(global_conf["tb_token"])
-		thingsboard_client.connect(THINGSBOARD_HOST, 1883, 60)
+		thingsboard_client.connect(global_conf["tb_host"], 1883, 60)
 		thingsboard_client.loop_start()
 	starttime = time.time()
 	while running:
