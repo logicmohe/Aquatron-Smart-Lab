@@ -73,21 +73,19 @@ SensorInfo={}
 for i in range(6):
     SensorInfo[i]=[_init, _init_min, _init_max]
 
-#conn=sqlite3.connect('/run/aquatron/db.sqlite')
-#cur=conn.cursor()
-# #sensors, read in from GPIO
-# watertemp_sensor=waterlvl_sensor =waterleak_sensor   = \
-#     light_sensor=roomtemp_sensor=humidity_sensor=_init
+conn=sqlite3.connect('/run/aquatron/db.sqlite')
+cur=conn.cursor()
+#sensors, read in from GPIO
+watertemp_sensor=waterlvl_sensor =waterleak_sensor   = \
+    light_sensor=roomtemp_sensor=humidity_sensor=_init
 
-# #Setup: After reaching the limit, special event will be triggerred
-# watertemp_min=waterlvl_min=waterleak_min=light_min \
-#     =roomtemp_min=humidity_min=_init_min
+#Setup: After reaching the limit, special event will be triggerred
+watertemp_min=waterlvl_min=waterleak_min=light_min \
+    =roomtemp_min=humidity_min=_init_min
 
-# watertemp_max=waterlvl_max=waterleak_max= \
-#     light_max=roomtemp_max=humidity_max=_init_max
+watertemp_max=waterlvl_max=waterleak_max= \
+    light_max=roomtemp_max=humidity_max=_init_max
 
-#Note for future : use for loop to check if any sensor value is 
-#out of range, use correpsonding button to make it read
 
 '''
 Data Processing
@@ -307,31 +305,30 @@ class MainScreen(Screen):
         super(MainScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self.get_data,1)
     def get_data(self,dt):
-        pass
-        # global current_time
-        # current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
-        # self.ids.time_label.text=current_time
-        # #Get value from SQLite 3
+        global current_time
+        current_time=strftime("%Y-%m-%d %H:%M:%S",localtime())
+        self.ids.time_label.text=current_time
+        #Get value from SQLite 3
         
-        # global cur
-        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 1 Temperature',))
-        # watertemp1=cur.fetchall()
-        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
-        # watertemp2=cur.fetchall()
-        # self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),3))
+        global cur
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 1 Temperature',))
+        watertemp1=cur.fetchall()
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
+        watertemp2=cur.fetchall()
+        self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),3))
 
-        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
-        # roomtemp=cur.fetchall()
-        # self.ids.roomtemp.text=str(round(float(roomtemp[0][0]),3))
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
+        roomtemp=cur.fetchall()
+        self.ids.roomtemp.text=str(round(float(roomtemp[0][0]),3))
 
-        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(humidity)',))
-        # roomhumi=cur.fetchall()
-        # self.ids.roomhumi.text=str(round(float(roomhumi[0][0]),3))
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(humidity)',))
+        roomhumi=cur.fetchall()
+        self.ids.roomhumi.text=str(round(float(roomhumi[0][0]),3))
 
-        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
-        # waterlvl=cur.fetchall()
-        # self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
-        # self.alarm_check()
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
+        waterlvl=cur.fetchall()
+        self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
+        self.alarm_check()
     def alarm_check(self):
         self.ids.roomtemp.background_color=(50,0,0,1)
         #if any sensor is beyond or below the threshold
