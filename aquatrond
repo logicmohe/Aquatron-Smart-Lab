@@ -300,7 +300,6 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		nonlocal running
 		print("Graceful exit")
 		running = False
-		raise KeyboardInterrupt
 	signal.signal(signal.SIGINT, sig_handler)
 	owfs_path = Path(global_conf["owfs"])
 	aq_dir = '/run/aquatron'
@@ -326,30 +325,26 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 			read_digitalIO(sensor)
 		for sensor in analog:
 			read_analog(sensor)
-		# protect storing data from KeyboardInterrupt
-		try:
-			# store data
+		# store data
+		for sensor in oneWire + i2c + digitalIO + analog:
+			print(f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
+			db.begin()
+			try:
+				db["sensor_data"].insert(dict(
+					timestamp=sensor["timestamp"], name = sensor["name"],
+					value = sensor["value"]
+				))
+				db.commit()
+			except Exception as err:
+				print("Error storing data in database:\n{0}".format(err))
+				db.rollback()
+		print()
+		# upload data
+		if global_conf["use_tb"]:
+			payload = {}
 			for sensor in oneWire + i2c + digitalIO + analog:
-				print(f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
-				db.begin()
-				try:
-					db["sensor_data"].insert(dict(
-						timestamp=sensor["timestamp"], name = sensor["name"],
-						value = sensor["value"]
-					))
-					db.commit()
-				except Exception as err:
-					print("Error storing data in database:\n{0}".format(err))
-					db.rollback()
-			print()
-			# upload data
-			if global_conf["use_tb"]:
-				payload = {}
-				for sensor in oneWire + i2c + digitalIO + analog:
-					payload[sensor["name"]] = sensor["value"]
-				thingsboard_client.publish('v1/devices/me/telemetry', json.dumps(payload), 1)
-		except KeyboardInterrupt:
-			pass
+				payload[sensor["name"]] = sensor["value"]
+			thingsboard_client.publish('v1/devices/me/telemetry', json.dumps(payload), 1)
 		# sleep for period
 		if running:
 			time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
