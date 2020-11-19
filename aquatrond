@@ -349,8 +349,8 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		if running:
 			time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
 	if global_conf["use_tb"]:
-		client.loop_stop()
-		client.disconnect()
+		thingsboard_client.loop_stop()
+		thingsboard_client.disconnect()
 
 def main():
 	GPIO.setmode(GPIO.BCM)
