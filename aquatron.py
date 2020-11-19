@@ -371,6 +371,7 @@ class MainScreen(Screen):
         else:
             self.ids.roomhumi.background_color=(50,0,0,1)
 
+        # Not connected yet
         # if SensorInfo[SS.WATERLEAK.value][1] < float(waterleak[0][0]) < SensorInfo[SS.WATERLEAK.value][2]:
         #     self.ids.waterleak.background_color=(1,1,1,1)
         # else:
