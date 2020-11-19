@@ -227,6 +227,7 @@ def build_sensor_lists(config):
 ########################################################################
 def read_owfs(sensor, owfs):
 	# TODO: check for key error in list, add more devices
+	sensor["timestamp"] = time.time()
 	try:
 		vfile = owfs / Path(sensor["addr"]) / Path({
 			"DS18B20" : "temperature"
@@ -234,7 +235,6 @@ def read_owfs(sensor, owfs):
 	except KeyError:
 		print("Don't know how to read this sensor model: ", sensor["model"])
 	if os.path.exists(vfile):
-		sensor["timestamp"] = time.time()
 		sensor["value"] = open(vfile).read()
 	else:
 		print("Error reading from sensor.")
