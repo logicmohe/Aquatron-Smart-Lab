@@ -273,25 +273,26 @@ class SettingScreen(Screen):
         popup.open()
         if ind is False:
             pass
-        global SensorInfo
-        SensorInfo[SS.WATERTEMP.value][1]=watertemp_min
-        SensorInfo[SS.WATERTEMP.value][2]=watertemp_max
-        SensorInfo[SS.WATERLVL.value][1]=waterlvl_min
-        SensorInfo[SS.WATERLVL.value][2]=waterlvl_max
-        SensorInfo[SS.ROOMTEMP.value][1]=roomtemp_min
-        SensorInfo[SS.ROOMTEMP.value][2]=roomtemp_max
-        SensorInfo[SS.ROOMHUMI.value][1]=roomhumi_min
-        SensorInfo[SS.ROOMHUMI.value][2]=roomhumi_max
-        SensorInfo[SS.WATERLEAK.value][1]=waterleak_min
-        SensorInfo[SS.WATERLEAK.value][2]=waterleak_max
-        SensorInfo[SS.OPTIC.value][1]=optic_min
-        SensorInfo[SS.OPTIC.value][2]=optic_max
+        else:
+            global SensorInfo
+            SensorInfo[SS.WATERTEMP.value][1]=watertemp_min
+            SensorInfo[SS.WATERTEMP.value][2]=watertemp_max
+            SensorInfo[SS.WATERLVL.value][1]=waterlvl_min
+            SensorInfo[SS.WATERLVL.value][2]=waterlvl_max
+            SensorInfo[SS.ROOMTEMP.value][1]=roomtemp_min
+            SensorInfo[SS.ROOMTEMP.value][2]=roomtemp_max
+            SensorInfo[SS.ROOMHUMI.value][1]=roomhumi_min
+            SensorInfo[SS.ROOMHUMI.value][2]=roomhumi_max
+            SensorInfo[SS.WATERLEAK.value][1]=waterleak_min
+            SensorInfo[SS.WATERLEAK.value][2]=waterleak_max
+            SensorInfo[SS.OPTIC.value][1]=optic_min
+            SensorInfo[SS.OPTIC.value][2]=optic_max
 #Popup
 class SettingPopup(Popup):
     obj = ObjectProperty(None)
 
     def __init__(self, obj, ind):
-        super(SettingPopup, self).__init__(self)
+        Popup.__init__(self)
         if ind is False:
             self.ids.popup.text="Error! Please try again"
 
