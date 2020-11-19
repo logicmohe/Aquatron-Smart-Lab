@@ -123,7 +123,6 @@ def get_global_conf(config):
 		else:
 			print("Warning: no OWFS Mountpoint set in config. Default: /mnt/owfs")
 			glob["owfs"] = "/mnt/owfs"
-		del config["Global"]
 		if "ThingsBoard Host" in config["Global"]:
 			glob["tb_host"] = config["Global"]["ThingsBoard Host"]
 			if "ThingsBoard Access Token" in config["Global"]:
@@ -135,6 +134,7 @@ def get_global_conf(config):
 		else:
 			print("Warning: No ThingsBoard Host set in config. Not using Thingsboard.");
 			glob["use_tb"] = False
+		del config["Global"]
 	else:
 		# default to 10 second poll period
 		print("Warning: no [Global] section in config. Default period: 10")
