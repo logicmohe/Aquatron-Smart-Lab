@@ -166,7 +166,7 @@ def build_sensor_lists(config):
 			errors = True
 			continue
 		
-		sensor = {"Value" : None}
+		sensor = {"value" : None}
 		sensor["name"] = friendly_name
 		
 		if "Address" in s:
