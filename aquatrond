@@ -305,7 +305,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	db = dataset.connect('sqlite:///' + aq_dir + '/db.sqlite')
 	thingsboard_client = None
 	if global_conf["use_tb"]:
-		nonlocal thingsboard_client
+		thingsboard_client
 		thingsboard_client = mqtt.Client()
 		thingsboard_client.username_pw_set(global_conf["tb_token"])
 		thingsboard_client.connect(THINGSBOARD_HOST, 1883, 60)
