@@ -45,7 +45,6 @@ DEFAULT_CONFIG_STR = (
 [Global]
 # sensor polling period in seconds
 Period = 10
-OWFS Mountpoint = /mnt/owfs
 ThingsBoard Host = 
 ThingsBoard Access Token = 
 
@@ -121,8 +120,7 @@ def get_global_conf(config):
 		if "OWFS Mountpoint" in config["Global"]:
 			glob["owfs"] = config["Global"]["OWFS Mountpoint"]
 		else:
-			print("Warning: no OWFS Mountpoint set in config. Default: /mnt/owfs")
-			glob["owfs"] = "/mnt/owfs"
+			glob["owfs"] = "/mnt/1wire" # default
 		if "ThingsBoard Host" in config["Global"]:
 			glob["tb_host"] = config["Global"]["ThingsBoard Host"]
 			if "ThingsBoard Access Token" in config["Global"]:
@@ -168,7 +166,7 @@ def build_sensor_lists(config):
 			errors = True
 			continue
 		
-		sensor = {"Value" : None}
+		sensor = {"value" : None}
 		sensor["name"] = friendly_name
 		
 		if "Address" in s:
@@ -229,6 +227,7 @@ def build_sensor_lists(config):
 ########################################################################
 def read_owfs(sensor, owfs):
 	# TODO: check for key error in list, add more devices
+	sensor["timestamp"] = time.time()
 	try:
 		vfile = owfs / Path(sensor["addr"]) / Path({
 			"DS18B20" : "temperature"
@@ -236,8 +235,7 @@ def read_owfs(sensor, owfs):
 	except KeyError:
 		print("Don't know how to read this sensor model: ", sensor["model"])
 	if os.path.exists(vfile):
-		sensor["timestamp"] = time.time()
-		sensor["value"] = str(open(vfile).read())
+		sensor["value"] = open(vfile).read()
 	else:
 		print("Error reading from sensor.")
 		print(vfile)
@@ -252,13 +250,18 @@ def read_owfs(sensor, owfs):
 def read_i2c(sensor):
 	sensor["timestamp"] = time.time()
 	if sensor["model"] == "SI7021":
-		temp = adafruit_si7021.SI7021(i2c)
+		try:
+			temp = adafruit_si7021.SI7021(i2c)
+		except ValueError as err:
+			print("Error reading from SI7021:\n{0}".format(err))
+			print("Is it attached and do you have the right address?")
+			return
 		if sensor["type"] == "temperature":
-			sensor["value"] = str(temp.temperature)
+			sensor["value"] = temp.temperature
 		elif sensor["type"] == "humidity":
-			sensor["value"] = str(temp.relative_humidity)
+			sensor["value"] = temp.relative_humidity
 	elif sensor["model"] == "VEML7700":
-		sensor["value"] = str(adafruit_veml7700.VEML7700(i2c).lux)
+		sensor["value"] = adafruit_veml7700.VEML7700(i2c).lux
 	else:
 		print("Don't know how to read this sensor model: ", sensor["model"])
 
@@ -271,7 +274,7 @@ def read_i2c(sensor):
 ########################################################################
 def read_digitalIO(sensor):
 	sensor["timestamp"] = time.time()
-	sensor["value"] = str(GPIO.input(sensor["addr"]))
+	sensor["value"] = GPIO.input(sensor["addr"])
 
 ########################################################################
 # read_analog
@@ -282,7 +285,7 @@ def read_digitalIO(sensor):
 ########################################################################
 def read_analog(sensor):
 	sensor["timestamp"] = time.time()
-	sensor["value"] = str(adc.read_adc(sensor["addr"], gain=1))
+	sensor["value"] = adc.read_adc(sensor["addr"], gain=1)
 
 ########################################################################
 # loop
@@ -293,22 +296,27 @@ def read_analog(sensor):
 def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	pollPeriod = global_conf["Period"]
 	running = True
+	sleeping = False
 	def sig_handler(*args):
 		nonlocal running
+		nonlocal sleeping
 		print("Graceful exit")
 		running = False
+		if sleeping: # exit immediately
+			sys.exit(0)
 	signal.signal(signal.SIGINT, sig_handler)
 	owfs_path = Path(global_conf["owfs"])
 	aq_dir = '/run/aquatron'
 	if not os.path.exists(aq_dir):
 		os.mkdir(aq_dir)
+		os.chmod(aq_dir, 0o777);
 	db = dataset.connect('sqlite:///' + aq_dir + '/db.sqlite')
 	thingsboard_client = None
 	if global_conf["use_tb"]:
 		thingsboard_client
 		thingsboard_client = mqtt.Client()
 		thingsboard_client.username_pw_set(global_conf["tb_token"])
-		thingsboard_client.connect(THINGSBOARD_HOST, 1883, 60)
+		thingsboard_client.connect(global_conf["tb_host"], 1883, 60)
 		thingsboard_client.loop_start()
 	starttime = time.time()
 	while running:
@@ -331,7 +339,8 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 					value = sensor["value"]
 				))
 				db.commit()
-			except:
+			except Exception as err:
+				print("Error storing data in database:\n{0}".format(err))
 				db.rollback()
 		print()
 		# upload data
@@ -339,13 +348,15 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 			payload = {}
 			for sensor in oneWire + i2c + digitalIO + analog:
 				payload[sensor["name"]] = sensor["value"]
-			# thingsboard_client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
+			thingsboard_client.publish('v1/devices/me/telemetry', json.dumps(payload), 1)
 		# sleep for period
 		if running:
+			sleeping = True
 			time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
+			sleeping = False
 	if global_conf["use_tb"]:
-		client.loop_stop()
-		client.disconnect()
+		thingsboard_client.loop_stop()
+		thingsboard_client.disconnect()
 
 def main():
 	GPIO.setmode(GPIO.BCM)
