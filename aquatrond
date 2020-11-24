@@ -43,7 +43,7 @@ adc = Adafruit_ADS1x15.ADS1015()
 DEFAULT_CONFIG_STR = (
 '''# Global config
 [Global]
-# sensor polling period in seconds
+# sensor polling period in minutes
 Period = 10
 ThingsBoard Host = 
 ThingsBoard Access Token = 
@@ -114,7 +114,7 @@ def get_global_conf(config):
 				print("Defaulting to Period = 10")
 				glob["Period"] = 10.0
 		else:
-			# default to 10 second poll period
+			# default to 10 minute poll period
 			print("Warning: no Period in [Global] in config. Default: 10")
 			glob["Period"] = 10.0
 		if "OWFS Mountpoint" in config["Global"]:
@@ -355,7 +355,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		# sleep for period
 		if running:
 			sleeping = True
-			time.sleep(pollPeriod - ((time.time() - starttime) % pollPeriod))
+			time.sleep((pollPeriod * 60.0) - ((time.time() - starttime) % (pollPeriod * 60.0)))
 			sleeping = False
 	if global_conf["use_tb"]:
 		thingsboard_client.loop_stop()
