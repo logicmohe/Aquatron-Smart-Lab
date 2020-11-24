@@ -158,6 +158,9 @@ def build_sensor_lists(config):
 	i2cNames = ["2WIRE", "TWOWIRE", "TWI", "I2C"]
 	digitalIONames = ["GPIO", "DIGITAL", "IO", "DIGITALIO", "BOOL", "BOOLEAN"]
 	analogNames = ["ANALOG"]
+	
+	dontNeedAddress = ["SI7021", "VEML7700"]
+	
 	errors = False
 	for friendly_name in config.sections():
 		s = config[friendly_name]
@@ -171,7 +174,7 @@ def build_sensor_lists(config):
 		
 		if "Address" in s:
 			sensor["addr"] = s["Address"]
-		elif s["Model"].upper() != "SI7021":
+		elif s["Model"].upper() not in dontNeedAddress:
 			print(f'Address type not specified for {friendly_name}.')
 			errors = True
 		
