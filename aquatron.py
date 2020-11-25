@@ -48,6 +48,9 @@ import matplotlib.dates as mdates
 
 from enum import Enum
 import sqlite3
+
+#from aquatrond import 
+import glob
 '''
 Initialization
 '''
@@ -108,24 +111,24 @@ class WaterSensorScreen(Screen):
         #Clock.schedule_interval(self.graph_test,600)
 
     def graph_test(self, dt): 
+        try: #Incase we don't have enough data
         #Plot the graph using matplotlib
-        # global cur
-        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 1 Temperature',))
-        # watertemp1=cur.fetchall()
-        # cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
-        # watertemp2=cur.fetchall()
-
-        # data1=[]
-        # data2=[]
-        # data3=[]
-        # for i in range(144):
-        #     data1[i]=watertemp1[i]
-        #     data2[i]=watertemp2[i]
-        #     data3[i]=(watertemp1[i]+watertemp2[i])/2
-
-        data1 = [random.randrange(0,100) for i in range (144)]
-        data2 = [random.randrange(0,50) for i in range (144)]
-        data3 = [random.randrange(50,100) for i in range (144)]
+            global cur
+            cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 1 Temperature',))
+            watertemp1=cur.fetchall()
+            cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
+            watertemp2=cur.fetchall()
+            data1=[]
+            data2=[]
+            data3=[]
+            for i in range(144):
+                data1[i]=watertemp1[i]
+                data2[i]=watertemp2[i]
+                data3[i]=(watertemp1[i]+watertemp2[i])/2
+        except:
+            data1 = [random.randrange(0,100) for i in range (144)]
+            data2 = [random.randrange(0,50) for i in range (144)]
+            data3 = [random.randrange(50,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
@@ -250,11 +253,9 @@ class SettingScreen(Screen):
     def set_threshold(self,dt):
         global SensorInfo
         self.ids.watertemp_slider_min.value=SensorInfo[SS.WATERTEMP.value][1]
-        #self.ids.watertemp_slider_max.value=SensorInfo[SS.WATERTEMP.value][2]
-        self.ids.watertemp_slider_max.value=50
+        self.ids.watertemp_slider_max.value=SensorInfo[SS.WATERTEMP.value][2]
         self.ids.waterlvl_slider_min.value=SensorInfo[SS.WATERLVL.value][1]
-        #self.ids.waterlvl_slider_max.value=SensorInfo[SS.WATERLVL.value][2]
-        self.ids.waterlvl_slider_max.value=50
+        self.ids.waterlvl_slider_max.value=SensorInfo[SS.WATERLVL.value][2]
         self.ids.roomtemp_slider_min.value=SensorInfo[SS.ROOMTEMP.value][1]
         self.ids.roomtemp_slider_max.value=SensorInfo[SS.ROOMTEMP.value][2]
         self.ids.roomhumi_slider_min.value=SensorInfo[SS.ROOMHUMI.value][1]
@@ -371,16 +372,15 @@ class MainScreen(Screen):
         else:
             self.ids.roomhumi.background_color=(50,0,0,1)
 
-        # Not connected yet
-        # if SensorInfo[SS.WATERLEAK.value][1] < float(waterleak[0][0]) < SensorInfo[SS.WATERLEAK.value][2]:
-        #     self.ids.waterleak.background_color=(1,1,1,1)
-        # else:
-        #     self.ids.waterleak.background_color=(50,0,0,1)
+        if SensorInfo[SS.WATERLEAK.value][1] < float(waterleak[0][0]) < SensorInfo[SS.WATERLEAK.value][2]:
+            self.ids.waterleak.background_color=(1,1,1,1)
+        else:
+            self.ids.waterleak.background_color=(50,0,0,1)
 
-        # if SensorInfo[SS.OPTIC.value][1] < float(optic[0][0]) < SensorInfo[SS.OPTIC.value][2]:
-        #     self.ids.optic.background_color=(1,1,1,1)
-        # else:
-        #     self.ids.optic.background_color=(50,0,0,1)
+        if SensorInfo[SS.OPTIC.value][1] < float(optic[0][0]) < SensorInfo[SS.OPTIC.value][2]:
+            self.ids.optic.background_color=(1,1,1,1)
+        else:
+            self.ids.optic.background_color=(50,0,0,1)
 
 
 
