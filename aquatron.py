@@ -338,6 +338,10 @@ class MainScreen(Screen):
         watertemp2=cur.fetchall()
         self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),3))
 
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
+        waterlvl=cur.fetchall()
+        self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
+
         cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
         roomtemp=cur.fetchall()
         self.ids.roomtemp.text=str(round(float(roomtemp[0][0]),3))
@@ -346,10 +350,14 @@ class MainScreen(Screen):
         roomhumi=cur.fetchall()
         self.ids.roomhumi.text=str(round(float(roomhumi[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
-        waterlvl=cur.fetchall()
-        self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
-        
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Toggle Switch',))
+        waterleak=cur.fetchall()
+        self.ids.waterleak.text=str(round(float(waterleak[0][0]),3))
+
+        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Ambient Light',))
+        optic=cur.fetchall()
+        self.ids.optic.text=str(round(float(optic[0][0]),3))
+
         #Alarm check
         global SensorInfo
         if SensorInfo[SS.WATERTEMP.value][1] < float(watertemp1[0][0]) < SensorInfo[SS.WATERTEMP.value][2]:
@@ -382,13 +390,9 @@ class MainScreen(Screen):
         else:
             self.ids.optic.background_color=(50,0,0,1)
 
-
-
         return
     #def email_alert(self):
     #    yag=yagmail.SMTP('dalhousieaquatron@gmail.com','aquatron123')
-    #def toggle_button(self):
-    #design for the toggle button to contrl on and off
 #testing plan:
 #Whether I could use self.ids.ListOfSensors[Num] to identify the button
 
