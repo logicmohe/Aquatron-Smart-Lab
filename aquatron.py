@@ -149,7 +149,6 @@ class WaterSensorScreen(Screen):
         bot=figb.add_subplot(111)
         plt.plot(times, data1, label="Leftside")
         plt.plot(times, data2, label="Rightside")
-        plt.plot(times, data3, label="Average")
         plt.title('Water Level in 24 hours')
         plt.legend()
         plt.ylim(top=100);plt.ylim(bottom=0)
