@@ -60,7 +60,7 @@ _init=0.00
 _init_min=0
 _init_max=80
 
-#AlertEmail=["dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com"]
+AlertEmail=["dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com"]
 
 current_time='0000-00-00 00:00:00'      #initialize the time
 
@@ -111,7 +111,7 @@ class WaterSensorScreen(Screen):
         #Clock.schedule_interval(self.graph_test,600)
 
     def graph_test(self, dt): 
-        try: #Incase we don't have enough data
+        try: #In case we don't have enough data
         #Plot the graph using matplotlib
             global cur
             cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 1 Temperature',))
@@ -119,16 +119,14 @@ class WaterSensorScreen(Screen):
             cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 2 Temperature',))
             watertemp2=cur.fetchall()
             data1=[]
+            for items in watertemp1:
+                data1.append(items[0])
             data2=[]
-            data3=[]
-            for i in range(144):
-                data1[i]=watertemp1[i]
-                data2[i]=watertemp2[i]
-                data3[i]=(watertemp1[i]+watertemp2[i])/2
+            for items in watertemp2:
+                data2.append(items[0])
         except:
             data1 = [random.randrange(0,100) for i in range (144)]
             data2 = [random.randrange(0,50) for i in range (144)]
-            data3 = [random.randrange(50,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
@@ -137,12 +135,12 @@ class WaterSensorScreen(Screen):
         top=figt.add_subplot(111)
         plt.plot(times, data1, label="Upside")
         plt.plot(times, data2, label="Downside")
-        plt.plot(times, data3, label="Average")
         plt.title('Water Temperature in 24 hours')
         plt.legend()
         plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
         top.xaxis.set_major_formatter(xfmt)
+        top.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         figb=plt.figure(1)
@@ -155,6 +153,7 @@ class WaterSensorScreen(Screen):
         plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
+        bot.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
         #return box
