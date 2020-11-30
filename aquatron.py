@@ -60,7 +60,7 @@ _init=0.00
 _init_min=0
 _init_max=80
 
-AlertEmail=["dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com"]
+#AlertEmail=["dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com"]
 
 current_time='0000-00-00 00:00:00'      #initialize the time
 
@@ -116,7 +116,7 @@ class WaterSensorScreen(Screen):
             global cur
             cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 1 Temperature',))
             watertemp1=cur.fetchall()
-            cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
+            cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 2 Temperature',))
             watertemp2=cur.fetchall()
             data1=[]
             data2=[]
