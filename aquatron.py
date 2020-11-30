@@ -116,19 +116,25 @@ class WaterSensorScreen(Screen):
         try: #In case we don't have enough data
         #Plot the graph using matplotlib
             global cur
-            cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 1 Temperature',))
+            cur.execute('SELECT value FROM sensor_data WHERE name=? ORDER BY timestamp DESC LIMIT 144',('Water Tank 1 Temperature',))
             watertemp1=cur.fetchall()
-            cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 144',('Water Tank 2 Temperature',))
+            cur.execute('SELECT value FROM sensor_data WHERE name=? ORDER BY timestamp DESC LIMIT 144',('Water Tank 2 Temperature',))
             watertemp2=cur.fetchall()
+            cur.execute('SELECT value FROM sensor_data WHERE name=? ORDER BY timestamp DESC LIMIT 144',('Water Level',))
+            waterlvl=cur.fetchall()
             data1=[]
             for items in watertemp1:
                 data1.append(items[0])
             data2=[]
             for items in watertemp2:
                 data2.append(items[0])
+            data3=[]
+            for items in waterlvl:
+                data3.append(items[0])
         except:
             data1 = [random.randrange(0,100) for i in range (144)]
             data2 = [random.randrange(0,50) for i in range (144)]
+            data3 = [random.randrange(0,50) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
@@ -139,22 +145,20 @@ class WaterSensorScreen(Screen):
         plt.plot(times, data2, label="Downside")
         plt.title('Water Temperature in 24 hours')
         plt.legend()
-        plt.ylim(top=100);plt.ylim(bottom=0)
+        #plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
         top.xaxis.set_major_formatter(xfmt)
-        top.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        #top.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         figb=plt.figure(1)
         bot=figb.add_subplot(111)
-        plt.plot(times, data1, label="Leftside")
-        plt.plot(times, data2, label="Rightside")
         plt.title('Water Level in 24 hours')
+        plt.plot(times, data3)
         plt.legend()
-        plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
-        bot.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        #bot.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
         #return box
@@ -183,7 +187,6 @@ class RoomSensorScreen(Screen):
         top=figt.add_subplot(111)
         plt.plot(times, data1, label="Upside")
         plt.title('Room Temperature in 24 hours')
-        plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
@@ -193,7 +196,6 @@ class RoomSensorScreen(Screen):
         bot=figb.add_subplot(111)
         plt.plot(times, data2)
         plt.title('Room Humidity in 24 hours')
-        plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
@@ -332,29 +334,29 @@ class MainScreen(Screen):
         #Get value from SQLite 3
         
         global cur
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 1 Temperature',))
+        cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Water Tank 1 Temperature',))
         watertemp1=cur.fetchall()
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Tank 2 Temperature',))
+        cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Water Tank 2 Temperature',))
         watertemp2=cur.fetchall()
         self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Water Level',))
+        cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Water Level',))
         waterlvl=cur.fetchall()
         self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(temperature)',))
+        cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('SI7021(temperature)',))
         roomtemp=cur.fetchall()
         self.ids.roomtemp.text=str(round(float(roomtemp[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('SI7021(humidity)',))
+        cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('SI7021(humidity)',))
         roomhumi=cur.fetchall()
         self.ids.roomhumi.text=str(round(float(roomhumi[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Toggle Switch',))
+        cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Toggle Switch',))
         waterleak=cur.fetchall()
         self.ids.waterleak.text=str(round(float(waterleak[0][0]),3))
 
-        cur.execute('SELECT value FROM sensor_data WHERE name=? LIMIT 1',('Ambient Light',))
+        cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Ambient Light',))
         optic=cur.fetchall()
         self.ids.optic.text=str(round(float(optic[0][0]),3))
 
