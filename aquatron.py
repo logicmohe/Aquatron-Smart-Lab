@@ -45,6 +45,8 @@ from kivy.properties import BooleanProperty, ListProperty, StringProperty, Objec
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+from matplotlib.ticker import FormatStrFormatter
+
 
 from enum import Enum
 import sqlite3
