@@ -17,8 +17,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# TODO: Send data to ThingsBoard
-
 SENSOR_CONFIG = '/etc/aquatron/sensors.conf'
 
 import time
@@ -47,6 +45,7 @@ DEFAULT_CONFIG_STR = (
 Period = 10
 ThingsBoard Host = 
 ThingsBoard Access Token = 
+Log Level = 1
 
 # Write list of sensors here.
 # Example:
@@ -56,6 +55,14 @@ ThingsBoard Access Token =
 # Model = abc123
 '''
 )
+
+log_lvl = 1 # 0 - quiet, 1 - normal, 2 - debug
+def log_msg(lvl, *args, **kwargs):
+    if lvl >= log_lvl:
+		print(*args, flush=True, **kwargs)
+
+def err_msg(*args, **kwargs):
+    print(*args, file=sys.stderr, flush=True, **kwargs)
 
 ########################################################################
 # read_config
@@ -71,8 +78,8 @@ def read_config(path_str):
 		try:
 			os.mkdir(config_path.parent)
 		except OSError as err:
-			print("OS error: {0}".format(err))
-			print("Are you root?")
+			err_msg("OS error: {0}".format(err))
+			err_msg("Are you root?")
 			sys.exit(1)
 	# check if file exists
 	if not os.path.exists(config_path):
@@ -81,20 +88,21 @@ def read_config(path_str):
 			f = open(config_path, "w")
 			f.write(DEFAULT_CONFIG_STR)
 			f.close()
-			print(f'Please populate {SENSOR_CONFIG}')
+			err_msg(f'Please populate {SENSOR_CONFIG}')
 			sys.exit(0)
 		except OSError as err:
-			print("OS error: {0}".format(err))
-			print("Are you root?")
+			err_msg("OS error: {0}".format(err))
+			err_msg("Are you root?")
 			sys.exit(1)
 	# file exists
 	config = configparser.ConfigParser()
 	try:
 		config.read(config_path)
 	except OSError as err:
-		print("OS error: {0}".format(err))
-		print("Are you root?")
+		err_msg("OS error: {0}".format(err))
+		err_msg("Are you root?")
 		sys.exit(1)
+	log_msg(1, "Configuration loaded.")
 	return config
 
 ########################################################################
@@ -110,12 +118,12 @@ def get_global_conf(config):
 			try:
 				glob["Period"] = float(config["Global"]["Period"])
 			except ValueError as err:
-				print("Invalid period in [Global]: {0}".format(err))
-				print("Defaulting to Period = 10")
+				err_msg("Invalid period in [Global]: {0}".format(err))
+				err_msg("Defaulting to Period = 10")
 				glob["Period"] = 10.0
 		else:
 			# default to 10 minute poll period
-			print("Warning: no Period in [Global] in config. Default: 10")
+			err_msg("Warning: no Period in [Global] in config. Default: 10")
 			glob["Period"] = 10.0
 		if "OWFS Mountpoint" in config["Global"]:
 			glob["owfs"] = config["Global"]["OWFS Mountpoint"]
@@ -127,17 +135,25 @@ def get_global_conf(config):
 				glob["use_tb"] = True
 				glob["tb_token"] = config["Global"]["ThingsBoard Access Token"]
 			else:
-				print("Warning: No ThingsBoard Access Token set in config. Not using Thingsboard.");
+				err_msg("Warning: No ThingsBoard Access Token set in config. Not using Thingsboard.");
 				glob["use_tb"] = False
 		else:
-			print("Warning: No ThingsBoard Host set in config. Not using Thingsboard.");
+			err_msg("Warning: No ThingsBoard Host set in config. Not using Thingsboard.");
 			glob["use_tb"] = False
+		if "Log Level" in config["Global"]:
+			global log_lvl
+			try:
+				log_lvl = config["Global"]
+			except ValueError as err:
+				err_msg("Invalid Log Level in [Global]: {0}".format(err))
+				err_msg("Defaulting to Log Level = 1")
+				log_lvl = 1
 		del config["Global"]
 	else:
 		# default to 10 second poll period
-		print("Warning: no [Global] section in config. Default period: 10")
+		err_msg("Warning: no [Global] section in config. Default period: 10")
 		glob["Period"] = 10.0
-		print("Warning: no OWFS Mountpoint set in config. Default: /mnt/owfs")
+		err_msg("Warning: no OWFS Mountpoint set in config. Default: /mnt/owfs")
 		glob["owfs"] = "/mnt/owfs"
 	return glob
 
@@ -150,6 +166,7 @@ def get_global_conf(config):
 # returns: tuple of lists (oneWire, i2c, digitalIO, analog)
 ########################################################################
 def build_sensor_lists(config):
+	log_msg(2, "Loading sensor list.")
 	oneWire = []
 	i2c = []
 	digitalIO = []
@@ -165,7 +182,7 @@ def build_sensor_lists(config):
 	for friendly_name in config.sections():
 		s = config[friendly_name]
 		if "Bus" not in s:
-			print(f'Bus type not specified for {friendly_name}.')
+			err_msg(f'Bus type not specified for {friendly_name}.')
 			errors = True
 			continue
 		
@@ -175,7 +192,7 @@ def build_sensor_lists(config):
 		if "Address" in s:
 			sensor["addr"] = s["Address"]
 		elif s["Model"].upper() not in dontNeedAddress:
-			print(f'Address type not specified for {friendly_name}.')
+			err_msg(f'Address type not specified for {friendly_name}.')
 			errors = True
 		
 		bus = s["Bus"].upper()
@@ -183,7 +200,7 @@ def build_sensor_lists(config):
 		if "Model" in s:
 			sensor["model"] = s["Model"].upper()
 		elif bus not in digitalIONames + analogNames:
-			print(f'Model number not specified for {friendly_name}.')
+			err_msg(f'Model number not specified for {friendly_name}.')
 			errors = True
 		
 		if bus in oneWireNames:
@@ -202,7 +219,7 @@ def build_sensor_lists(config):
 			try:
 				sensor["addr"] = int(sensor["addr"])
 			except ValueError:
-				print(f'{sensor["name"]} has invalid address')
+				err_msg(f'{sensor["name"]} has invalid address')
 				errors = True
 			GPIO.setup(sensor["addr"], GPIO.IN)
 			digitalIO.append(sensor.copy())
@@ -210,14 +227,14 @@ def build_sensor_lists(config):
 			try:
 				sensor["addr"] = int(sensor["addr"])
 			except ValueError:
-				print(f'{sensor["name"]} has invalid address')
+				err_msg(f'{sensor["name"]} has invalid address')
 				errors = True
 			analog.append(sensor.copy())
 		else: # unknown bus type
-			print(f'Unknown bus type for {friendly_name}: {s["Bus"]}')
+			err_msg(f'Unknown bus type for {friendly_name}: {s["Bus"]}')
 			errors = True
 	if errors:
-		print(f'Please fix these errors in {SENSOR_CONFIG}')
+		err_msg(f'Please fix these errors in {SENSOR_CONFIG}')
 		sys.exit(1)
 	return oneWire, i2c, digitalIO, analog
 
@@ -236,12 +253,12 @@ def read_owfs(sensor, owfs):
 			"DS18B20" : "temperature"
 		}[sensor["model"]])
 	except KeyError:
-		print("Don't know how to read this sensor model: ", sensor["model"])
+		err_msg("Don't know how to read this sensor model: ", sensor["model"])
 	if os.path.exists(vfile):
 		sensor["value"] = open(vfile).read()
 	else:
-		print("Error reading from sensor.")
-		print(vfile)
+		err_msg("Error reading from sensor.")
+		err_msg(vfile)
 
 ########################################################################
 # read_i2c
@@ -256,8 +273,8 @@ def read_i2c(sensor):
 		try:
 			temp = adafruit_si7021.SI7021(i2c)
 		except ValueError as err:
-			print("Error reading from SI7021:\n{0}".format(err))
-			print("Is it attached and do you have the right address?")
+			err_msg("Error reading from SI7021:\n{0}".format(err))
+			err_msg("Is it attached and do you have the right address?")
 			return
 		if sensor["type"] == "temperature":
 			sensor["value"] = temp.temperature
@@ -266,7 +283,7 @@ def read_i2c(sensor):
 	elif sensor["model"] == "VEML7700":
 		sensor["value"] = adafruit_veml7700.VEML7700(i2c).lux
 	else:
-		print("Don't know how to read this sensor model: ", sensor["model"])
+		err_msg("Don't know how to read this sensor model: ", sensor["model"])
 
 ########################################################################
 # read_digitalIO
@@ -303,7 +320,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	def sig_handler(*args):
 		nonlocal running
 		nonlocal sleeping
-		print("Graceful exit")
+		log_msg(1, "Graceful exit.")
 		running = False
 		if sleeping: # exit immediately
 			sys.exit(0)
@@ -324,6 +341,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 	starttime = time.time()
 	while running:
 		# read data
+		log_msg(2, "Reading sensor data.")
 		for sensor in oneWire:
 			read_owfs(sensor, owfs_path)
 		for sensor in i2c:
@@ -333,8 +351,9 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		for sensor in analog:
 			read_analog(sensor)
 		# store data
+		log_msg(2, "Storing data in database.")
 		for sensor in oneWire + i2c + digitalIO + analog:
-			print(f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
+			log_msg(2,f'{sensor["timestamp"]}: {sensor["name"]}: {sensor["value"]}')
 			db.begin()
 			try:
 				db["sensor_data"].insert(dict(
@@ -343,11 +362,11 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 				))
 				db.commit()
 			except Exception as err:
-				print("Error storing data in database:\n{0}".format(err))
+				err_msg("Error storing data in database:\n{0}".format(err))
 				db.rollback()
-		print()
 		# upload data
 		if global_conf["use_tb"]:
+			log_msg(2, "Uploading data to ThingsBoard.")
 			payload = {}
 			for sensor in oneWire + i2c + digitalIO + analog:
 				payload[sensor["name"]] = sensor["value"]
@@ -355,6 +374,7 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		# sleep for period
 		if running:
 			sleeping = True
+			log_msg(2, f'Going to sleep for {pollPeriod} minutes.')
 			time.sleep((pollPeriod * 60.0) - ((time.time() - starttime) % (pollPeriod * 60.0)))
 			sleeping = False
 	if global_conf["use_tb"]:
@@ -362,15 +382,16 @@ def loop(oneWire, i2c, digitalIO, analog, global_conf):
 		thingsboard_client.disconnect()
 
 def main():
+	log_msg(1, "aquatrond started.")
 	GPIO.setmode(GPIO.BCM)
 	config = read_config(SENSOR_CONFIG)
 	global_conf = get_global_conf(config)
 	oneWire, i2c, digitalIO, analog = build_sensor_lists(config)
-	print("1wire devices: ", json.dumps(oneWire, indent = 2))
-	print("i2c devices: ", json.dumps(i2c, indent = 2))
-	print("digitalIO devices: ", json.dumps(digitalIO, indent = 2))
-	print("analog devices: ", json.dumps(analog, indent = 2))
-	print("poll period: ", global_conf["Period"])
+	log_msg(2, "1wire devices: ", json.dumps(oneWire, indent = 2))
+	log_msg(2, "i2c devices: ", json.dumps(i2c, indent = 2))
+	log_msg(2, "digitalIO devices: ", json.dumps(digitalIO, indent = 2))
+	log_msg(2, "analog devices: ", json.dumps(analog, indent = 2))
+	log_msg(2, "poll period: ", global_conf["Period"])
 	loop(oneWire, i2c, digitalIO, analog, global_conf)
 
 if __name__ == "__main__":
