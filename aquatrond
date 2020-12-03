@@ -102,7 +102,7 @@ def read_config(path_str):
 		err_msg("OS error: {0}".format(err))
 		err_msg("Are you root?")
 		sys.exit(1)
-	log_msg(1, "Configuration loaded.")
+	log_msg(2, "Configuration loaded.")
 	return config
 
 ########################################################################
