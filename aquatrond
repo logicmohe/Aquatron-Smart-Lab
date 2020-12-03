@@ -58,7 +58,7 @@ Log Level = 1
 
 log_lvl = 1 # 0 - quiet, 1 - normal, 2 - debug
 def log_msg(lvl, *args, **kwargs):
-	if lvl >= log_lvl:
+	if log_lvl >= lvl:
 		print(*args, flush=True, **kwargs)
 
 def err_msg(*args, **kwargs):
