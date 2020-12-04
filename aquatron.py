@@ -325,7 +325,7 @@ class MainScreen(Screen):
         else:
             self.ids.watertemp.background_color=(50,0,0,1)
 
-        if waterlvl[0][0] == 'OFF':
+        if waterlvl[0][0] == '0':
             self.ids.waterlvl.background_color=(1,1,1,1)
         else:
             self.ids.waterlvl.background_color=(50,0,0,1)
@@ -340,7 +340,7 @@ class MainScreen(Screen):
         else:
             self.ids.roomhumi.background_color=(50,0,0,1)
 
-        if waterleak[0][0] == 'OFF':
+        if waterleak[0][0] == '0':
             self.ids.waterleak.background_color=(1,1,1,1)
         else:
             self.ids.waterleak.background_color=(50,0,0,1)
