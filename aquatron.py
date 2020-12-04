@@ -118,7 +118,7 @@ class WaterSensorScreen(Screen):
         except:
             data1 = data2 = data3 = [random.randrange(0,100) for i in range (144)]
 
-        times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
+        times = pd.date_range (datetime.now(),periods=144, freq = '10MIN')
 
         figwt=plt.figure(0)
         top=figwt.add_subplot(111)
@@ -126,7 +126,7 @@ class WaterSensorScreen(Screen):
         plt.plot(times, data2, label="Downside")
         plt.title('Water Temperature in 24 hours')
         plt.legend()
-        xfmt=mdates.DateFormatter('%H:%M')
+        xfmt=mdates.DateFormatter('%a-%H:%M')
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
@@ -134,8 +134,7 @@ class WaterSensorScreen(Screen):
         bot=figwl.add_subplot(111)
         plt.title('Water Level in 24 hours')
         plt.plot(times, data3)
-        plt.legend()
-        xfmt=mdates.DateFormatter('%H:%M')
+        xfmt=mdates.DateFormatter('%a-%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
@@ -166,14 +165,13 @@ class RoomSensorScreen(Screen):
         except:
             data1 = data2 = [random.randrange(0,100) for i in range (144)]
 
-        times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
+        times = pd.date_range (datetime.now(),periods=144, freq = '10MIN')
 
         figrt=plt.figure(2)
         top=figrt.add_subplot(111)
         plt.title('Room Temperature in 24 hours')
         plt.plot(times, data1)
-        plt.legend()
-        xfmt=mdates.DateFormatter('%H:%M')
+        xfmt=mdates.DateFormatter('%a-%H:%M')
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
@@ -181,8 +179,7 @@ class RoomSensorScreen(Screen):
         bot=figrh.add_subplot(111)
         plt.title('Room Humidity in 24 hours')
         plt.plot(times, data2)
-        plt.legend()
-        xfmt=mdates.DateFormatter('%H:%M')
+        xfmt=mdates.DateFormatter('%a-%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
@@ -212,14 +209,13 @@ class OtherSensorScreen(Screen):
         except:
             data1 = data2 = [random.randrange(0,100) for i in range (144)]
 
-        times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
+        times = pd.date_range (datetime.now(),periods=144, freq = '10MIN')
 
         figo=plt.figure(4)
         top=figo.add_subplot(111)
         plt.plot(times, data1)
         plt.title('Ambient Light in 24 hours')
-        plt.legend()
-        xfmt=mdates.DateFormatter('%H:%M')
+        xfmt=mdates.DateFormatter('%a-%H:%M')
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
@@ -227,8 +223,7 @@ class OtherSensorScreen(Screen):
         bot=figl.add_subplot(111)
         plt.title('Water Leak in 24 hours')
         plt.plot(times, data2)
-        plt.legend()
-        xfmt=mdates.DateFormatter('%H:%M')
+        xfmt=mdates.DateFormatter('%a-%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
@@ -246,19 +241,15 @@ class SettingScreen(Screen):
         global SensorInfo
         self.ids.watertemp_slider_min.value=SensorInfo[SS.WATERTEMP.value][1]
         self.ids.watertemp_slider_max.value=SensorInfo[SS.WATERTEMP.value][2]
-        self.ids.waterlvl_slider_min.value=SensorInfo[SS.WATERLVL.value][1]
-        self.ids.waterlvl_slider_max.value=SensorInfo[SS.WATERLVL.value][2]
         self.ids.roomtemp_slider_min.value=SensorInfo[SS.ROOMTEMP.value][1]
         self.ids.roomtemp_slider_max.value=SensorInfo[SS.ROOMTEMP.value][2]
         self.ids.roomhumi_slider_min.value=SensorInfo[SS.ROOMHUMI.value][1]
         self.ids.roomhumi_slider_max.value=SensorInfo[SS.ROOMHUMI.value][2]
-        self.ids.waterleak_slider_min.value=SensorInfo[SS.WATERLEAK.value][1]
-        self.ids.waterleak_slider_max.value=SensorInfo[SS.WATERLEAK.value][2]
         self.ids.optic_slider_min.value=SensorInfo[SS.OPTIC.value][1]
         self.ids.optic_slider_max.value=SensorInfo[SS.OPTIC.value][2]
         return
-    def setting_change(self, watertemp_min,watertemp_max, waterlvl_min, waterlvl_max,roomtemp_min, roomtemp_max, roomhumi_min, roomhumi_max, waterleak_min, waterleak_max, optic_min, optic_max):
-        if watertemp_min <= watertemp_max and waterlvl_min <= waterlvl_max and roomtemp_min <= roomtemp_max and roomhumi_min <= roomhumi_max and waterleak_min <= waterleak_max and optic_min <= optic_max:
+    def setting_change(self, watertemp_min,watertemp_max,optic_min, optic_max ,roomtemp_min, roomtemp_max, roomhumi_min, roomhumi_max):
+        if watertemp_min <= watertemp_max and optic_min <= optic_max and roomtemp_min <= roomtemp_max and roomhumi_min <= roomhumi_max:
             ind = True
         else:
             ind = False
@@ -268,14 +259,10 @@ class SettingScreen(Screen):
             global SensorInfo
             SensorInfo[SS.WATERTEMP.value][1]=watertemp_min
             SensorInfo[SS.WATERTEMP.value][2]=watertemp_max
-            SensorInfo[SS.WATERLVL.value][1]=waterlvl_min
-            SensorInfo[SS.WATERLVL.value][2]=waterlvl_max
             SensorInfo[SS.ROOMTEMP.value][1]=roomtemp_min
             SensorInfo[SS.ROOMTEMP.value][2]=roomtemp_max
             SensorInfo[SS.ROOMHUMI.value][1]=roomhumi_min
             SensorInfo[SS.ROOMHUMI.value][2]=roomhumi_max
-            SensorInfo[SS.WATERLEAK.value][1]=waterleak_min
-            SensorInfo[SS.WATERLEAK.value][2]=waterleak_max
             SensorInfo[SS.OPTIC.value][1]=optic_min
             SensorInfo[SS.OPTIC.value][2]=optic_max
             return
@@ -309,7 +296,7 @@ class MainScreen(Screen):
         watertemp1=cur.fetchall()
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Water Tank 2 Temperature',))
         watertemp2=cur.fetchall()
-        self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),2))
+        self.ids.watertemp.text=str(round(float(watertemp1[0][0]),2))+" | "+str(round(float(watertemp2[0][0]),2))
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Water Level',))
         waterlvl=cur.fetchall()
@@ -317,11 +304,11 @@ class MainScreen(Screen):
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('SI7021(temperature)',))
         roomtemp=cur.fetchall()
-        self.ids.roomtemp.text=str(round(float(roomtemp[0][0]),3))
+        self.ids.roomtemp.text=str(round(float(roomtemp[0][0]),2))
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('SI7021(humidity)',))
         roomhumi=cur.fetchall()
-        self.ids.roomhumi.text=str(round(float(roomhumi[0][0]),3))
+        self.ids.roomhumi.text=str(round(float(roomhumi[0][0]),2))
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Toggle Switch',))
         waterleak=cur.fetchall()
@@ -329,48 +316,41 @@ class MainScreen(Screen):
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Ambient Light',))
         optic=cur.fetchall()
-        self.ids.optic.text=str(round(float(optic[0][0]),3))
+        self.ids.optic.text=str(round(float(optic[0][0]),2))
 
         #Alarm check
         global SensorInfo
-        if SensorInfo[SS.WATERTEMP.value][1] < float(watertemp1[0][0]) < SensorInfo[SS.WATERTEMP.value][2]:
+        if SensorInfo[SS.WATERTEMP.value][1] <= float(watertemp1[0][0]) <= SensorInfo[SS.WATERTEMP.value][2]:
             self.ids.watertemp.background_color=(1,1,1,1)
         else:
             self.ids.watertemp.background_color=(50,0,0,1)
 
-        if SensorInfo[SS.WATERLVL.value][1] < float(waterlvl[0][0]) < SensorInfo[SS.WATERLVL.value][2]:
+        if waterlvl[0][0] == 'OFF':
             self.ids.waterlvl.background_color=(1,1,1,1)
         else:
             self.ids.waterlvl.background_color=(50,0,0,1)
 
-        if SensorInfo[SS.ROOMTEMP.value][1] < float(roomtemp[0][0]) < SensorInfo[SS.ROOMTEMP.value][2]:
+        if SensorInfo[SS.ROOMTEMP.value][1] <= float(roomtemp[0][0]) <= SensorInfo[SS.ROOMTEMP.value][2]:
             self.ids.roomtemp.background_color=(1,1,1,1)
         else:
             self.ids.roomtemp.background_color=(50,0,0,1)
 
-        if SensorInfo[SS.ROOMHUMI.value][1] < float(roomhumi[0][0]) < SensorInfo[SS.ROOMHUMI.value][2]:
+        if SensorInfo[SS.ROOMHUMI.value][1] <= float(roomhumi[0][0]) <= SensorInfo[SS.ROOMHUMI.value][2]:
             self.ids.roomhumi.background_color=(1,1,1,1)
         else:
             self.ids.roomhumi.background_color=(50,0,0,1)
 
-        if SensorInfo[SS.WATERLEAK.value][1] < float(waterleak[0][0]) < SensorInfo[SS.WATERLEAK.value][2]:
+        if waterleak[0][0] == 'OFF':
             self.ids.waterleak.background_color=(1,1,1,1)
         else:
             self.ids.waterleak.background_color=(50,0,0,1)
 
-        if SensorInfo[SS.OPTIC.value][1] < float(optic[0][0]) < SensorInfo[SS.OPTIC.value][2]:
+        if SensorInfo[SS.OPTIC.value][1] <= float(optic[0][0]) <= SensorInfo[SS.OPTIC.value][2]:
             self.ids.optic.background_color=(1,1,1,1)
         else:
             self.ids.optic.background_color=(50,0,0,1)
 
         return
-    #def email_alert(self):
-    #    yag=yagmail.SMTP('dalhousieaquatron@gmail.com','aquatron123')
-#testing plan:
-#Whether I could use self.ids.ListOfSensors[Num] to identify the button
-
-
-
 
 #AquaGUI screen manager
 class ScreenManager(ScreenManager):
@@ -380,7 +360,6 @@ class AquaguiApp(App):
     title = "Aquatron Smart Lab"
     def build(self):
         return ScreenManager()
-
 
 '''
 Main Program

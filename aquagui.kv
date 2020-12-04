@@ -155,7 +155,7 @@
         BoxLayout:
             orientation: "horizontal"
             spacing: 20
-            #Water Sensor
+            #Water Temp & Optic
             BoxLayout:
                 orientation:"vertical"
                 #Water Temp
@@ -187,9 +187,9 @@
                     step: 1
                     value: 0
                     orientation: "horizontal"
-                #Water Lvl
+                #Optic
                 Label:
-                    text:"Water Level Sensor"
+                    text:"Optic Sensor"
                     size_hint: 1,.5
                 BoxLayout:
                     orientation: "horizontal"
@@ -197,20 +197,20 @@
                     Label:
                         text: "Min"
                     Label:
-                        text: str(waterlvl_slider_min.value)
+                        text: str(optic_slider_min.value)
                     Label:
                         text: "Max"                
                     Label:
-                        text: str(waterlvl_slider_max.value)
+                        text: str(optic_slider_max.value)
                 Slider:
-                    id: waterlvl_slider_min
+                    id: optic_slider_min
                     min: 0
                     max: 100
                     step: 1
                     value: 0
                     orientation: "horizontal"
                 Slider:
-                    id: waterlvl_slider_max
+                    id: optic_slider_max
                     min: 0
                     max: 100
                     step: 1
@@ -278,67 +278,6 @@
                     step: 1
                     value: 0
                     orientation: "horizontal"
-            #Other Sensor
-            BoxLayout:
-                orientation:"vertical"
-                #Water Leak
-                Label:
-                    text:"Water Leak Sensor"
-                    size_hint: 1,.5
-                BoxLayout:
-                    orientation: "horizontal"
-                    size_hint_y: .5
-                    Label:
-                        text: "Min"
-                    Label:
-                        text: str(waterleak_slider_min.value)
-                    Label:
-                        text: "Max"                
-                    Label:
-                        text: str(waterleak_slider_max.value)
-                Slider:
-                    id: waterleak_slider_min
-                    min: 0
-                    max: 100
-                    step: 1
-                    value: 0
-                    orientation: "horizontal"
-                Slider:
-                    id: waterleak_slider_max
-                    min: 0
-                    max: 100
-                    step: 1
-                    value: 0
-                    orientation: "horizontal"
-                #Optic
-                Label:
-                    text:"Optic Sensor"
-                    size_hint: 1,.5
-                BoxLayout:
-                    orientation: "horizontal"
-                    size_hint_y: .5
-                    Label:
-                        text: "Min"
-                    Label:
-                        text: str(optic_slider_min.value)
-                    Label:
-                        text: "Max"                
-                    Label:
-                        text: str(optic_slider_max.value)
-                Slider:
-                    id: optic_slider_min
-                    min: 0
-                    max: 100
-                    step: 1
-                    value: 0
-                    orientation: "horizontal"
-                Slider:
-                    id: optic_slider_max
-                    min: 0
-                    max: 100
-                    step: 1
-                    value: 0
-                    orientation: "horizontal"
 
         #Button on bottom
         BoxLayout:
@@ -347,7 +286,7 @@
             Button:
                 text:"Save Changes"
                 on_release:
-                    root.setting_change(watertemp_slider_min.value, watertemp_slider_max.value, waterlvl_slider_min.value, waterlvl_slider_max.value, roomtemp_slider_min.value, roomtemp_slider_max.value,roomhumi_slider_min.value, roomhumi_slider_max.value,waterleak_slider_min.value, waterleak_slider_max.value,  optic_slider_min.value, optic_slider_max.value)
+                    root.setting_change(watertemp_slider_min.value, watertemp_slider_max.value, optic_slider_min.value, optic_slider_max.valu, roomtemp_slider_min.value, roomtemp_slider_max.value,roomhumi_slider_min.value, roomhumi_slider_max.value,  e)
             Button:
                 text: "Back"
                 on_release: root.manager.current='Main'            
