@@ -21,10 +21,8 @@ import os
 import sys
 import random
 import serial
-#import board
-#import busio
-#import RPI.GPIO as GPIO
 from time import localtime, strftime,sleep
+from datetime import datetime
 import pandas as pd
 
 from kivy.app import App
@@ -36,22 +34,17 @@ from kivy.uix.slider import Slider
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.behaviors import FocusBehavior
-#from kivy.uix.recyclegridlayout import RecycleGridLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
-#from kivy.uix.recycleview.layout import LayoutSelectionBehavior
-#from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.properties import BooleanProperty, ListProperty, StringProperty, ObjectProperty
-
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.ticker import FormatStrFormatter
 
-
 from enum import Enum
 import sqlite3
 
-#from aquatrond import 
+#Project Library: from aquatrond import 
 import glob
 '''
 Initialization
@@ -109,12 +102,10 @@ class WaterSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(WaterSensorScreen, self).__init__(**kwargs)
-        Clock.schedule_once(self.graph_test)
-        #Clock.schedule_interval(self.graph_test,600)
+        Clock.schedule_once(self.graph_generate)
 
-    def graph_test(self, dt): 
-        try: #In case we don't have enough data
-        #Plot the graph using matplotlib
+    def graph_generate(self, dt): 
+        try: #In case for initialization period, random data for first 24 hours
             global cur
             cur.execute('SELECT value FROM sensor_data WHERE name=? ORDER BY timestamp DESC LIMIT 144',('Water Tank 1 Temperature',))
             watertemp1=cur.fetchall()
@@ -130,11 +121,9 @@ class WaterSensorScreen(Screen):
                 data2.append(float(items[0]))
             data3=[]
             for items in waterlvl:
-                data3.append(float(items[0]))
+                data3.append('ON' if int(items[0]) else 'OFF')
         except:
-            data1 = [random.randrange(0,100) for i in range (144)]
-            data2 = [random.randrange(0,50) for i in range (144)]
-            data3 = [random.randrange(0,50) for i in range (144)]
+            data1 = data2 = data3 = [random.randrange(0,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
@@ -145,10 +134,8 @@ class WaterSensorScreen(Screen):
         plt.plot(times, data2, label="Downside")
         plt.title('Water Temperature in 24 hours')
         plt.legend()
-        #plt.ylim(top=100);plt.ylim(bottom=0)
         xfmt=mdates.DateFormatter('%H:%M')
         top.xaxis.set_major_formatter(xfmt)
-        #top.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         figb=plt.figure(1)
@@ -158,14 +145,9 @@ class WaterSensorScreen(Screen):
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
-        #bot.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-
-        #return box
-        #If this is keep refreshing, then use remove_widget(destination)
-    def graph_generate(self):
-        #overhere, read from postgreSQL data to generate Matplotlib graph
         return
+
 
 class RoomSensorScreen(Screen):
     data_items=ListProperty([])
@@ -173,36 +155,45 @@ class RoomSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(RoomSensorScreen, self).__init__(**kwargs)
-        Clock.schedule_once(self.graph_test)
-        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+        Clock.schedule_once(self.graph_generate)
 
-    def graph_test(self, dt): 
-        #Plot the graph using matplotlib
-        data1 = [random.randrange(0,100) for i in range (144)]
+    def graph_generate(self, dt): 
+        try: #In case for initialization period, random data for first 24 hours
+            global cur
+            cur.execute('SELECT value FROM sensor_data WHERE name=? ORDER BY timestamp DESC LIMIT 144',('SI7021(temperature)',))
+            roomtemp=cur.fetchall()
+            cur.execute('SELECT value FROM sensor_data WHERE name=? ORDER BY timestamp DESC LIMIT 144',('SI7021(humidity)',))
+            roomhumi=cur.fetchall()
+            data1=[]
+            for items in roomtemp:
+                data1.append(float(items[0]))
+            data2=[]
+            for items in roomhumi:
+                data2.append(float(items[0]))
+
+        except:
+            data1 = data2 = [random.randrange(0,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         self.graph_generate()
-        figt=plt.figure(2)
+        figt=plt.figure(0)
         top=figt.add_subplot(111)
-        plt.plot(times, data1, label="Upside")
         plt.title('Room Temperature in 24 hours')
+        plt.plot(times, data1)
+        plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        data2 = [random.randrange(0,100) for i in range (144)]
-        figb=plt.figure(3)
+        figb=plt.figure(1)
         bot=figb.add_subplot(111)
-        plt.plot(times, data2)
         plt.title('Room Humidity in 24 hours')
+        plt.plot(times, data2)
+        plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-        #return box
-        #If this is keep refreshing, then use remove_widget(destination)
-    def graph_generate(self):
-        #overhere, read from postgreSQL data to generate Matplotlib graph
         return
 
 class OtherSensorScreen(Screen):
@@ -211,38 +202,47 @@ class OtherSensorScreen(Screen):
 
     def __init__(self, **kwargs):
         super(OtherSensorScreen, self).__init__(**kwargs)
-        Clock.schedule_once(self.graph_test)
-        #Clock.schedule_interval(self.graph_test,600) #proper callback time, for now is 0.1 s
+        Clock.schedule_once(self.graph_generate)
 
-    def graph_test(self, dt): 
-        #Plot the graph using matplotlib
-        data1 = [random.randrange(0,100) for i in range (144)]
+    def graph_generate(self, dt): 
+        try: #In case for initialization period, random data for first 24 hours
+            global cur
+            cur.execute('SELECT value FROM sensor_data WHERE name=? ORDER BY timestamp DESC LIMIT 144',('Ambient Light',))
+            optic=cur.fetchall()
+            cur.execute('SELECT value FROM sensor_data WHERE name=? ORDER BY timestamp DESC LIMIT 144',('Toggle Switch',))
+            waterleak=cur.fetchall()
+            data1=[]
+            for items in optic:
+                data1.append(float(items[0]))
+            data2=[]
+            for items in waterleak:
+                data2.append('ON' if int(items[0]) else 'OFF')
+
+        except:
+            data1 = data2 = [random.randrange(0,100) for i in range (144)]
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
+
         self.graph_generate()
-        figt=plt.figure(4)
+        figt=plt.figure(0)
         top=figt.add_subplot(111)
-        plt.plot(times, data1, label="Upside")
-        plt.title('Water Leak in 24 hours')
-        plt.ylim(top=100);plt.ylim(bottom=0)
+        plt.plot(times, data1)
+        plt.title('Ambient Light in 24 hours')
+        plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        data2 = [random.randrange(0,100) for i in range (144)]
-        figb=plt.figure(5)
+        figb=plt.figure(1)
         bot=figb.add_subplot(111)
+        plt.title('Water Leak in 24 hours')
         plt.plot(times, data2)
-        plt.title('Optic Level in 24 hours')
-        plt.ylim(top=100);plt.ylim(bottom=0)
+        plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
         bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-        #return box
-        #If this is keep refreshing, then use remove_widget(destination)
-    def graph_generate(self):
-        #overhere, read from postgreSQL data to generate Matplotlib graph
         return
+
 
 #Kivy Setting Screen
 class SettingScreen(Screen):
