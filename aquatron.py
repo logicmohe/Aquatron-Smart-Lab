@@ -121,22 +121,22 @@ class WaterSensorScreen(Screen):
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         figwt=plt.figure(0)
-        top=figwt.add_subplot(111)
+        top1=figwt.add_subplot(111)
         plt.plot(times, data1, label="Upside")
         plt.plot(times, data2, label="Downside")
         plt.title('Water Temperature in 24 hours')
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        top.xaxis.set_major_formatter(xfmt)
+        top1.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         figwl=plt.figure(1)
-        bot=figwl.add_subplot(111)
+        bot1=figwl.add_subplot(111)
         plt.title('Water Level in 24 hours')
         plt.plot(times, data3)
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        bot.xaxis.set_major_formatter(xfmt)
+        bot1.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
 
@@ -169,21 +169,21 @@ class RoomSensorScreen(Screen):
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         figrt=plt.figure(0)
-        top=figrt.add_subplot(111)
+        top2=figrt.add_subplot(111)
         plt.title('Room Temperature in 24 hours')
         plt.plot(times, data1)
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        top.xaxis.set_major_formatter(xfmt)
+        top2.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         figrh=plt.figure(1)
-        bot=figrh.add_subplot(111)
+        bot2=figrh.add_subplot(111)
         plt.title('Room Humidity in 24 hours')
         plt.plot(times, data2)
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        bot.xaxis.set_major_formatter(xfmt)
+        bot2.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
 
@@ -215,21 +215,21 @@ class OtherSensorScreen(Screen):
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         figo=plt.figure(0)
-        top=figo.add_subplot(111)
+        top3=figo.add_subplot(111)
         plt.plot(times, data1)
         plt.title('Ambient Light in 24 hours')
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        top.xaxis.set_major_formatter(xfmt)
+        top3.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         figl=plt.figure(1)
-        bot=figl.add_subplot(111)
+        bot3=figl.add_subplot(111)
         plt.title('Water Leak in 24 hours')
         plt.plot(times, data2)
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        bot.xaxis.set_major_formatter(xfmt)
+        bot3.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
 
@@ -289,25 +289,6 @@ class SettingPopup(Popup):
         Popup.__init__(self)
         if ind is False:
             self.ids.popup.text="Error! Please try again"
-
-
-#Kivy Setting Screen
-class AlertingScreen(Screen):
-    global AlertEmail
-    #waiting for other items
-    data_items=ListProperty([])
-    def __init__(self, **kwargs):
-        super(AlertingScreen, self).__init__(**kwargs)
-
-    def alert_email(self):
-        self.ids.Email1.text=AlertEmail[0]
-        self.ids.Email2.text=AlertEmail[1]
-        self.ids.Email3.text=AlertEmail[2]
-
-    def alert_change(self, email1, email2, email3):
-        AlertEmail[0]=email1
-        AlertEmail[1]=email2
-        AlertEmail[2]=email3
     
 
 #Kivy Main Screen

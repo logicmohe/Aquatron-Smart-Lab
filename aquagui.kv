@@ -8,7 +8,6 @@
     WaterSensorScreen
     RoomSensorScreen
     OtherSensorScreen
-    AlertingScreen
 
 #Main Screen Layout
 <MainScreen>:
@@ -59,10 +58,6 @@
                         text:"Other Sensor"
                         size_hint: .5,1
                         on_release: root.manager.current='OtherSensor'
-                    Button:
-                        text:"Alerting"
-                        size_hint: .5,1
-                        on_release: root.manager.current='Alerting'
 
                     BoxLayout:
                         orientation: "horizontal"
@@ -426,32 +421,7 @@
             size_hint_y: .15
             Button:
                 text: "Back"
-                on_release: root.manager.current='Main'
-
-<AlertingScreen>:
-    name: 'Alerting'
-    BoxLayout:
-        orientation: "vertical"
-        spacing: 30
-        Label:
-            text: "Please enter the email address for emergency contacts:"
-        TextInput:
-            id: Email1
-            text: "dalhousieaquatron@gmail.com"
-        TextInput:
-            id: Email2
-        TextInput:
-            id: Email3
-
-        #Button on bottom
-        BoxLayout:
-            orientation: "horizontal"
-            Button:
-                text:"Save Changes"
-                on_release: root.alert_change(Email1.text, Email2.text, Email3.text)
-            Button:
-                text: "Back"
-                on_release: root.manager.current='Main'            
+                on_release: root.manager.current='Main'      
 
 <SettingPopup>:
     title: "Save Change"
