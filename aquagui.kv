@@ -5,119 +5,138 @@
 <ScreenManager>:
     MainScreen
     SettingScreen
-    StatisticScreen
+    WaterSensorScreen
+    RoomSensorScreen
+    OtherSensorScreen
 
 #Main Screen Layout
 <MainScreen>:
     name: 'Main'
     BoxLayout:
         orientation:"vertical"
-
-        spacing: 30
-        #Header
+        spacing: 5
+        #Header: Icon Info & Button
         BoxLayout:
             orientation: "horizontal"
             size_hint_y: .15
-            Label:
-                text: "Aquatron Smart Lab"
-            Label:
-                id: time_label
-                text: "0000-00-00 00:00:00"
-        
-        #Top buttons
+            #Icon
+            BoxLayout:
+                size_hint_x: .2
+                orientation: "horizontal"
+                Image:
+                    source: 'aquatron.png'
+            BoxLayout:
+                orientation:"vertical"
+                #Info
+                BoxLayout:
+                    orientation:"horizontal"
+                    size_hint_y: .3
+                    Label:
+                        text: "Aquatron Smart Lab"
+                    Label:
+                        id: time_label
+                        text: "0000-00-00 00:00:00"
+                #Top buttons
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: .3
+                    spacing: 5
+                    
+                    Button:
+                        text:"Setting"
+                        size_hint: .5,1
+                        on_release: root.manager.current='Setting'
+                    Button:
+                        text:"Water Sensor"
+                        size_hint: .5,1
+                        on_release: root.manager.current='WaterSensor'  
+                    Button:
+                        text:"Room Sensor"
+                        size_hint: .5,1
+                        on_release: root.manager.current='RoomSensor'          
+                    Button:
+                        text:"Other Sensor"
+                        size_hint: .5,1
+                        on_release: root.manager.current='OtherSensor'
+
+                    BoxLayout:
+                        orientation: "horizontal"
+                        size_hint: .9,1
+                        ToggleButton:
+                            id: ON
+                            on_press: root.on_button()
+                            state:'down'
+                            text: "ON"
+                            group: "Status"
+                        ToggleButton:
+                            id:OFF
+                            on_press: root.off_button()
+                            text: "OFF"
+                            group: "Status"
+                        #Switch:
+
+        #Sensors & Labels
         BoxLayout:
             orientation: "horizontal"
-            height: 10
-            size_hint_y: .3
             spacing: 20
-            Image:
-                source: 'aquatron.png'
-                size_hint: .3,1
-            Button:
-                text:"Setting Page"
-                size_hint: .5,1
-                on_release: root.manager.current='Setting'
-            Button:
-                text:"Statistic Page"
-                size_hint: .5,1
-                on_release: root.manager.current='Statistic'
-
+            #Water Sensor
             BoxLayout:
-                orientation: "horizontal"
-                size_hint: .9,1
-                ToggleButton:
-                    id: ON
-                    on_press: root.on_button()
-                    state:'down'
-                    text: "ON"
-                    group: "Status"
-                ToggleButton:
-                    id:OFF
-                    on_press: root.off_button()
-                    text: "OFF"
-                    group: "Status"
-                #Switch:
+                orientation:"vertical"
+                Label:
+                    text:"Water Temperature Sensor"
+                    size_hint: 1,.3
+                Button:
+                    id: watertemp
+                    text:"44F   |   46F"
+                    on_release: root.manager.current='WaterSensor'
+                    #size_hint: .5,1
+                Label:
+                    text:"Water Level Sensor"
+                    size_hint: 1,.3
+                Button:
+                    id: waterlvl
+                    text:"25%   |   25%"
+                    on_release: root.manager.current='WaterSensor'
+                    #size_hint: 1,1
 
-        #First Row Three sensors 
-        BoxLayout:#Name
-            orientation: "horizontal"
-            height: 10
-            size_hint_y: .2
-            spacing: 20
-            Label:
-                text:"Water Temperature Sensor"
-                #size_hint: .5,1
-            Label:
-                text:"Liquid Sensor"
-                #size_hint: .5,1
-            Label:
-                text:"Air Temperature Sensor"
-                #size_hint: .5,1
-
-        BoxLayout:#Value
-            orientation: "horizontal"
-            height: 10
-            spacing: 20
-            Button:
-                text:"Water Temperature Sensor"
-                #size_hint: .5,1
-            Button:
-                text:"Liquid Sensor"
-                #size_hint: .5,1
-            Button:
-                text:"Air Temperature Sensor"
-                #size_hint: .5,1
-
-        
-        #Second Row Three sensors 
-        BoxLayout:#Name
-            orientation: "horizontal"
-            height: 10
-            size_hint_y: .2
-            spacing: 20
-            Label:
-                text:"Water Level Sensor"
-                #size_hint: .5,1
-            Label:
-                text:"Light Sensor"
-                #size_hint: .5,1
-            Label:
-                text:"Humidity Sensor"
-                #size_hint: .5,1
-
-        BoxLayout:#Value
-            orientation: "horizontal"
-            height: 10
-            spacing: 20
-            Button:
-                text:"Water Level Sensor"
-                #size_hint: 1,1
-            Button:
-                text:"Light Sensor"
-                #size_hint: .5,1
-            Button:
-                text:"Humidity Sensor"
-                #size_hint: .5,1
+            #Room Sensor
+            BoxLayout:
+                orientation:"vertical"
+                Label:
+                    text:"Air Temperature Sensor"
+                    size_hint: 1,.3   
+                Button:
+                    id: roomtemp
+                    text:"53F"
+                    on_release: root.manager.current='RoomSensor'
+                    #size_hint: .5,1
+                Label:
+                    text:"Humidity Sensor"
+                    size_hint: 1,.3
+                Button:
+                    id: roomhumi
+                    text:"55%"
+                    on_release: root.manager.current='RoomSensor'
+                    #size_hint: .5,1
+            #Other Sensor
+            BoxLayout:
+                orientation:"vertical"
+                Label:
+                    text:"Water Leak Sensor"
+                    size_hint: 1,.3
+                Button:
+                    id: waterleak
+                    text:"No Leak Detected"
+                    on_release: root.manager.current='OtherSensor'
+                    #size_hint: .5,1
+                Label:
+                    text:"Optic Sensor"
+                    size_hint: 1,.3            
+                Button:
+                    id: optic
+                    text:"36"
+                    on_release: root.manager.current='OtherSensor'
+                    #size_hint: .5,1
 
 #Setting Screen Layout
 <SettingScreen>:
@@ -128,185 +147,146 @@
         #Header
         BoxLayout:
             orientation: "horizontal"
-            size_hint_y: .2
+            size_hint_y: .1
             Label:
-                text: "Aquatron Smart Lab Setting Page: Please drag the slider to desire values, then save change"
+                text: "Aquatron Smart Lab Setting Page: Please drag the slider bar, then save the change"
 
-
-        #First Row contains three sensors
-        BoxLayout:#Name
+        #Sensors & Labels
+        BoxLayout:
             orientation: "horizontal"
-            size_hint_y: .8
-            Label:
-                text: "Water Temperature Sensor"
-            Label:
-                text: "Liquid Sensor"       
-            Label:
-                text: "Air Temperature Sensor"
-        BoxLayout:#Max and Min value
-            orientation: "horizontal"
-            size_hint_y: .2
-            Label:
-                text: "Max"                
-            Label:
-                text: str(watertemp_slider_max.value)
+            spacing: 20
+            #Water Temp & Optic
+            BoxLayout:
+                orientation:"vertical"
+                #Water Temp
+                Label:
+                    text:"Water Temperature Sensor"
+                    size_hint: 1,.5
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: .5
+                    Label:
+                        text: "Min"
+                    Label:
+                        text: str(watertemp_slider_min.value)
+                    Label:
+                        text: "Max"                
+                    Label:
+                        text: str(watertemp_slider_max.value)
+                Slider:
+                    id: watertemp_slider_min
+                    min: 0
+                    max: 100
+                    step: 1
+                    value: 0
+                    orientation: "horizontal"
+                Slider:
+                    id: watertemp_slider_max
+                    min: 0
+                    max: 100
+                    step: 1
+                    value: 0
+                    orientation: "horizontal"
+                #Optic
+                Label:
+                    text:"Optic Sensor"
+                    size_hint: 1,.5
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: .5
+                    Label:
+                        text: "Min"
+                    Label:
+                        text: str(optic_slider_min.value)
+                    Label:
+                        text: "Max"                
+                    Label:
+                        text: str(optic_slider_max.value)
+                Slider:
+                    id: optic_slider_min
+                    min: 0
+                    max: 100
+                    step: 1
+                    value: 0
+                    orientation: "horizontal"
+                Slider:
+                    id: optic_slider_max
+                    min: 0
+                    max: 100
+                    step: 1
+                    value: 0
+                    orientation: "horizontal"
 
-            Label:
-                text: "Min"
-            Label:
-                text: str(watertemp_slider_min.value)
-
-            Label:
-                text: "Max"
-            Label:
-                text: str(liquid_slider_max.value)  
-            Label:
-                text: "Min"
-            Label:
-                text: str(liquid_slider_min.value)
-            Label:
-                text: "Max"
-            Label:
-                text: str(airtemp_slider_max.value)
-            Label:
-                text: "Min"  
-            Label:
-                text: str(airtemp_slider_min.value)
-
-        #First Row Sliders
-        BoxLayout:#Max
-            orientation: "horizontal"
-            Slider:
-                id: watertemp_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: liquid_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: airtemp_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-        BoxLayout:#Min
-            orientation: "horizontal"
-            Slider:
-                id: watertemp_slider_min
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: liquid_slider_min
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: airtemp_slider_min
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-
-
-        #Second Row contains three sensors
-        BoxLayout:#Name
-            orientation: "horizontal"
-            size_hint_y: .8
-            Label:
-                text: "Water Level Sensor"
-            Label:
-                text: "Light Sensor"
-            Label:
-                text: "Humidity Sensor"
-        BoxLayout:#Max and Min value
-            orientation: "horizontal"
-            size_hint_y: .2
-            Label:
-                text: "Max"
-            Label:
-                text: str(waterlvl_slider_max.value)
-            Label:
-                text: "Min"  
-            Label:
-                text: str(waterlvl_slider_min.value)
-
-            Label:
-                text: "Max"                
-            Label:
-                text: str(light_slider_max.value)
-
-            Label:
-                text: "Min"
-            Label:
-                text: str(light_slider_min.value)
-
-            Label:
-                text: "Max"
-            Label:
-                text: str(humidity_slider_max.value)  
-            Label:
-                text: "Min"
-            Label:
-                text: str(humidity_slider_min.value)
-
-
-        #Second Row Sliders
-        BoxLayout:#Max
-            orientation: "horizontal"
-            Slider:
-                id: waterlvl_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: light_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: humidity_slider_max
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-        BoxLayout:#Min
-            orientation: "horizontal"
-            Slider:
-                id: waterlvl_slider_min
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: light_slider_min
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
-            Slider:
-                id: humidity_slider_min
-                min: 0
-                max: 100
-                step: 1
-                orientation: "horizontal"
+            #Room Sensor
+            BoxLayout:
+                orientation:"vertical"
+                #Room Temp
+                Label:
+                    text:"Room Temperature Sensor"
+                    size_hint: 1,.5
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: .5
+                    Label:
+                        text: "Min"
+                    Label:
+                        text: str(roomtemp_slider_min.value)
+                    Label:
+                        text: "Max"                
+                    Label:
+                        text: str(roomtemp_slider_max.value)
+                Slider:
+                    id: roomtemp_slider_min
+                    min: 0
+                    max: 100
+                    step: 1
+                    value: 0
+                    orientation: "horizontal"
+                Slider:
+                    id: roomtemp_slider_max
+                    min: 0
+                    max: 100
+                    step: 1
+                    value: 0
+                    orientation: "horizontal"
+                #Room Humidity
+                Label:
+                    text:"Room Humidity Sensor"
+                    size_hint: 1,.5
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: .5
+                    Label:
+                        text: "Min"
+                    Label:
+                        text: str(roomhumi_slider_min.value)
+                    Label:
+                        text: "Max"                
+                    Label:
+                        text: str(roomhumi_slider_max.value)
+                Slider:
+                    id: roomhumi_slider_min
+                    min: 0
+                    max: 100
+                    step: 1
+                    value: 0
+                    orientation: "horizontal"
+                Slider:
+                    id: roomhumi_slider_max
+                    min: 0
+                    max: 100
+                    step: 1
+                    value: 0
+                    orientation: "horizontal"
 
         #Button on bottom
         BoxLayout:
             orientation: "horizontal"
+            size_hint_y: .2
             Button:
                 text:"Save Changes"
-                #on_release:
-                    #root.update.....
+                on_release:
+                    root.setting_change(watertemp_slider_min.value, watertemp_slider_max.value, optic_slider_min.value, optic_slider_max.valu, roomtemp_slider_min.value, roomtemp_slider_max.value,roomhumi_slider_min.value, roomhumi_slider_max.value,  e)
             Button:
                 text: "Back"
                 on_release: root.manager.current='Main'            
@@ -314,8 +294,30 @@
 
 
 #StatisticScreen Screen Layout
-<StatisticScreen>:
-    name: 'Statistic'
+<WaterSensorScreen>:
+    name: 'WaterSensor'
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        #Header
+        BoxLayout:
+            orientation: "horizontal"
+            id: topline
+
+        BoxLayout:
+            orientation: "horizontal"
+            id: botline
+        
+        #Button on bottom
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: .15
+            Button:
+                text: "Back"
+                on_release: root.manager.current='Main'
+
+<RoomSensorScreen>:
+    name: 'RoomSensor'
     BoxLayout:
         orientation: "vertical"
         spacing: 20
@@ -334,9 +336,44 @@
             orientation: "horizontal"
             size_hint_y: .15
             Button:
-                text:"Save Changes"
-                #on_release:
-                    #root.update.....
-            Button:
                 text: "Back"
                 on_release: root.manager.current='Main'
+
+<OtherSensorScreen>:
+    name: 'OtherSensor'
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        #Header
+
+        BoxLayout:
+            orientation: "horizontal"
+            id: topline
+
+        BoxLayout:
+            orientation: "horizontal"
+            id: botline
+        
+        #Button on bottom
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: .15
+            Button:
+                text: "Back"
+                on_release: root.manager.current='Main'      
+
+<SettingPopup>:
+    title: "Save Change"
+    size_hint: None, None
+    size: 300, 200
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            id: popup
+            text: "Successful!"
+        Button:
+            size_hint: 1, 0.2
+            text: "Okay"
+            on_press: root.dismiss()
