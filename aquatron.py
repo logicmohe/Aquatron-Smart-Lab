@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-#    aquatrond - Backend daemon for aquatron system
+#    aquatron.py - Front end daemon for aquatron system based on Kivy
 #
-#    Copyright (C) 2020 Josh Boudreau <josh.boudreau@dal.ca>
+#    Copyright (C) 2020
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -124,13 +124,13 @@ class WaterSensorScreen(Screen):
             waterlvl=cur.fetchall()
             data1=[]
             for items in watertemp1:
-                data1.append(items[0])
+                data1.append(float(items[0]))
             data2=[]
             for items in watertemp2:
-                data2.append(items[0])
+                data2.append(float(items[0]))
             data3=[]
             for items in waterlvl:
-                data3.append(items[0])
+                data3.append(float(items[0]))
         except:
             data1 = [random.randrange(0,100) for i in range (144)]
             data2 = [random.randrange(0,50) for i in range (144)]
