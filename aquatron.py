@@ -121,22 +121,22 @@ class WaterSensorScreen(Screen):
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
         figwt=plt.figure(0)
-        top1=figwt.add_subplot(111)
+        top=figwt.add_subplot(111)
         plt.plot(times, data1, label="Upside")
         plt.plot(times, data2, label="Downside")
         plt.title('Water Temperature in 24 hours')
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        top1.xaxis.set_major_formatter(xfmt)
+        top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
         figwl=plt.figure(1)
-        bot1=figwl.add_subplot(111)
+        bot=figwl.add_subplot(111)
         plt.title('Water Level in 24 hours')
         plt.plot(times, data3)
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        bot1.xaxis.set_major_formatter(xfmt)
+        bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
 
@@ -168,22 +168,22 @@ class RoomSensorScreen(Screen):
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
-        figrt=plt.figure(0)
-        top2=figrt.add_subplot(111)
+        figrt=plt.figure(2)
+        top=figrt.add_subplot(111)
         plt.title('Room Temperature in 24 hours')
         plt.plot(times, data1)
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        top2.xaxis.set_major_formatter(xfmt)
+        top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        figrh=plt.figure(1)
-        bot2=figrh.add_subplot(111)
+        figrh=plt.figure(3)
+        bot=figrh.add_subplot(111)
         plt.title('Room Humidity in 24 hours')
         plt.plot(times, data2)
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        bot2.xaxis.set_major_formatter(xfmt)
+        bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
 
@@ -214,22 +214,22 @@ class OtherSensorScreen(Screen):
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
-        figo=plt.figure(0)
-        top3=figo.add_subplot(111)
+        figo=plt.figure(4)
+        top=figo.add_subplot(111)
         plt.plot(times, data1)
         plt.title('Ambient Light in 24 hours')
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        top3.xaxis.set_major_formatter(xfmt)
+        top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        figl=plt.figure(1)
-        bot3=figl.add_subplot(111)
+        figl=plt.figure(5)
+        bot=figl.add_subplot(111)
         plt.title('Water Leak in 24 hours')
         plt.plot(times, data2)
         plt.legend()
         xfmt=mdates.DateFormatter('%H:%M')
-        bot3.xaxis.set_major_formatter(xfmt)
+        bot.xaxis.set_major_formatter(xfmt)
         self.ids.botline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         return
 
