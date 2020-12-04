@@ -55,8 +55,6 @@ _init=0.00
 _init_min=0
 _init_max=80
 
-AlertEmail=["dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com","dalhousieaquatron@gmail.com"]
-
 current_time='0000-00-00 00:00:00'      #initialize the time
 
 class SS(Enum):
@@ -73,23 +71,18 @@ for i in range(6):
 
 conn=sqlite3.connect('/run/aquatron/db.sqlite')
 cur=conn.cursor()
-#sensors, read in from GPIO
+#sensors & threshold
 watertemp_sensor=waterlvl_sensor =waterleak_sensor   = \
     light_sensor=roomtemp_sensor=humidity_sensor=_init
-
-#Setup: After reaching the limit, special event will be triggerred
 watertemp_min=waterlvl_min=waterleak_min=light_min \
     =roomtemp_min=humidity_min=_init_min
-
 watertemp_max=waterlvl_max=waterleak_max= \
     light_max=roomtemp_max=humidity_max=_init_max
-
 
 '''
 Data Processing
 '''
 #read in data and process in this section
-
 
 
 '''
@@ -127,9 +120,8 @@ class WaterSensorScreen(Screen):
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
-        self.graph_generate()
-        figt=plt.figure(0)
-        top=figt.add_subplot(111)
+        figwt=plt.figure(0)
+        top=figwt.add_subplot(111)
         plt.plot(times, data1, label="Upside")
         plt.plot(times, data2, label="Downside")
         plt.title('Water Temperature in 24 hours')
@@ -138,8 +130,8 @@ class WaterSensorScreen(Screen):
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        figb=plt.figure(1)
-        bot=figb.add_subplot(111)
+        figwl=plt.figure(1)
+        bot=figwl.add_subplot(111)
         plt.title('Water Level in 24 hours')
         plt.plot(times, data3)
         plt.legend()
@@ -176,9 +168,8 @@ class RoomSensorScreen(Screen):
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
-        self.graph_generate()
-        figt=plt.figure(0)
-        top=figt.add_subplot(111)
+        figrt=plt.figure(0)
+        top=figrt.add_subplot(111)
         plt.title('Room Temperature in 24 hours')
         plt.plot(times, data1)
         plt.legend()
@@ -186,8 +177,8 @@ class RoomSensorScreen(Screen):
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        figb=plt.figure(1)
-        bot=figb.add_subplot(111)
+        figrh=plt.figure(1)
+        bot=figrh.add_subplot(111)
         plt.title('Room Humidity in 24 hours')
         plt.plot(times, data2)
         plt.legend()
@@ -223,9 +214,8 @@ class OtherSensorScreen(Screen):
 
         times = pd.date_range ('10-10-2020',periods=144, freq = '10MIN')
 
-        self.graph_generate()
-        figt=plt.figure(0)
-        top=figt.add_subplot(111)
+        figo=plt.figure(0)
+        top=figo.add_subplot(111)
         plt.plot(times, data1)
         plt.title('Ambient Light in 24 hours')
         plt.legend()
@@ -233,8 +223,8 @@ class OtherSensorScreen(Screen):
         top.xaxis.set_major_formatter(xfmt)
         self.ids.topline.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         
-        figb=plt.figure(1)
-        bot=figb.add_subplot(111)
+        figl=plt.figure(1)
+        bot=figl.add_subplot(111)
         plt.title('Water Leak in 24 hours')
         plt.plot(times, data2)
         plt.legend()
@@ -338,11 +328,11 @@ class MainScreen(Screen):
         watertemp1=cur.fetchall()
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Water Tank 2 Temperature',))
         watertemp2=cur.fetchall()
-        self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),3))
+        self.ids.watertemp.text=str(round(float(watertemp1[0][0]),3))+" | "+str(round(float(watertemp2[0][0]),2))
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Water Level',))
         waterlvl=cur.fetchall()
-        self.ids.waterlvl.text=str(round(float(waterlvl[0][0]),3))
+        self.ids.waterlvl.text='ON' if int(waterlvl[0][0]) else 'OFF'
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('SI7021(temperature)',))
         roomtemp=cur.fetchall()
@@ -354,7 +344,7 @@ class MainScreen(Screen):
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Toggle Switch',))
         waterleak=cur.fetchall()
-        self.ids.waterleak.text=str(round(float(waterleak[0][0]),3))
+        self.ids.waterleak.text='ON' if int(waterleak[0][0]) else 'OFF'
 
         cur.execute('SELECT value FROM sensor_data WHERE name=?  ORDER BY timestamp DESC LIMIT 1',('Ambient Light',))
         optic=cur.fetchall()
