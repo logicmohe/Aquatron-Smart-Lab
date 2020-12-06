@@ -1,43 +1,15 @@
-import sqlite3
-from sqlite3 import Error
-def create_connection(db_file):
-    conn=None
-    try:
-        conn=sqlite3.connect(db_file)
-    except Error as e:
-        print(e)
+from typing import NamedTuple
 
-    return conn
+class Sensors(NamedTuple):
+    name: str
+    data: float
+    timestamp: int
+    min_threshold: list
+    max_threshold: float
 
-def select_all(conn):
-    cur=conn.cursor()
-    cur.execute("SELECT * FROM tasks")
+my_item = Sensors('foo', 0,0, ['baz'],0)
+print(my_item.name)
 
-    rows=cur.fetchall()
+print(int(float('1.234')))
 
-    for row in rows:
-        print(row)
-
-def select_task_by_priority(conn, priority):
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM tasks WHERE priority=?", (priority,))
-
-    rows = cur.fetchall()
-
-    for row in rows:
-        print(row)
-
-def main():
-    database = r"C:\sqlite\db\pythonsqlite.db"
-
-    # create a database connection
-    conn = create_connection(database)
-    with conn:
-        print("1. Query task by priority:")
-        select_task_by_priority(conn, 1)
-
-        print("2. Query all tasks")
-        select_all(conn)
-
-if __name__ == '__main__':
-    main()
+print(my_item) # MyStruct(foo='foo', bar=0, baz=['baz'], qux=User(name='peter'))

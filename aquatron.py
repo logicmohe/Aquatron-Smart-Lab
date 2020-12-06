@@ -280,7 +280,6 @@ class SettingPopup(Popup):
 
 #Kivy Main Screen
 class MainScreen(Screen):
-    #waiting for other items
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
