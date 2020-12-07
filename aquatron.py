@@ -142,8 +142,6 @@ class WaterSensorScreen(Screen):
 
 class RoomSensorScreen(Screen):
     data_items=ListProperty([])
-    #build a simple graph
-
     def __init__(self, **kwargs):
         super(RoomSensorScreen, self).__init__(**kwargs)
         Clock.schedule_once(self.graph_generate)
@@ -231,7 +229,6 @@ class OtherSensorScreen(Screen):
 
 #Kivy Setting Screen
 class SettingScreen(Screen):
-    #waiting for other items
     data_items=ListProperty([])
     def __init__(self, **kwargs):
         super(SettingScreen, self).__init__(**kwargs)
